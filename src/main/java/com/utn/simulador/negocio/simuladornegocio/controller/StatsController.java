@@ -22,4 +22,9 @@ public class StatsController {
 
         return StatVo.builder().producto(producto).build();
     }
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
 }
