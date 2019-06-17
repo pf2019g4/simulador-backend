@@ -1,10 +1,10 @@
-CREATE TABLE proyecto (
+CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE producto (
+CREATE TABLE IF NOT EXISTS producto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
   nombre VARCHAR(45) NOT NULL,
