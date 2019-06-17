@@ -1,5 +1,5 @@
 # Simulador-backend 
-
+Por ahora utiliza una BD en memoria.
 
 ## Requerimientos
 - Maven > 3.1
