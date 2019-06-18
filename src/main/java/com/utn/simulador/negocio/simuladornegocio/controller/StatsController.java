@@ -20,7 +20,7 @@ public class StatsController {
 
         Producto producto = productoService.obtenerProducto();
 
-        return Estado.builder().producto(producto).build();
+        return new Estado();
     }
 
     @GetMapping("/ping")

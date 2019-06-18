@@ -12,3 +12,16 @@ CREATE TABLE IF NOT EXISTS producto (
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
+
+CREATE TABLE IF NOT EXISTS estado (
+  id bigint UNSIGNED AUTO_INCREMENT,
+  producto_id bigint NOT NULL,
+  costo_fijo decimal(19,2),
+  costo_variable decimal(19,2),
+  caja decimal(19,2),
+  stock bigint,
+  produccion_mensual bigint,
+  mes integer,
+  PRIMARY KEY (id),
+  FOREIGN KEY (producto_id) REFERENCES producto(id)
+);

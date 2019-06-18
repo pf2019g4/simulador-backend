@@ -1,6 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 @Data
 public class Estado {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
     private Producto producto;
     private BigDecimal costoFijo;
     private BigDecimal costoVariable;
