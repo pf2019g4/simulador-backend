@@ -21,6 +21,7 @@ CREATE TABLE estado (
   caja decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
+  activo boolean NOT NULL DEFAULT FALSE,
   mes integer,
   PRIMARY KEY (id),
   FOREIGN KEY (producto_id) REFERENCES producto(id)

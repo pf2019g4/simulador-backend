@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
+import com.utn.simulador.negocio.simuladornegocio.service.EstadoService;
 import com.utn.simulador.negocio.simuladornegocio.service.ProductoService;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class StatsController {
+public class EstadoController {
 
-    private final ProductoService productoService;
+    private final EstadoService estadoService;
 
-    @GetMapping("/proyecto/stat")
-    public Estado obtenerStatProyecto() {
-
-        Producto producto = productoService.obtenerProducto();
-
-        return new Estado();
+    @GetMapping("/estado/actual")
+    public Estado obtenerEstadoActual() {
+        return estadoService.obtenerActual();
     }
 
     @GetMapping("/ping")

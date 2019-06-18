@@ -19,8 +19,9 @@ public class Estado {
     private BigDecimal costoVariable;
     private BigDecimal caja;
     private Long stock;
-    private Integer mes; //TODO usar time en vez de contador
     private Long produccionMensual;
+    private Boolean activo;
+    private Integer mes; //TODO usar time en vez de contador
 
 
 }
