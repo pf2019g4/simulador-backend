@@ -5,9 +5,15 @@ import javax.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder(toBuilder=true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Estado {
 
     @Id
@@ -22,6 +28,7 @@ public class Estado {
     private Long produccionMensual;
     private Boolean activo;
     private Integer mes; //TODO usar time en vez de contador
-
+    @Embedded
+    private ParametrosVentas parametrosVentas;
 
 }

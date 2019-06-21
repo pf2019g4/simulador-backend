@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS estado (
   produccion_mensual bigint,
   activo boolean NOT NULL DEFAULT FALSE,
   mes integer,
+  parametros_ventas_media bigint,
+  parametros_ventas_desvio decimal(10,5),
   PRIMARY KEY (id),
-  FOREIGN KEY (producto_id) REFERENCES producto(id)
+  FOREIGN KEY (producto_id) REFERENCES producto(id),
+
 );

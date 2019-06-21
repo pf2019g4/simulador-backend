@@ -17,9 +17,9 @@ public class ProductoServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void obtenerPorProyecto_existente_producto() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        ProductoBuilder.deProyecto(proyecto).build(em);
+        Producto productoCreado = ProductoBuilder.deProyecto(proyecto).build(em);
 
-        Producto productoObtenido = productoService.obtenerProducto();
+        Producto productoObtenido = productoService.obtenerProducto(proyecto.getId());
 
         assertThat(productoObtenido).isNotNull();
     }

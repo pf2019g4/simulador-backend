@@ -11,8 +11,8 @@ public class ProductoService {
 
     private final ProductoRepository productoRepository;
 
-    public Producto obtenerProducto() {
-        return productoRepository.findByProyectoId(1L);
+    public Producto obtenerProducto(long proyectoId) {
+        return productoRepository.findByProyectoId(proyectoId);
     }
 
 }
