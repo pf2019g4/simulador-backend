@@ -22,7 +22,7 @@ public class EstadoServiceTest extends SimuladorNegocioApplicationTests {
         Producto producto = ProductoBuilder.deProyecto(proyecto).build(em);
         EstadoBuilder.inicial(producto).build(em);
 
-        Estado e = estadoService.obtenerActual();
-        assertThat(e).isNotNull();
+        Estado estado = estadoService.obtenerActual();
+        assertThat(estado).isNotNull();
     }
 }

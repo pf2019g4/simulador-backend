@@ -1,11 +1,11 @@
-CREATE TABLE proyecto (
-  id bigint UNSIGNED AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS proyecto (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE producto (
-  id bigint UNSIGNED AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS producto (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
   nombre VARCHAR(45) NOT NULL,
   precio decimal(19,2),
@@ -13,7 +13,7 @@ CREATE TABLE producto (
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
-CREATE TABLE estado (
+CREATE TABLE IF NOT EXISTS estado (
   id bigint UNSIGNED AUTO_INCREMENT,
   producto_id bigint NOT NULL,
   costo_fijo decimal(19,2),

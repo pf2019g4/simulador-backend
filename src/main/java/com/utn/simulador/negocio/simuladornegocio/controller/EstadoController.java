@@ -21,8 +21,4 @@ public class EstadoController {
         return estadoService.obtenerActual();
     }
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
-    }
 }
