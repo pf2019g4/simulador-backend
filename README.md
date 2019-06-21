@@ -17,4 +17,5 @@ mvn spring-boot:run
 ## autenticacion
 
 ## Url
+/api/estado/actual
 /api/proyecto/stat 
