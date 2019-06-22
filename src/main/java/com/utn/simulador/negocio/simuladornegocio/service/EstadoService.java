@@ -19,10 +19,14 @@ public class EstadoService {
         Estado nuevoEstado = estado.toBuilder().id(null).build();
         estado.setActivo(Boolean.FALSE);
         nuevoEstado.setMes(estado.getMes() + 1);
-        
+
         estadoRepository.save(nuevoEstado);
         estadoRepository.save(estado);
         return nuevoEstado;
+    }
+
+    void guardar(Estado estado) {
+        estadoRepository.save(estado);
     }
 
 }

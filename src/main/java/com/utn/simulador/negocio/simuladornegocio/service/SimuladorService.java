@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class SimuladorService {
+public class SimuladorService {
 
     private final EstadoService estadoService;
     private final SimuladorVentasService simuladorVentasService;
@@ -20,6 +20,7 @@ class SimuladorService {
         simuladorProduccionService.simular(nuevoEstado);
         simuladorVentasService.simular(nuevoEstado);
 
+        estadoService.guardar(nuevoEstado);
         return nuevoEstado;
     }
 

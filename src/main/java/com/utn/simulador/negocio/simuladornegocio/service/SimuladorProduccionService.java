@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 @Service
-class SimuladorProduccionService {
+public class SimuladorProduccionService {
 
     Estado simular(Estado estado) {
 
