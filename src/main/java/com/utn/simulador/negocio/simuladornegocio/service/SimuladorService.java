@@ -9,11 +9,16 @@ import org.springframework.stereotype.Service;
 class SimuladorService {
 
     private final EstadoService estadoService;
+    private final SimuladorVentasService simuladorVentasService;
+    private final SimuladorProduccionService simuladorProduccionService;
 
     public Estado simularPeriodo(long proyectoId) {
         Estado estado = estadoService.obtenerActual();
 
         Estado nuevoEstado = estadoService.avanzarTiempo(estado);
+
+        simuladorProduccionService.simular(nuevoEstado);
+        simuladorVentasService.simular(nuevoEstado);
 
         return nuevoEstado;
     }
