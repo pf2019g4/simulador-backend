@@ -13,14 +13,18 @@ public class SimuladorService {
     private final SimuladorProduccionService simuladorProduccionService;
 
     public Estado simularPeriodo(long proyectoId) {
+        Estado estado = avanzarTiempo();
+
+        simuladorProduccionService.simular(estado);
+        simuladorVentasService.simular(estado);
+
+        estadoService.guardar(estado);
+        return estado;
+    }
+
+    private Estado avanzarTiempo() {
         Estado estado = estadoService.obtenerActual();
-
         Estado nuevoEstado = estadoService.avanzarTiempo(estado);
-
-        simuladorProduccionService.simular(nuevoEstado);
-        simuladorVentasService.simular(nuevoEstado);
-
-        estadoService.guardar(nuevoEstado);
         return nuevoEstado;
     }
 
