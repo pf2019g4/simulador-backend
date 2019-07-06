@@ -15,7 +15,9 @@ public class Decision {
 
     private String descripcion;
 
-    @OneToMany(mappedBy = "decisionId")
+    private Long proyectoId;
+
+    @OneToMany(mappedBy = "decisionId", cascade = CascadeType.ALL)
     private List<Respuesta> respuestas;
 
 }

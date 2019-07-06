@@ -17,4 +17,8 @@ public class CuentaService {
     public List<Cuenta> obtenerPorProyectoYTipo(Long idProyecto, TipoCuenta tipoCuenta){
         return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
     }
+
+    public void guardar(Cuenta cuenta) {
+        cuentaRepository.save(cuenta);
+    }
 }

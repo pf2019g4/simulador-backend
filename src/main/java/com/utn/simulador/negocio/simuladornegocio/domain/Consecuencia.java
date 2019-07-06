@@ -2,10 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -21,5 +18,8 @@ public class Consecuencia {
     private BigDecimal monto;
 
     private Long respuestaId;
+
+    @Enumerated(EnumType.STRING)
+    private Operacion operacion;
 
 }

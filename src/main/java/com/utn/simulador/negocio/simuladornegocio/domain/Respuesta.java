@@ -17,7 +17,7 @@ public class Respuesta {
 
     private Long decisionId;
 
-    @OneToMany(mappedBy = "respuestaId")
+    @OneToMany(mappedBy = "respuestaId", cascade = CascadeType.ALL)
     private List<Consecuencia> consecuencias;
 
 }

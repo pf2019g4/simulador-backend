@@ -40,3 +40,30 @@ CREATE TABLE IF NOT EXISTS cuenta (
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
+
+CREATE TABLE IF NOT EXISTS decision (
+    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(250) NOT NULL,
+    proyecto_id bigint,
+    PRIMARY KEY (id),
+    FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+);
+
+CREATE TABLE IF NOT EXISTS respuesta (
+    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(45) NOT NULL,
+    decision_id bigint,
+    PRIMARY KEY (id),
+    FOREIGN KEY (decision_id) REFERENCES decision(id)
+);
+
+CREATE TABLE IF NOT EXISTS consecuencia (
+    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    monto decimal(19,2) NOT NULL,
+    respuesta_id bigint,
+    cuenta_id bigint,
+    operacion varchar(20) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (respuesta_id) REFERENCES respuesta(id),
+    FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
+);
