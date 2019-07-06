@@ -29,3 +29,14 @@ CREATE TABLE IF NOT EXISTS estado (
   FOREIGN KEY (producto_id) REFERENCES producto(id),
 
 );
+
+CREATE TABLE IF NOT EXISTS cuenta (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint,
+  descripcion VARCHAR(45) NOT NULL,
+  monto decimal(19,2),
+  periodo integer not null,
+  tipo_cuenta varchar(20) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+);
