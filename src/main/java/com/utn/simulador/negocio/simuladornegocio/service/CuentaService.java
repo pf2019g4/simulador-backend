@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,47 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
     }
 
-    public void crearVentas(Estado estado) {
-        crearCuetnaFinanciera(estado);
-        crearCuentaEconomica(estado);
+    public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
+        crearCuentaFinanacieraProduccion(estado, costoPeriodo);
+        crearCuentaEconomicaProduccion(estado, costoPeriodo);
+
     }
 
-    public void crearCuentaEconomica(Estado estado) {
+    private void crearCuentaFinanacieraProduccion(Estado estado, BigDecimal costoPeriodo) {
+        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
+                .tipoCuenta(TipoCuenta.FINANCIERO)
+                .cuentasPeriodo(new ArrayList<>())
+                .proyectoId(estado.getProyectoId())
+                .build();
+        cuenta = cuentaRepository.save(cuenta);
+
+        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
+                .cuenta(cuenta)
+                .monto(costoPeriodo.negate())
+                .periodo(estado.getMes()).build());
+    }
+
+    private void crearCuentaEconomicaProduccion(Estado estado, BigDecimal costoPeriodo) {
+
+        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
+                .tipoCuenta(TipoCuenta.ECONOMICO)
+                .cuentasPeriodo(new ArrayList<>())
+                .proyectoId(estado.getProyectoId())
+                .build();
+        cuenta = cuentaRepository.save(cuenta);
+
+        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
+                .cuenta(cuenta)
+                .monto(costoPeriodo.negate())
+                .periodo(estado.getMes()).build());
+    }
+
+    public void crearVentas(Estado estado) {
+        crearCuetnaFinancieraVenta(estado);
+        crearCuentaEconomicaVenta(estado);
+    }
+
+    private void crearCuentaEconomicaVenta(Estado estado) {
         Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .cuentasPeriodo(new ArrayList<>())
@@ -43,7 +79,7 @@ public class CuentaService {
                 .periodo(estado.getMes()).build());
     }
 
-    public void crearCuetnaFinanciera(Estado estado) {
+    private void crearCuetnaFinancieraVenta(Estado estado) {
         Cuenta cuentaFinanciera = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
