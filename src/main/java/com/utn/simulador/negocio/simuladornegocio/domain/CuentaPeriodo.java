@@ -4,19 +4,18 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Entity
 @Data
-public class Cuenta {
+public class CuentaPeriodo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String descripcion;
-
-    private Long proyectoId;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_id", nullable = false)
+    private Cuenta cuenta;
 
     private BigDecimal monto;
 
@@ -25,6 +24,4 @@ public class Cuenta {
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc
 
-    @OneToMany(mappedBy = "cuenta")
-    private Set<CuentaPeriodo> cuentPeriodo;
 }

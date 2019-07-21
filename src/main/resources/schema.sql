@@ -34,12 +34,20 @@ CREATE TABLE IF NOT EXISTS cuenta (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
   descripcion VARCHAR(45) NOT NULL,
-  monto decimal(19,2),
-  periodo integer not null,
   tipo_cuenta varchar(20) NOT NULL,
+  tipo_flujo_fondo varchar(20) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
+
+CREATE TABLE IF NOT EXISTS cuenta_periodo {
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  cuenta_id bigint UNSIGNED not null,
+  monto decimal not null,
+  periodo int not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
+}
 
 CREATE TABLE IF NOT EXISTS decision (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
