@@ -23,7 +23,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     public void obtenerPorProyecto_porProyectoValido_devuelveDecisionesConSusRespuestasYConsecuencias() {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO).build(em);
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodo cuentaPeriodo = CuentaPeriodoBuilder.deCuenta(cuenta, 3).build(em);
         cuenta.getCuentasPeriodo().add(cuentaPeriodo);
         Decision decision = DecisionBuilder.deProyecto(proyecto).build(em);

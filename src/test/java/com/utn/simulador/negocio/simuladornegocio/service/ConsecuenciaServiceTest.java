@@ -29,7 +29,7 @@ public class ConsecuenciaServiceTest extends SimuladorNegocioApplicationTests {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         Decision decision = DecisionBuilder.deProyecto(proyecto).build(em);
         Respuesta respuesta = RespuestaBuilder.deDecision(decision).build(em);
-        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO).build(em);
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodo cuentaPeriodo = CuentaPeriodoBuilder.deCuenta(cuenta, 4).build(em);
         
         cuenta.getCuentasPeriodo().add(cuentaPeriodo);
