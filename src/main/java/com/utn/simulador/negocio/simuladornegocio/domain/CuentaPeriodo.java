@@ -4,9 +4,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import lombok.Builder;
 
 @Entity
 @Data
+@Builder
 public class CuentaPeriodo {
 
     @Id

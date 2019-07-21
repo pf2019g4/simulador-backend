@@ -3,8 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,14 +16,10 @@ public class Cuenta {
     private String descripcion;
 
     private Long proyectoId;
-
-    private BigDecimal monto;
-
-    private Integer periodo; // mes 1, 2, 3, etc
-
+    
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc
 
     @OneToMany(mappedBy = "cuenta")
-    private Set<CuentaPeriodo> cuentPeriodo;
+    private List<CuentaPeriodo> cuentasPeriodo;
 }

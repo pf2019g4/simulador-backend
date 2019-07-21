@@ -40,14 +40,14 @@ CREATE TABLE IF NOT EXISTS cuenta (
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
-CREATE TABLE IF NOT EXISTS cuenta_periodo {
+CREATE TABLE IF NOT EXISTS cuenta_periodo (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   cuenta_id bigint UNSIGNED not null,
   monto decimal not null,
   periodo int not null,
   PRIMARY KEY (id),
   FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
-}
+);
 
 CREATE TABLE IF NOT EXISTS decision (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,

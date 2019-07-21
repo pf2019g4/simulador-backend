@@ -10,7 +10,6 @@ import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +23,7 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
     private CuentaRepository cuentaRepository;
 
     @Test
-    public void obtenerPorProyectoYTipo_conIdProyectoYTipoValido_devuelveCuentas(){
+    public void obtenerPorProyectoYTipo_conIdProyectoYTipoValido_devuelveCuentas() {
         TipoCuenta tipoCuentaTest = TipoCuenta.FINANCIERO;
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         CuentaBuilder.deProyecto(proyecto, tipoCuentaTest, 1).build(em);
@@ -36,16 +35,9 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     @Test
-    public void guardar_conCuentaNueva_guardaEnBD(){
+    public void guardar_conCuentaNueva_guardaEnBD() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-
-        Cuenta cuenta = new Cuenta();
-        cuenta.setProyectoId(proyecto.getId());
-        cuenta.setMonto(new BigDecimal("500"));
-        cuenta.setTipoCuenta(TipoCuenta.FINANCIERO);
-        cuenta.setDescripcion("Descripcion genérica");
-        cuenta.setPeriodo(1);
-
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.FINANCIERO, 1).build();
         cuentaService.guardar(cuenta);
 
         assertThat(cuentaRepository.count()).isEqualTo(1);
