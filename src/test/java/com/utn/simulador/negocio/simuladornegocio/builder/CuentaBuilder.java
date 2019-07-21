@@ -4,6 +4,7 @@ import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
+import java.util.ArrayList;
 
 public class CuentaBuilder extends AbstractPersistenceBuilder<Cuenta> {
 
@@ -16,7 +17,8 @@ public class CuentaBuilder extends AbstractPersistenceBuilder<Cuenta> {
         cuentaBuilder.instance.setDescripcion("Caja");
         cuentaBuilder.instance.setTipoCuenta(tipoCuenta);
         cuentaBuilder.instance.setProyectoId(proyecto.getId());
-        
+        cuentaBuilder.instance.setCuentasPeriodo(new ArrayList<>());
+
         return cuentaBuilder;
     }
 
