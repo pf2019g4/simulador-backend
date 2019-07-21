@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS cuenta (
   proyecto_id bigint,
   descripcion VARCHAR(45) NOT NULL,
   tipo_cuenta varchar(20) NOT NULL,
-  tipo_flujo_fondo varchar(20),
+  tipo_flujo_fondo varchar(40),
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
