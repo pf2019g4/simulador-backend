@@ -12,15 +12,12 @@ public class SimuladorProduccionService {
     private final CuentaService cuentaService;
 
     Estado simular(Estado estado) {
-
         aumentarStock(estado);
         imputarGastosProduccion(estado);
-
         return estado;
     }
 
     private void imputarGastosProduccion(Estado estado) {
-
         BigDecimal costoProduccionPeriodo
                 = estado.getCostoVariable().multiply(new BigDecimal(estado.getProduccionMensual()))
                         .add(estado.getCostoFijo());
