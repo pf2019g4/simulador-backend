@@ -49,6 +49,7 @@ public class CuentaService {
 
         Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
+                .tipoFlujoFondo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
                 .proyectoId(estado.getProyectoId())
                 .build();
@@ -68,6 +69,7 @@ public class CuentaService {
     private void crearCuentaEconomicaVenta(Estado estado) {
         Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
+                .tipoFlujoFondo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
                 .proyectoId(estado.getProyectoId())
                 .build();

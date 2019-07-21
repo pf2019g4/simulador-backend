@@ -31,5 +31,4 @@ public class SimuladorProduccionService {
     private void aumentarStock(Estado estado) {
         estado.setStock(estado.getStock() + estado.getProduccionMensual());
     }
-
 }
