@@ -15,10 +15,12 @@ CREATE TABLE IF NOT EXISTS producto (
 
 CREATE TABLE IF NOT EXISTS estado (
   id bigint UNSIGNED AUTO_INCREMENT,
+  proyecto_id bigint NOT NULL,
   producto_id bigint NOT NULL,
   costo_fijo decimal(19,2),
   costo_variable decimal(19,2),
   caja decimal(19,2),
+  ventas decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
   activo boolean NOT NULL DEFAULT FALSE,
@@ -27,6 +29,7 @@ CREATE TABLE IF NOT EXISTS estado (
   parametros_ventas_desvio decimal(10,5),
   PRIMARY KEY (id),
   FOREIGN KEY (producto_id) REFERENCES producto(id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
 
 );
 

@@ -15,8 +15,8 @@ insert into producto
 
 
 insert into estado
-(activo, caja  , costo_fijo, costo_variable, mes, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media ) values
-(true  , 11500.0,200.0     , 3.5           , 1  , 150               , 1          , 200  , 0.10                     , 180);
+(proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, mes, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media ) values
+(1          , true  , 11500.0 ,9000.0 ,200.0     , 3.5           , 1  , 150               , 1          , 200  , 0.10                     , 180);
 
 insert into cuenta
 (id, descripcion  , tipo_cuenta   ,TIPO_FLUJO_FONDO, proyecto_id) values
