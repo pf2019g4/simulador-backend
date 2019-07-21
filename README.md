@@ -19,3 +19,6 @@ mvn spring-boot:run
 ## Url
 GET /api/estado/actual
 POST /api/estado  
+
+## Pasaje a Prod
+Quitar annotation @crossOrigin del Controller
