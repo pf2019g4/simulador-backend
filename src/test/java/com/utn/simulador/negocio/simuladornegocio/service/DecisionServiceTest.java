@@ -23,12 +23,13 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     public void obtenerPorProyecto_porProyectoValido_devuelveDecisionesConSusRespuestasYConsecuencias() {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO, 3).build(em);
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO).build(em);
+        CuentaPeriodo cuentaPeriodo = CuentaPeriodoBuilder.deCuenta(cuenta, 3).build(em);
+        cuenta.getCuentasPeriodo().add(cuentaPeriodo);
         Decision decision = DecisionBuilder.deProyecto(proyecto).build(em);
         Respuesta respuesta1 = RespuestaBuilder.deDecision(decision).build(em);
         RespuestaBuilder.deDecision(decision).build(em);
         ConsecuenciaBuilder.deRespuestaYCuenta(respuesta1, cuenta).build(em);
-
 
         List<Decision> decisiones = decisionService.obtenerPorProyecto(proyecto.getId());
 

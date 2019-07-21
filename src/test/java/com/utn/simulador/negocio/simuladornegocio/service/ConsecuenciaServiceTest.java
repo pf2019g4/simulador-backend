@@ -2,6 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
 import com.utn.simulador.negocio.simuladornegocio.builder.CuentaBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.CuentaPeriodoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.DecisionBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.RespuestaBuilder;
@@ -28,7 +29,9 @@ public class ConsecuenciaServiceTest extends SimuladorNegocioApplicationTests {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         Decision decision = DecisionBuilder.deProyecto(proyecto).build(em);
         Respuesta respuesta = RespuestaBuilder.deDecision(decision).build(em);
-        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO, 4).build(em);
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO).build(em);
+        CuentaPeriodo cuentaPeriodo = CuentaPeriodoBuilder.deCuenta(cuenta, 4).build(em);
+        cuenta.getCuentasPeriodo().add(cuentaPeriodo);
 
         Consecuencia consecuencia = new Consecuencia();
         consecuencia.setMonto(new BigDecimal("456"));

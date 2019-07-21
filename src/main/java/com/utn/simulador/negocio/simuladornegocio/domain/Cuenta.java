@@ -16,10 +16,10 @@ public class Cuenta {
     private String descripcion;
 
     private Long proyectoId;
-    
+
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc
 
-    @OneToMany(mappedBy = "cuenta")
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     private List<CuentaPeriodo> cuentasPeriodo;
 }
