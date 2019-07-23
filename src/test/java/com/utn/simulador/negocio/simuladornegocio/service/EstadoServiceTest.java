@@ -17,10 +17,10 @@ public class EstadoServiceTest extends SimuladorNegocioApplicationTests {
     EstadoService estadoService;
 
     @Test
-    public void obtenerEstadoActual_estadoExistente_estado(){
+    public void obtenerEstadoActual_estadoExistente_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.deProyecto(proyecto).build(em);
-        EstadoBuilder.inicial(producto).build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        EstadoBuilder.inicial(producto, proyecto).build(em);
 
         Estado estado = estadoService.obtenerActual();
         assertThat(estado).isNotNull();

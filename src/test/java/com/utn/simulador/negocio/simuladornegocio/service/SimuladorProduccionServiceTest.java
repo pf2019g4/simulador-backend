@@ -21,8 +21,8 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
     @Test
     public void simular_produccionValida_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.deProyecto(proyecto).build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto).build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 
