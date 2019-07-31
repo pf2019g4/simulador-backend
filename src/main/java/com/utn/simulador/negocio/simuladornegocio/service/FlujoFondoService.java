@@ -26,17 +26,17 @@ public class FlujoFondoService {
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
 
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
-        cuentas.put("INGRESOS_AFECTOS_A_IMPUESTOS", new AgrupadorVo("Ingresos Afectos a Impuestos", cuentasIngresosAfectosAImpuestos, null));
+        cuentas.put("INGRESOS_AFECTOS_A_IMPUESTOS", new AgrupadorVo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosAfectosAImpuestos, null));
 
         List<Cuenta> cuentasEgresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
-        cuentas.put("EGRESOS_AFECTOS_A_IMPUESTOS", new AgrupadorVo("Egresos Afectos a Impuestos", cuentasEgresosAfectosAImpuestos, null));
+        cuentas.put("EGRESOS_AFECTOS_A_IMPUESTOS", new AgrupadorVo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosAfectosAImpuestos, null));
 
         List<Cuenta> cuentasGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
-        cuentas.put("GASTOS_NO_DESEMBOLSABLES", new AgrupadorVo("Gastos No Desembolsables", cuentasGastosNoDesembolsables, null));
+        cuentas.put("GASTOS_NO_DESEMBOLSABLES", new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
-        Cuenta cuentaUtilidadNetaAntesDeImpuestos = new Cuenta();
+        Cuenta cuentaUtilidadAntesDeImpuestos = new Cuenta();
         IntStream.range(0, cantidadPeriodos).forEach(periodo -> {
-            cuentaUtilidadNetaAntesDeImpuestos.getCuentasPeriodo().add(
+            cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().add(
                     new CuentaPeriodo(
                             null,
                             null,
@@ -45,15 +45,20 @@ public class FlujoFondoService {
                     )
             );
         });
-        cuentas.put("UTILIDAD_NETA_ANTES_DE_IMPUESTOS", new AgrupadorVo("Utilidad Neta Antes de Impuestos", null, cuentaUtilidadNetaAntesDeImpuestos.getCuentasPeriodo()));
+        cuentas.put("UTILIDAD_ANTES_DE_IMPUESTOS", new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo()));
 
 
-        List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadNetaAntesDeImpuestos.getCuentasPeriodo().
+        List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(impuesto)), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
-        cuentas.put("IMPUESTOS", new AgrupadorVo("Impuestos", null, cuentaImpuestos));
+        cuentas.put("IMPUESTOS", new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
+        List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().
+                stream().
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(1 - impuesto)), cuentaPeriodo.getPeriodo())).
+                collect(Collectors.toList());
+        cuentas.put("UTILIDADA_DESPUES_DE_IMPUESTOS", new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
         return null;
     }
