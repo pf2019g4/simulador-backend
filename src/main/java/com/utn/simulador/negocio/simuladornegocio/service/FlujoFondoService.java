@@ -59,7 +59,7 @@ public class FlujoFondoService {
 
         //TODO falta inversiones!
 
-        //TODO falta restar inversiones!
+        //TODO falta restar inversiones para calcualr el flujo de fondos!
         List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
                 range(0, cantidadPeriodos).
                 mapToObj(periodo -> new CuentaPeriodo(null, null, montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)), periodo)).
