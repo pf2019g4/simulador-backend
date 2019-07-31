@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -19,10 +20,10 @@ public class FlujoFondoService {
 
     private final CuentaService cuentaService;
 
-    //Incompleto
-    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, Integer cantidadPeriodos) {
+    //TODO fijarse si tasa de impuesto esta ok por parametro o deberia ser un atributo del proyecto o similar.
+    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, Integer cantidadPeriodos, Long impuesto) {
 
-        Map<String, AgrupadorVo> cuentas  = new HashMap<>();
+        Map<String, AgrupadorVo> cuentas = new HashMap<>();
 
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
         cuentas.put("INGRESOS_AFECTOS_A_IMPUESTOS", new AgrupadorVo("Ingresos Afectos a Impuestos", cuentasIngresosAfectosAImpuestos, null));
@@ -47,8 +48,11 @@ public class FlujoFondoService {
         cuentas.put("UTILIDAD_NETA_ANTES_DE_IMPUESTOS", new AgrupadorVo("Utilidad Neta Antes de Impuestos", null, cuentaUtilidadNetaAntesDeImpuestos.getCuentasPeriodo()));
 
 
-
-
+        List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadNetaAntesDeImpuestos.getCuentasPeriodo().
+                stream().
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(impuesto)), cuentaPeriodo.getPeriodo())).
+                collect(Collectors.toList());
+        cuentas.put("IMPUESTOS", new AgrupadorVo("Impuestos", null, cuentaImpuestos));
 
 
         return null;
@@ -59,12 +63,12 @@ public class FlujoFondoService {
                 .stream()
                 .map(cuenta ->
                         cuenta.getCuentasPeriodo()
-                        .stream()
-                        .filter(cuentaPeriodo ->
-                                cuentaPeriodo.getPeriodo() == periodo)
-                        .findFirst()
-                        .map(CuentaPeriodo::getMonto)
-                        .orElse(new BigDecimal(0)))
+                                .stream()
+                                .filter(cuentaPeriodo ->
+                                        cuentaPeriodo.getPeriodo() == periodo)
+                                .findFirst()
+                                .map(CuentaPeriodo::getMonto)
+                                .orElse(new BigDecimal(0)))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
