@@ -36,7 +36,7 @@ public class FlujoFondoService {
 
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
                 range(0, cantidadPeriodos).
-                mapToObj(periodo -> new CuentaPeriodo(null, null, montoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).subtract(montoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).subtract(montoPeriodo(cuentasGastosNoDesembolsables, periodo)), periodo)).
+                mapToObj(periodo -> new CuentaPeriodo(null, null, sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)), periodo)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
@@ -57,27 +57,34 @@ public class FlujoFondoService {
         List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasAjusteGastosNoDesembolsables, null));
 
-        //TODO pendiente, deberia ser similar a cuentaUtilidadAntesDeImpuestos su cálculo.
-        List<CuentaPeriodo> cuentaFlujoDeFondos = null;
+        //TODO falta inversiones!
+
+        //TODO falta restar inversiones!
+        List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
+                range(0, cantidadPeriodos).
+                mapToObj(periodo -> new CuentaPeriodo(null, null, montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)), periodo)).
+                collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.FLUJO_DE_FONDOS.name(), new AgrupadorVo(TipoFlujoFondo.FLUJO_DE_FONDOS.getDescripcion(), null, cuentaFlujoDeFondos));
 
-
-        return null;
+        return cuentas;
     }
 
-    //TODO check this
-    private BigDecimal montoPeriodo(List<Cuenta> cuentas, Integer periodo) {
+    private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
         return cuentas
                 .stream()
-                .map(cuenta ->
-                        cuenta.getCuentasPeriodo()
-                                .stream()
-                                .filter(cuentaPeriodo ->
-                                        cuentaPeriodo.getPeriodo() == periodo)
-                                .findFirst()
-                                .map(CuentaPeriodo::getMonto)
-                                .orElse(new BigDecimal(0)))
+                .map(cuenta -> montoPeriodo(cuenta.getCuentasPeriodo(), periodo))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
+        return cuentaPeriodos
+                .stream()
+                .filter(cuentaPeriodo ->
+                        cuentaPeriodo.getPeriodo() == periodo)
+                .findFirst()
+                .map(CuentaPeriodo::getMonto)
+                .orElse(new BigDecimal(0));
+    }
+
 
 }
