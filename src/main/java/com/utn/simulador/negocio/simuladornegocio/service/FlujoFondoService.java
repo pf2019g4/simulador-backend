@@ -34,35 +34,38 @@ public class FlujoFondoService {
         List<Cuenta> cuentasGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
-        Cuenta cuentaUtilidadAntesDeImpuestos = new Cuenta();
-        IntStream.range(0, cantidadPeriodos).forEach(periodo -> {
-            cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().add(
-                    new CuentaPeriodo(
-                            null,
-                            null,
-                            montoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).subtract(montoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).subtract(montoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                            periodo
-                    )
-            );
-        });
-        cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo()));
+        List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
+                range(0, cantidadPeriodos).
+                mapToObj(periodo -> new CuentaPeriodo(null, null, montoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).subtract(montoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).subtract(montoPeriodo(cuentasGastosNoDesembolsables, periodo)), periodo)).
+                collect(Collectors.toList());
+        cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
-
-        List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().
+        //TODO los impuestos podrian sumar en vez de restar si la utilidad antes de impuestos es negativa? Eso impactaria en el calculo de la utilidad despues de impuestos?
+        List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(impuesto)), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
-        List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.getCuentasPeriodo().
+        List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(1 - impuesto)), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
+        //TODO esto se va a levantar como cuentasGastosNoDesembolsables, es decir, de la base? O lo vamos a armar en base a cuentasGastosNoDesembolsables?
+        List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
+        cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasAjusteGastosNoDesembolsables, null));
+
+        //TODO pendiente, deberia ser similar a cuentaUtilidadAntesDeImpuestos su cálculo.
+        List<CuentaPeriodo> cuentaFlujoDeFondos = null;
+        cuentas.put(TipoFlujoFondo.FLUJO_DE_FONDOS.name(), new AgrupadorVo(TipoFlujoFondo.FLUJO_DE_FONDOS.getDescripcion(), null, cuentaFlujoDeFondos));
+
+
         return null;
     }
 
+    //TODO check this
     private BigDecimal montoPeriodo(List<Cuenta> cuentas, Integer periodo) {
         return cuentas
                 .stream()
