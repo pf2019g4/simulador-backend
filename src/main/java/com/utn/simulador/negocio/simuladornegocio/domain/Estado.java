@@ -19,7 +19,8 @@ public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long proyectoId;
+    @OneToOne
+    private Proyecto proyecto;
     @ManyToOne
     private Producto producto;
     private BigDecimal costoFijo;
@@ -32,5 +33,4 @@ public class Estado {
     private Integer mes; //TODO usar time en vez de contador
     @Embedded
     private ParametrosVentas parametrosVentas;
-
 }

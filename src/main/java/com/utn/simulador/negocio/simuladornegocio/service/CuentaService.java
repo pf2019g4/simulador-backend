@@ -36,7 +36,7 @@ public class CuentaService {
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyectoId())
+                .proyectoId(estado.getProyecto().getId())
                 .build();
         cuenta = cuentaRepository.save(cuenta);
 
@@ -51,7 +51,7 @@ public class CuentaService {
         Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyectoId())
+                .proyectoId(estado.getProyecto().getId())
                 .build();
         cuenta = cuentaRepository.save(cuenta);
 
@@ -70,7 +70,7 @@ public class CuentaService {
         Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyectoId())
+                .proyectoId(estado.getProyecto().getId())
                 .build();
         cuentaEconomica = cuentaRepository.save(cuentaEconomica);
 
@@ -85,7 +85,7 @@ public class CuentaService {
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyectoId())
+                .proyectoId(estado.getProyecto().getId())
                 .build();
         cuentaFinanciera = cuentaRepository.save(cuentaFinanciera);
 

@@ -78,3 +78,12 @@ CREATE TABLE IF NOT EXISTS consecuencia (
     FOREIGN KEY (respuesta_id) REFERENCES respuesta(id),
     FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
 );
+
+CREATE TABLE IF NOT EXISTS modalidad_cobro (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint,
+  porcentaje decimal not null,
+  des_periodo int not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+);
