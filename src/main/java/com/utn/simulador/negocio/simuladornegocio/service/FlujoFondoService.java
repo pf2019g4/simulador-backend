@@ -54,7 +54,7 @@ public class FlujoFondoService {
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
         //TODO esto se va a levantar como cuentasGastosNoDesembolsables, es decir, de la base? O lo vamos a armar en base a cuentasGastosNoDesembolsables?
-        List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
+        List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasAjusteGastosNoDesembolsables, null));
 
         //TODO falta inversiones!
