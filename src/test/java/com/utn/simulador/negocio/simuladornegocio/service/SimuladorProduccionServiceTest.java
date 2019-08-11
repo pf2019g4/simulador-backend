@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationTests {
 
@@ -20,13 +21,21 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
     @Test
     public void simular_produccionValida_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.deProyecto(proyecto).build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto).build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 
+        int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
+        int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
+
         Estado estado = produccionService.simular(estadoInicial);
 
+        int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
+        int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
+
+        assertThat(cantidadCuentasDespues).isEqualTo(cantidadCuentasAntes + 2);
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 2);
         assertThat(estado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(estado.getStock()).isGreaterThan(stockInicial);
         assertThat(estado.getCaja()).isLessThan(cajaInicial);

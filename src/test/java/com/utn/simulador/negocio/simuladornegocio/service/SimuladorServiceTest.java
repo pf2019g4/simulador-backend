@@ -19,8 +19,8 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void simularPeriodo_escenarioValido_avanzaElPeriodo() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.deProyecto(proyecto).build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto).build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
 
         Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId());
 

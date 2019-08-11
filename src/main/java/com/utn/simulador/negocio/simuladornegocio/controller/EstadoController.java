@@ -27,6 +27,6 @@ public class EstadoController {
     @PostMapping("/estado")
     public Estado avanzarPeriodo() {
         //TODO recibir el id del proyecto por parámetro.
-        return simuladorService.simularPeriodo(estadoService.obtenerActual().getProducto().getProyectoId());
+        return simuladorService.simularPeriodo(estadoService.obtenerActual().getProyecto().getId());
     }
 }

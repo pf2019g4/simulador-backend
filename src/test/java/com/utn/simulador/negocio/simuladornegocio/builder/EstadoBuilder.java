@@ -4,6 +4,7 @@ import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.ParametrosVentas;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 
 import java.math.BigDecimal;
 
@@ -13,9 +14,10 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         instance = new Estado();
     }
 
-    public static EstadoBuilder inicial(Producto producto) {
+    public static EstadoBuilder inicial(Producto producto, Proyecto proyecto) {
         EstadoBuilder estadoBuilder = new EstadoBuilder();
         estadoBuilder.instance.setProducto(producto);
+        estadoBuilder.instance.setProyecto(proyecto);
         estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setCaja(new BigDecimal(11000));

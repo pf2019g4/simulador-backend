@@ -4,9 +4,15 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cuenta {
 
     @Id

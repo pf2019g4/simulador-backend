@@ -11,13 +11,11 @@ public class ProductoBuilder extends AbstractPersistenceBuilder<Producto> {
         instance = new Producto();
     }
 
-    public static ProductoBuilder deProyecto(Proyecto proyecto) {
+    public static ProductoBuilder base() {
         ProductoBuilder productoBuilder = new ProductoBuilder();
         
         productoBuilder.instance.setNombre("Nombre producto");
-        productoBuilder.instance.setProyectoId(proyecto.getId());
         productoBuilder.instance.setPrecio(new BigDecimal(1000));
-
         return productoBuilder;
     }
     

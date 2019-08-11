@@ -14,7 +14,6 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long proyectoId;
     private String nombre;
     private BigDecimal precio;
 
