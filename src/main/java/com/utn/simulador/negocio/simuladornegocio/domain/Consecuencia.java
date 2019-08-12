@@ -13,13 +13,14 @@ public class Consecuencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long cuentaId;
-
     private BigDecimal monto;
-
-    private Long respuestaId;
+    private String descripcion;
+    private Long opcionId;
 
     @Enumerated(EnumType.STRING)
-    private Operacion operacion;
+    private TipoCuenta tipoCuenta; // financiero , economico , etc
+
+    @Enumerated(EnumType.STRING)
+    private TipoFlujoFondo tipoFlujoFondo;
 
 }

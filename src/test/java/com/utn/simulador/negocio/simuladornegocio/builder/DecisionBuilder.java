@@ -3,19 +3,16 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 public class DecisionBuilder extends AbstractPersistenceBuilder<Decision> {
 
     private DecisionBuilder() {
         instance = new Decision();
     }
 
-    public static DecisionBuilder deProyecto(Proyecto proyecto) {
+    public static DecisionBuilder deEscenario(Escenario escenario) {
         DecisionBuilder decisionBuilder = new DecisionBuilder();
         decisionBuilder.instance.setDescripcion("Se le presenta una oportunidad de financiamiento, que hace?");
-        decisionBuilder.instance.setProyectoId(proyecto.getId());
+        decisionBuilder.instance.setEscenarioId(escenario.getId());
 
         return decisionBuilder;
     }

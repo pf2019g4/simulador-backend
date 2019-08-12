@@ -1,14 +1,22 @@
-
 delete from cuenta_periodo;
+delete from opcion_proyecto;
+delete from consecuencia;
+delete from opcion;
+delete from decision;
 delete from cuenta;
 delete from estado;
 delete from producto;
 delete from modalidad_cobro;
 delete from proyecto;
+delete from escenario;
+
+insert into escenario
+(id , descripcion        ) values 
+(1  , 'escenario 1'  );
 
 insert into proyecto
-(id , nombre        ) values 
-(1  , 'Proyecto 1'  );
+(id , nombre       , escenario_id) values 
+(1  , 'Proyecto 1' , 1           );
 
 insert into producto 
 (id, nombre  , precio, proyecto_id) values 
