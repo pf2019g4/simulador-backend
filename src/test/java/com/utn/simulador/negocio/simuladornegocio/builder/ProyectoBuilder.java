@@ -13,6 +13,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
     public static ProyectoBuilder proyectoAbierto() {
         ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
         proyectoBuilder.instance.setNombre("Proyecto Abierto");
+        proyectoBuilder.instance.setImpuestoPorcentaje(0.0d);
 
         return proyectoBuilder;
     }

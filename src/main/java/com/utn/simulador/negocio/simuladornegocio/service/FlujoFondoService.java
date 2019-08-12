@@ -1,8 +1,9 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
+import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.RespuestaRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.AgrupadorVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -19,9 +21,21 @@ import java.util.stream.IntStream;
 public class FlujoFondoService {
 
     private final CuentaService cuentaService;
+    private final ProyectoRepository proyectoRepository;
+    private final EstadoRepository estadoRepository;
 
     //TODO fijarse si tasa de impuesto esta ok por parametro o deberia ser un atributo del proyecto o similar.
-    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, Integer cantidadPeriodos, Long impuesto) {
+    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto) {
+
+        Optional<Proyecto> proyecto = proyectoRepository.findById(idProyecto);
+
+        if (proyecto.isEmpty()) {
+            //TODO devolver 403 o un optional null
+            return null;
+        }
+
+        Estado estado = estadoRepository.findByProyectoId(idProyecto);
+        Integer periodoActual = estado.getMes();
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
 
@@ -35,7 +49,7 @@ public class FlujoFondoService {
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
-                range(0, cantidadPeriodos).
+                range(0, periodoActual).
                 mapToObj(periodo -> new CuentaPeriodo(null, null, sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)), periodo)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
@@ -43,13 +57,13 @@ public class FlujoFondoService {
         //TODO los impuestos podrian sumar en vez de restar si la utilidad antes de impuestos es negativa? Eso impactaria en el calculo de la utilidad despues de impuestos?
         List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
-                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(impuesto)), cuentaPeriodo.getPeriodo())).
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(proyecto.get().getImpuestoPorcentaje())), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
         List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
-                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(1 - impuesto)), cuentaPeriodo.getPeriodo())).
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(1 - proyecto.get().getImpuestoPorcentaje())), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -61,7 +75,7 @@ public class FlujoFondoService {
 
         //TODO falta restar inversiones para calcualr el flujo de fondos!
         List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
-                range(0, cantidadPeriodos).
+                range(0, periodoActual).
                 mapToObj(periodo -> new CuentaPeriodo(null, null, montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)), periodo)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.FLUJO_DE_FONDOS.name(), new AgrupadorVo(TipoFlujoFondo.FLUJO_DE_FONDOS.getDescripcion(), null, cuentaFlujoDeFondos));

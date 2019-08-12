@@ -7,8 +7,8 @@ delete from modalidad_cobro;
 delete from proyecto;
 
 insert into proyecto
-(id , nombre        ) values 
-(1  , 'Proyecto 1'  );
+(id , nombre        , impuesto_porcentaje) values
+(1  , 'Proyecto 1'  , 0.0);
 
 insert into producto 
 (id, nombre  , precio, proyecto_id) values 

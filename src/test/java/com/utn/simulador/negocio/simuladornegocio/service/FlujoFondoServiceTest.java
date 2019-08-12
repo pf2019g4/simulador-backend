@@ -1,10 +1,9 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
-import com.utn.simulador.negocio.simuladornegocio.builder.CuentaBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.CuentaPeriodoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
+import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.vo.AgrupadorVo;
@@ -46,6 +45,9 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
     public void calcularCuentas_conCuentasValidasYSinCalcularImpuestos_devuelveVoConFlujoDeFondosSinImpuestos() {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        EstadoBuilder.inicialConPeriodoActual(producto,proyecto, 2).build(em);
+
         Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 2).build(em);
@@ -79,7 +81,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 2).build(em);
 
 
-        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), 2, 0L);
+        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId());
 
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
