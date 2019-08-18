@@ -88,6 +88,7 @@ public class FlujoFondoService {
         List<Cuenta> cuentasIngresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS);
         cuentas.put(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosNoAfectosAImpuestos, null));
 
+        System.out.println("RIGHT HERE");
         List<Cuenta> cuentasEgresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
         cuentas.put(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosNoAfectosAImpuestos, null));
 

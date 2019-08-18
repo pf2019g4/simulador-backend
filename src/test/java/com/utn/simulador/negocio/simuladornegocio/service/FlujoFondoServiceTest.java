@@ -119,11 +119,20 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
      * AGND
      *  AGND1            50      50
      *  AGND2            50      50
-     * FLUJO FONDOS      730     730
+     * INAI
+     *  INAI1            90      90
+     *  INAI2            90      90
+     * ENAI
+     *  ENAI1            120     120
+     *  ENAI2            150     150
+     * INV
+     *  INV1            400     400
+     *  INV2            400     400
+     * FLUJO FONDOS      -160     -160
      */
 
     @Test
-    public void calcularCuentas_conCuentasValidasYSinCalcularImpuestos_devuelveVoConFlujoDeFondosConImpuestos() {
+    public void calcularCuentas_conCuentasValidasYConCalcularImpuestos_devuelveVoConFlujoDeFondosConImpuestos() {
 
         Escenario escenario = EscenarioBuilder.escenarioConImpuesto(0.1).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
@@ -162,27 +171,76 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 2).build(em);
 
+        Cuenta cuentaINAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "INAI1", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINAI1, new BigDecimal(90), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINAI1, new BigDecimal(90), 2).build(em);
+
+        Cuenta cuentaINAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "INAI2", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINAI2, new BigDecimal(90), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINAI2, new BigDecimal(90), 2).build(em);
+
+        Cuenta cuentaENAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "ENAI1", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaENAI1, new BigDecimal(120), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaENAI1, new BigDecimal(120), 2).build(em);
+
+        Cuenta cuentaENAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "ENAI2", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaENAI2, new BigDecimal(150), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaENAI2, new BigDecimal(150), 2).build(em);
+
+        //TODO hacer inversiones en Periodo 0
+        Cuenta cuentaINV1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "INV1", TipoFlujoFondo.INVERSIONES).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV1, new BigDecimal(400), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV1, new BigDecimal(400), 2).build(em);
+
+        //TODO hacer inversiones en Periodo 0
+        Cuenta cuentaINV2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "INV2", TipoFlujoFondo.INVERSIONES).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV2, new BigDecimal(400), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV2, new BigDecimal(400), 2).build(em);
+
 
         Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId());
 
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+
         assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+
         assertThat(resultadoVo.get(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+
         assertThat(resultadoVo.get(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name()).getMontosPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("700"));
+
         assertThat(resultadoVo.get(TipoFlujoFondo.IMPUESTOS.name()).getMontosPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.IMPUESTOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("70"), withinPercentage(0.001));
+
         assertThat(resultadoVo.get(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name()).getMontosPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("630"), withinPercentage(0.001));
+
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("50"));
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(1).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("50"));
+
+
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("90"));
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(1).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("90"));
+
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("120"));
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(1).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("150"));
+
+        assertThat(resultadoVo.get(TipoFlujoFondo.INVERSIONES.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INVERSIONES.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INVERSIONES.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("400"));
+        assertThat(resultadoVo.get(TipoFlujoFondo.INVERSIONES.name()).getCuentas().get(1).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isEqualTo(new BigDecimal("400"));
+
         assertThat(resultadoVo.get(TipoFlujoFondo.FLUJO_DE_FONDOS.name()).getMontosPeriodo()).hasSize(2);
-        assertThat(resultadoVo.get(TipoFlujoFondo.FLUJO_DE_FONDOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("730"), withinPercentage(0.001));
+        assertThat(resultadoVo.get(TipoFlujoFondo.FLUJO_DE_FONDOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("-160"), withinPercentage(0.001));
     }
 
     //TODO testar impuestos negativos
