@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -19,6 +21,6 @@ public class Escenario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
-    private Double impuestoPorcentaje;
+    private Double impuestoPorcentaje;  //Es un valor entre 0 y 1
 
 }

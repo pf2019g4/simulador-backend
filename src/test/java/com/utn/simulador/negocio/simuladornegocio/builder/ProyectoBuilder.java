@@ -19,10 +19,21 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         return proyectoBuilder;
     }
 
-    public Proyecto build(EntityManager em) {
-        Escenario escenario = EscenarioBuilder.base().build(em);
+    public static ProyectoBuilder proyectoConEscenario(Escenario escenario) {
 
-        this.instance.setEscenario(escenario);
+        ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
+        proyectoBuilder.instance.setNombre("Proyecto con Escenario");
+        proyectoBuilder.instance.setEscenario(escenario);
+
+        return proyectoBuilder;
+    }
+
+
+    public Proyecto build(EntityManager em) {
+        if (instance.getEscenario() == null) {
+            Escenario escenario = EscenarioBuilder.base().build(em);
+            this.instance.setEscenario(escenario);
+        }
         Proyecto proyecto = super.build(em);
         ModalidadCobroBuilder.unPago(proyecto).build(em);
         return proyecto;
