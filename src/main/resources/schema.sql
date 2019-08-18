@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS estado (
   stock bigint,
   produccion_mensual bigint,
   activo boolean NOT NULL DEFAULT FALSE,
-  mes integer,
+  periodo integer,
   parametros_ventas_media bigint,
   parametros_ventas_desvio decimal(10,5),
   PRIMARY KEY (id),

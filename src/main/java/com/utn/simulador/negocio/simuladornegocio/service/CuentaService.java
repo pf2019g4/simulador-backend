@@ -33,7 +33,7 @@ public class CuentaService {
     }
 
     private void crearCuentaFinanacieraProduccion(Estado estado, BigDecimal costoPeriodo) {
-        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
+        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getPeriodo())
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
@@ -44,12 +44,12 @@ public class CuentaService {
         cuentaPeriodoRepository.save(CuentaPeriodo.builder()
                 .cuenta(cuenta)
                 .monto(costoPeriodo.negate())
-                .periodo(estado.getMes()).build());
+                .periodo(estado.getPeriodo()).build());
     }
 
     private void crearCuentaEconomicaProduccion(Estado estado, BigDecimal costoPeriodo) {
 
-        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getMes())
+        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getPeriodo())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .cuentasPeriodo(new ArrayList<>())
                 .proyectoId(estado.getProyecto().getId())
@@ -59,7 +59,7 @@ public class CuentaService {
         cuentaPeriodoRepository.save(CuentaPeriodo.builder()
                 .cuenta(cuenta)
                 .monto(costoPeriodo.negate())
-                .periodo(estado.getMes()).build());
+                .periodo(estado.getPeriodo()).build());
     }
 
     public void crearVentas(Estado estado) {
@@ -68,7 +68,7 @@ public class CuentaService {
     }
 
     private void crearCuentaEconomicaVenta(Estado estado) {
-        Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
+        Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getPeriodo())
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .cuentasPeriodo(new ArrayList<>())
                 .proyectoId(estado.getProyecto().getId())
@@ -78,11 +78,11 @@ public class CuentaService {
         cuentaPeriodoRepository.save(CuentaPeriodo.builder()
                 .cuenta(cuentaEconomica)
                 .monto(estado.getVentas())
-                .periodo(estado.getMes()).build());
+                .periodo(estado.getPeriodo()).build());
     }
 
     private void crearCuetnaFinancieraVenta(Estado estado) {
-        Cuenta cuentaFinanciera = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
+        Cuenta cuentaFinanciera = Cuenta.builder().descripcion("venta periodo " + estado.getPeriodo())
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
                 .cuentasPeriodo(new ArrayList<>())
@@ -93,7 +93,7 @@ public class CuentaService {
         cuentaPeriodoRepository.save(CuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
                 .monto(estado.getVentas())
-                .periodo(estado.getMes()).build());
+                .periodo(estado.getPeriodo()).build());
 
     }
 

@@ -3,7 +3,6 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
-import com.utn.simulador.negocio.simuladornegocio.repository.RespuestaRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.AgrupadorVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class FlujoFondoService {
         }
 
         Estado estado = estadoRepository.findByProyectoIdAndActivo(idProyecto, true);
-        Integer periodoActual = estado.getMes();
+        Integer periodoActual = estado.getPeriodo();
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
 

@@ -30,7 +30,7 @@ public class Estado {
     private Long stock;
     private Long produccionMensual;
     private Boolean activo;
-    private Integer mes; //TODO usar time en vez de contador
+    private Integer periodo; //TODO usar time en vez de contador
     @Embedded
     private ParametrosVentas parametrosVentas;
 }

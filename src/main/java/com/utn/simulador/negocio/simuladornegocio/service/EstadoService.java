@@ -18,7 +18,7 @@ public class EstadoService {
     public Estado avanzarTiempo(Estado estado) {
         Estado nuevoEstado = estado.toBuilder().id(null).build();
         estado.setActivo(Boolean.FALSE);
-        nuevoEstado.setMes(estado.getMes() + 1);
+        nuevoEstado.setPeriodo(estado.getPeriodo() + 1);
 
         estadoRepository.save(nuevoEstado);
         estadoRepository.save(estado);

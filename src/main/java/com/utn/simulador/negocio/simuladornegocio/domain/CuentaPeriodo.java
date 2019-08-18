@@ -23,5 +23,5 @@ public class CuentaPeriodo {
     private Cuenta cuenta;
     private BigDecimal monto;
 
-    private Integer periodo; // mes 1, 2, 3, etc
+    private Integer periodo; // periodo 1, 2, 3, etc
 }
