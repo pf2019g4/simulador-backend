@@ -186,4 +186,5 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     //TODO testar impuestos negativos
+    //TODO Testear Ingresos No Afectos A Impuestos, Egresos No Afectos A Impuestos, Inversiones
 }
