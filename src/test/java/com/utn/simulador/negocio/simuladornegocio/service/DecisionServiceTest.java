@@ -4,11 +4,11 @@ import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTes
 import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
+import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
@@ -22,18 +22,11 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void obtenerPorProyecto_porProyectoValido_devuelveDecisionesConSusRespuestasYConsecuencias() {
 
-//        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-//        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoCuenta.ECONOMICO).build(em);
-//        CuentaPeriodo cuentaPeriodo = CuentaPeriodoBuilder.deCuenta(cuenta, 3).build(em);
-//        cuenta.getCuentasPeriodo().add(cuentaPeriodo);
-//        Decision decision = DecisionBuilder.deProyecto(proyecto).build(em);
-//        Opcion respuesta1 = RespuestaBuilder.deDecision(decision).build(em);
-//        RespuestaBuilder.deDecision(decision).build(em);
-//        ConsecuenciaBuilder.deRespuestaYCuenta(respuesta1, cuenta).build(em);
-//
-//        List<Decision> decisiones = decisionService.obtenerPorProyecto(proyecto.getId());
-//
-//        assertThat(decisiones).hasSize(1);
+        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
+
+        List<DecisionVo> decisiones = decisionService.obtenerPorProyecto(proyecto);
+
+        assertThat(decisiones).hasSize(0);
 //        assertThat(decisiones.get(0).getRespuestas()).hasSize(2);
 //        assertThat(decisiones.get(0).getRespuestas().get(0).getConsecuencias()).hasSize(1);
 //        assertThat(decisiones.get(0).getRespuestas().get(0).getConsecuencias().get(0).getCuentaId()).isEqualTo(cuenta.getId());
