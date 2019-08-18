@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class CuentaPeriodo {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "cuenta_id", nullable = false)
+    @JsonBackReference
     private Cuenta cuenta;
     private BigDecimal monto;
 
