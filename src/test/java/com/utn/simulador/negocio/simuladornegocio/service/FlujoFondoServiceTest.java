@@ -185,4 +185,5 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(resultadoVo.get(TipoFlujoFondo.FLUJO_DE_FONDOS.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("730"), withinPercentage(0.001));
     }
 
+    //TODO testar impuestos negativos
 }

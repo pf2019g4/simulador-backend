@@ -51,20 +51,18 @@ public class FlujoFondoService {
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
-        //TODO los impuestos podrian sumar en vez de restar si la utilidad antes de impuestos es negativa? Eso impactaria en el calculo de la utilidad despues de impuestos?
         List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
-                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())), cuentaPeriodo.getPeriodo())).
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())) , cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
         List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
-                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().multiply(new BigDecimal(1 - proyecto.get().getEscenario().getImpuestoPorcentaje())), cuentaPeriodo.getPeriodo())).
+                map(cuentaPeriodo -> new CuentaPeriodo(null, null, cuentaPeriodo.getMonto().subtract(cuentaPeriodo.getMonto().multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))), cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
-        //TODO esto se va a levantar como cuentasGastosNoDesembolsables, es decir, de la base? O lo vamos a armar en base a cuentasGastosNoDesembolsables?
         List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasAjusteGastosNoDesembolsables, null));
 
