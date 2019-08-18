@@ -24,17 +24,15 @@ public class FlujoFondoService {
     private final ProyectoRepository proyectoRepository;
     private final EstadoRepository estadoRepository;
 
-    //TODO fijarse si tasa de impuesto esta ok por parametro o deberia ser un atributo del proyecto o similar.
     public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto) {
 
         Optional<Proyecto> proyecto = proyectoRepository.findById(idProyecto);
 
         if (proyecto.isEmpty()) {
-            //TODO devolver 403 o un optional null
-            return null;
+            throw new IllegalArgumentException();
         }
 
-        Estado estado = estadoRepository.findByProyectoId(idProyecto);
+        Estado estado = estadoRepository.findByProyectoIdAndActivo(idProyecto, true);
         Integer periodoActual = estado.getMes();
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
