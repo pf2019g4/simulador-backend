@@ -1,3 +1,6 @@
+delete from consecuencia;
+delete from opcion;
+delete from decision;
 delete from cuenta_periodo;
 delete from opcion_proyecto;
 delete from consecuencia;
