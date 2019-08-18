@@ -24,7 +24,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
 
-        List<DecisionVo> decisiones = decisionService.obtenerPorProyecto(proyecto);
+        List<DecisionVo> decisiones = decisionService.obtenerPorProyecto(proyecto.getId());
 
         assertThat(decisiones).hasSize(0);
 //        assertThat(decisiones.get(0).getRespuestas()).hasSize(2);

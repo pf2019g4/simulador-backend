@@ -28,7 +28,7 @@ public class DecisionService {
     public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
-        List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenarioId());
+        List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenario().getId());
         List<OpcionProyecto> opcionesTomadas = opcionProyectoRepository.findByProyectoId(proyecto.getId());
 
         List<DecisionVo> decisionesVo = new ArrayList<>();
