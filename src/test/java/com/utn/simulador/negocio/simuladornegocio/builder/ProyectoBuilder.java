@@ -15,7 +15,6 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
         ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
         proyectoBuilder.instance.setNombre("Proyecto Abierto");
-        proyectoBuilder.instance.setImpuestoPorcentaje(0.0d);
 
         return proyectoBuilder;
     }
@@ -23,7 +22,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
     public Proyecto build(EntityManager em) {
         Escenario escenario = EscenarioBuilder.base().build(em);
 
-        this.instance.setEscenarioId(escenario.getId());
+        this.instance.setEscenario(escenario);
         Proyecto proyecto = super.build(em);
         ModalidadCobroBuilder.unPago(proyecto).build(em);
         return proyecto;
