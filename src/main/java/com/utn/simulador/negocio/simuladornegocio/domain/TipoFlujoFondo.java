@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum TipoFlujoFondo {
 
-    INGRESOS_AFECTOS_A_IMPUESTOS ("Ingresos afectos a impuestos"),
+    INGRESOS_AFECTOS_A_IMPUESTOS("Ingresos afectos a impuestos"),
     EGRESOS_AFECTOS_A_IMPUESTOS("Egresos afectos a impuestos"),
     GASTOS_NO_DESEMBOLSABLES("Gastos no desembolsables"),
     UTILIDAD_ANTES_DE_IMPUESTOS("Utilidad antes de impuestos"),
@@ -13,6 +13,7 @@ public enum TipoFlujoFondo {
     AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES("Ajuste de gastos no desembolsables"),
     INGRESOS_NO_AFECTOS_A_IMPUESTOS("Ingresos no afectos a impuestos"),
     EGRESOS_NO_AFECTOS_A_IMPUESTOS("Egresos no afectos a impuestos"),
+    INVERSIONES("Inversiones"),
     FLUJO_DE_FONDOS("Flujo de fondos");
 
     @Getter
