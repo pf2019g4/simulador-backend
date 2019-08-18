@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
   nombre VARCHAR(45) NOT NULL,
+  impuesto_porcentaje DECIMAL NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );

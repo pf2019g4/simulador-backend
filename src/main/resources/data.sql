@@ -15,8 +15,8 @@ insert into escenario
 (1  , 'escenario 1'  );
 
 insert into proyecto
-(id , nombre       , escenario_id) values 
-(1  , 'Proyecto 1' , 1           );
+(id , nombre       , escenario_id,  impuesto_porcentaje) values 
+(1  , 'Proyecto 1' , 1           ,  0.0          );
 
 insert into producto 
 (id, nombre  , precio, proyecto_id) values 

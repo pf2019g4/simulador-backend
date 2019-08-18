@@ -21,9 +21,10 @@ public class CuentaService {
     private final CuentaRepository cuentaRepository;
     private final CuentaPeriodoRepository cuentaPeriodoRepository;
 
-    public List<Cuenta> obtenerPorProyectoYTipo(Long idProyecto, TipoCuenta tipoCuenta) {
-        return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
+    public List<Cuenta> obtenerPorProyectoYTipoFlujoFondo(Long idProyecto, TipoFlujoFondo tipoFlujoFondo) {
+        return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
     }
+
 
     public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
         crearCuentaFinanacieraProduccion(estado, costoPeriodo);
