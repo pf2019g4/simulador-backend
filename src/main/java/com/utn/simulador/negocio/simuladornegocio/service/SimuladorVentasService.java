@@ -33,14 +33,14 @@ public class SimuladorVentasService {
     }
 
     private BigDecimal calcularMontoVendido(Estado estado, Long unidadesVendidas) {
-        Integer periodo = estado.getMes();
+        Integer periodo = estado.getPeriodo();
         BigDecimal montoVendido = BigDecimal.ZERO;
 
         while (periodo >= 1) { //TODO: tiene que cambiar también las unidadesVendidas
 
             BigDecimal porcentajeVentas = BigDecimal.ZERO;
-            if (estado.getProyecto().getModalidadCobro().size() > estado.getMes() - periodo) {
-                porcentajeVentas = estado.getProyecto().getModalidadCobro().get(estado.getMes() - periodo).getPorcentaje().divide(new BigDecimal(100));
+            if (estado.getProyecto().getModalidadCobro().size() > estado.getPeriodo() - periodo) {
+                porcentajeVentas = estado.getProyecto().getModalidadCobro().get(estado.getPeriodo() - periodo).getPorcentaje().divide(new BigDecimal(100));
             }
             BigDecimal precio = estado.getProducto().getPrecio();
             montoVendido = montoVendido.add(precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas));
