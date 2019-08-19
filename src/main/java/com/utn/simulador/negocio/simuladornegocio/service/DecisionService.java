@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class DecisionService {
 
     public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
 
-        Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+        Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
         List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenario().getId());
         List<OpcionProyecto> opcionesTomadas = opcionProyectoRepository.findByProyectoId(proyecto.getId());
 
@@ -57,24 +58,28 @@ public class DecisionService {
     }
 
     public void tomaDecision(Long proyectoId, Long opcionId) {
-        //TODO: validaciones
-        //marcar como tomada
-        Estado estadoActual = estadoRepository.findByProyectoIdAndActivo(proyectoId, true);
-        final Opcion opcionTomada = opcionRepository.findById(opcionId).get();
-        Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+        final Opcion opcionTomada = opcionRepository.findById(opcionId).orElseThrow(() -> new IllegalArgumentException("Opcion inexistente"));
+        Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
 
-//obtener el estado actual        
+        Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId().equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
+
+        marcarOpcionComoTomada(proyectoId, opcionTomada);
+        imputarCuentasPorConsecuencia(opcionTomada, proyecto);
+    }
+
+    private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
+        Estado estadoActual = estadoRepository.findByProyectoIdAndActivo(proyecto.getId(), true);
+        List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto, estadoActual.getPeriodo());
+
+        cuentaService.imputar(cuentasAImputar, estadoActual);
+    }
+
+    private void marcarOpcionComoTomada(Long proyectoId, final Opcion opcionTomada) {
         OpcionProyecto opcionProyecto = new OpcionProyecto();
         opcionProyecto.setProyectoId(proyectoId);
         opcionProyecto.setOpcion(opcionTomada);
 
         opcionProyectoRepository.save(opcionProyecto);
-        //imputar consecuencias
-
-        List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto, estadoActual.getPeriodo());
-        
-        cuentaService.imputar(cuentasAImputar, estadoActual);
-
     }
 
 }
