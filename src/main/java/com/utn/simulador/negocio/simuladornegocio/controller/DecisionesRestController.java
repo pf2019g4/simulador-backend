@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,15 @@ public class DecisionesRestController {
     private final DecisionService decisionService;
 
     @GetMapping("/proyecto/{proyectoId}/decisiones")
-    public List<DecisionVo>  decisionesPorProyecto(@PathVariable("proyectoId") Long proyectoId) {
-
+    public List<DecisionVo> decisionesPorProyecto(@PathVariable("proyectoId") Long proyectoId) {
         return decisionService.obtenerPorProyecto(proyectoId);
+    }
+
+    @PostMapping("/proyecto/{proyectoId}/opcion/{opcionId}/toma-decision")
+    public void tomaDecision(@PathVariable("proyectoId") Long proyectoId,
+            @PathVariable("opcionId") Long opcionId) {
+        decisionService.tomaDecision(proyectoId,opcionId);
+
     }
 
 }

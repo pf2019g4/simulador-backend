@@ -1,7 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.repository;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import org.springframework.data.jpa.repository.JpaRepository;
 

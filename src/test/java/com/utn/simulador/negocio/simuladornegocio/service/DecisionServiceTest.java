@@ -3,8 +3,10 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
 import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
-import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
+import java.math.BigDecimal;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,34 +19,59 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     private DecisionService decisionService;
 
     @Autowired
-    private DecisionRepository decisionRepository;
+    private OpcionProyectoRepository opcionProyectoRepository;
+
+    @Autowired
+    private CuentaRepository cuentaRepository;
 
     @Test
     public void obtenerPorProyecto_porProyectoValido_devuelveDecisionesConSusRespuestasYConsecuencias() {
 
-        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
+        Escenario escenario = EscenarioBuilder.base().build(em);
+
+        Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
+
+        OpcionBuilder.deDecision(decision)
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .build(em);
+
+        Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
 
         List<DecisionVo> decisiones = decisionService.obtenerPorProyecto(proyecto.getId());
-
-        assertThat(decisiones).hasSize(0);
-//        assertThat(decisiones.get(0).getRespuestas()).hasSize(2);
-//        assertThat(decisiones.get(0).getRespuestas().get(0).getConsecuencias()).hasSize(1);
-//        assertThat(decisiones.get(0).getRespuestas().get(0).getConsecuencias().get(0).getCuentaId()).isEqualTo(cuenta.getId());
+        assertThat(decisiones).hasSize(1);
+        assertThat(decisiones.get(0).getOpciones()).hasSize(1);
+        assertThat(decisiones.get(0).getOpciones().get(0).getConsecuencias()).hasSize(2);
 
     }
 
     @Test
-    public void guardar_conDecisionNueva_guardaEnBD() {
-//
-//        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-//
-//        Decision decision = new Decision();
-//        decision.setDescripcion("Desc1");
-//        decision.setProyectoId(proyecto.getId());
-//
-//        decisionService.guardar(decision);
-//
-//        assertThat(decisionRepository.count()).isEqualTo(1);
+    public void tomarDecision_escenarioValido() {
+
+        Escenario escenario = EscenarioBuilder.base().build(em);
+
+        Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
+
+        Opcion opcion = OpcionBuilder.deDecision(decision)
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .build(em);
+
+        Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
+
+        
+        
+        long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
+        long cuentasAntes = cuentaRepository.count();
+
+        decisionService.tomaDecision(proyecto.getId(), opcion.getId());
+
+        long cuentasDespues = cuentaRepository.count();
+        long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
+
+        assertThat(cuentasDespues).isEqualTo(cuentasAntes + opcion.getConsecuencias().size());
+        assertThat(cantidadDecisionesTomadasDespues).isEqualTo(cantidadDecisionesTomadasAntes + 1);
+
     }
 
 }
