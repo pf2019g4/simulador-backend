@@ -2,7 +2,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 

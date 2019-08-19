@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,11 @@ public class CuentaService {
 
     private final CuentaRepository cuentaRepository;
     private final CuentaPeriodoRepository cuentaPeriodoRepository;
+    private final EstadoRepository estadoRepository;
 
     public List<Cuenta> obtenerPorProyectoYTipoFlujoFondo(Long idProyecto, TipoFlujoFondo tipoFlujoFondo) {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
     }
-
 
     public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
         crearCuentaFinanacieraProduccion(estado, costoPeriodo);
@@ -99,5 +100,26 @@ public class CuentaService {
 
     public void guardar(Cuenta cuenta) {
         cuentaRepository.save(cuenta);
+    }
+
+    public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
+
+        for (Cuenta cuenta : cuentasAImputar) {
+            for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
+                if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
+                        && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
+                    if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
+                            || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
+                        estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
+                    } else {
+                        estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
+                    }
+                }
+            }
+
+            cuentaRepository.save(cuenta);
+            estadoRepository.save(estado);
+
+        }
     }
 }

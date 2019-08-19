@@ -15,6 +15,7 @@ public class SimuladorService {
     public Estado simularPeriodo(long proyectoId) {
         Estado estado = avanzarTiempo();
 
+        
         simuladorProduccionService.simular(estado);
         simuladorVentasService.simular(estado);
 
