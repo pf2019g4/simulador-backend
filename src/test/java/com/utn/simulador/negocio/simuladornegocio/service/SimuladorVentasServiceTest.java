@@ -33,7 +33,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        estadoInicial.setMes(estadoInicial.getMes() + 1);
+        estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
         Estado nuevoEstado = simuladorVentasService.simular(estadoInicial);
 
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
@@ -63,19 +63,19 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        estadoInicial.setMes(estadoInicial.getMes() + 1);
+        estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
         Estado estadoContado = simuladorVentasService.simular(estadoInicial);
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial);
         
-        estadoContado.setMes(estadoContado.getMes() + 1);
+        estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
         Estado estado30D = simuladorVentasService.simular(estadoContado);
         Long stock30D = estado30D.getStock();
         BigDecimal caja30D = estado30D.getCaja();
         BigDecimal variacionCaja30D = caja30D.subtract(cajaContado);
 
-        estado30D.setMes(estado30D.getMes() + 1);
+        estado30D.setPeriodo(estado30D.getPeriodo() + 1);
         Estado estado60D = simuladorVentasService.simular(estado30D);
 
         assertThat(estadoContado.getId()).isEqualTo(estadoInicial.getId());

@@ -5,6 +5,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class SimuladorVentasService {
         long unidadesVendidas = calcularUnidadesVendidas(estado);
         Integer offsetPeriodo = 0;
         BigDecimal precio = estado.getProducto().getPrecio();
+        List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinancieraVenta(estado.getProyecto().getId(), estado.getPeriodo());
 
         while (offsetPeriodo < estado.getProyecto().getModalidadCobro().size()) {
 
@@ -26,9 +29,12 @@ public class SimuladorVentasService {
             
             BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
             
-            cuentaService.crearCuentaFinancieraVenta(estado.getProyecto().getId(), estado.getMes() + offsetPeriodo, montoVendido);
+            cuentasPeriodos.add(cuentaService.crearCuentaPeriodoVenta(estado.getProyecto().getId(), estado.getPeriodo() + offsetPeriodo, montoVendido, cuentaFinanciera));
             offsetPeriodo = offsetPeriodo + 1;
         }
+
+        cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
+        cuentaService.guardar(cuentaFinanciera);
         
         BigDecimal ingresosCaja = calcularIngresosCaja(estado);
         estado.setCaja(estado.getCaja().add(ingresosCaja));
@@ -36,7 +42,7 @@ public class SimuladorVentasService {
         estado.setStock(estado.getStock() - unidadesVendidas);
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
-        cuentaService.crearCuentaEconomicaVenta(estado.getProyecto().getId(), estado.getMes(), estado.getVentas());
+        cuentaService.crearCuentaEconomicaVenta(estado.getProyecto().getId(), estado.getPeriodo(), estado.getVentas());
 
         return estado;
     }
@@ -48,9 +54,9 @@ public class SimuladorVentasService {
     private BigDecimal calcularIngresosCaja(Estado estado) {
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(estado.getProyecto().getId(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
 
-        return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getMes());
+        return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
     }
-
+    
     private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
         return cuentas
                 .stream()

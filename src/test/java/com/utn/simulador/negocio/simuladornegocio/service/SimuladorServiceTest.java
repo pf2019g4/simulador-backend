@@ -24,7 +24,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
         Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId());
 
-        assertThat(nuevoEstado.getMes()).isEqualTo(estadoInicial.getMes() + 1);
+        assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
         assertThat(nuevoEstado.getActivo()).isTrue();
 
     }

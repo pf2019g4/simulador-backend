@@ -19,10 +19,7 @@ public class FlujoFondoController {
 
     @GetMapping("/proyecto/{id}/flujo-fondo")
     public Map<String, AgrupadorVo> obtenerFlujoFondo(@PathVariable("id") Long id){
-
         return flujoFondoService.calcularCuentas(id);
-
-
     }
 
 

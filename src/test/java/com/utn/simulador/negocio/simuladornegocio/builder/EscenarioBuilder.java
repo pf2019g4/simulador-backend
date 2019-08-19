@@ -2,7 +2,8 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+
+import java.math.BigDecimal;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
@@ -11,10 +12,17 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     }
 
     public static EscenarioBuilder base() {
-        EscenarioBuilder modalidadCobroBuilder = new EscenarioBuilder();
-        modalidadCobroBuilder.instance.setDescripcion("escenario de test 1");
+        EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
+        escenarioBuilder.instance.setDescripcion("escenario de test 1");
+        escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
+        return escenarioBuilder;
+    }
 
-        return modalidadCobroBuilder;
+    public static EscenarioBuilder escenarioConImpuesto(Double impuesto) {
+        EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
+        escenarioBuilder.instance.setDescripcion("escenario con impuesto");
+        escenarioBuilder.instance.setImpuestoPorcentaje(impuesto);
+        return escenarioBuilder;
     }
 
 }

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   descripcion VARCHAR(300) NOT NULL,
+  impuesto_porcentaje DECIMAL NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -8,7 +9,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
   nombre VARCHAR(45) NOT NULL,
-  impuesto_porcentaje DECIMAL NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS estado (
   stock bigint,
   produccion_mensual bigint,
   activo boolean NOT NULL DEFAULT FALSE,
-  mes integer,
+  periodo integer,
   parametros_ventas_media bigint,
   parametros_ventas_desvio decimal(10,5),
   PRIMARY KEY (id),

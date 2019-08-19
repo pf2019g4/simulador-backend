@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,5 +31,6 @@ public class Cuenta {
     private TipoFlujoFondo tipoFlujoFondo;
 
     @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<CuentaPeriodo> cuentasPeriodo;
 }
