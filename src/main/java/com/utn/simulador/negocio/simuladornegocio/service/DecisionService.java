@@ -29,11 +29,7 @@ public class DecisionService {
     private final EstadoRepository estadoRepository;
     private final CuentaService cuentaService;
 
-    public void guardar(Decision decision) {
-        decisionRepository.save(decision);
-    }
-
-    public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
+     public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
         List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenario().getId());
