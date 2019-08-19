@@ -29,14 +29,19 @@ public class DecisionService {
     private final EstadoRepository estadoRepository;
     private final CuentaService cuentaService;
 
-     public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
+    public List<DecisionVo> obtenerPorProyecto(Long proyectoId) {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
+
+        List<DecisionVo> decisionesVo = obtenerDecisionesPorProyecto(proyecto);
+
+        return decisionesVo;
+    }
+
+    private List<DecisionVo> obtenerDecisionesPorProyecto(Proyecto proyecto) {
         List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenario().getId());
         List<OpcionProyecto> opcionesTomadas = opcionProyectoRepository.findByProyectoId(proyecto.getId());
-
         List<DecisionVo> decisionesVo = new ArrayList<>();
-
         for (Decision decision : decisionesPosibles) {
             Long opcionTomadaId = null;
 
@@ -49,7 +54,6 @@ public class DecisionService {
             decisionesVo.add(new DecisionVo(decision, opcionTomadaId));
 
         }
-
         return decisionesVo;
     }
 
@@ -57,10 +61,25 @@ public class DecisionService {
         final Opcion opcionTomada = opcionRepository.findById(opcionId).orElseThrow(() -> new IllegalArgumentException("Opcion inexistente"));
         Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
 
-        Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId().equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
+        Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId()
+                .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
+
+        validarDecisionPendiente(proyecto, opcionTomada);
 
         marcarOpcionComoTomada(proyectoId, opcionTomada);
         imputarCuentasPorConsecuencia(opcionTomada, proyecto);
+    }
+
+    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
+        for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
+            if (opcionTomada.getDecisionId().equals(decision.getId())) {
+                if (decision.getOpcionTomada() == null) {
+                    break;
+                } else {
+                    throw new IllegalStateException("La decision ya fue tomada.");
+                }
+            }
+        }
     }
 
     private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
