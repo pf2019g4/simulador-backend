@@ -62,39 +62,47 @@ public class CuentaService {
                 .periodo(estado.getMes()).build());
     }
 
-    public void crearVentas(Estado estado) {
-        crearCuetnaFinancieraVenta(estado);
-        crearCuentaEconomicaVenta(estado);
-    }
-
-    private void crearCuentaEconomicaVenta(Estado estado) {
-        Cuenta cuentaEconomica = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
+    public void crearCuentaEconomicaVenta(Long idProyecto, Integer periodo, BigDecimal ventas) {
+        CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
+        
+        List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
+        
+        Cuenta cuentaEconomica = Cuenta.builder()
+                .descripcion("venta periodo " + periodo)
                 .tipoCuenta(TipoCuenta.ECONOMICO)
-                .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyecto().getId())
+                .proyectoId(idProyecto)
                 .build();
-        cuentaEconomica = cuentaRepository.save(cuentaEconomica);
 
-        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
+        cuentasPeriodos.add(cuentaPeriodo.builder()
                 .cuenta(cuentaEconomica)
-                .monto(estado.getVentas())
-                .periodo(estado.getMes()).build());
+                .monto(ventas)
+                .periodo(periodo).build());
+        
+        cuentaEconomica.setCuentasPeriodo(cuentasPeriodos);
+        
+        cuentaRepository.save(cuentaEconomica);
     }
 
-    private void crearCuetnaFinancieraVenta(Estado estado) {
-        Cuenta cuentaFinanciera = Cuenta.builder().descripcion("venta periodo " + estado.getMes())
+    public void crearCuentaFinancieraVenta(Long idProyecto, Integer periodo, BigDecimal ventas) {
+        CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
+        
+        List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
+        
+        Cuenta cuentaFinanciera = Cuenta.builder()
+                .descripcion("venta periodo " + periodo)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
-                .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyecto().getId())
+                .proyectoId(idProyecto)
                 .build();
-        cuentaFinanciera = cuentaRepository.save(cuentaFinanciera);
-
-        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
+        
+        cuentasPeriodos.add(cuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
-                .monto(estado.getVentas())
-                .periodo(estado.getMes()).build());
-
+                .monto(ventas)
+                .periodo(periodo).build());
+        
+        cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
+        
+        cuentaRepository.save(cuentaFinanciera);
     }
 
     public void guardar(Cuenta cuenta) {

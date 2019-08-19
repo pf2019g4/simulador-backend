@@ -1,7 +1,11 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
+import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
+import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +17,26 @@ public class SimuladorVentasService {
 
     Estado simular(Estado estado) {
         long unidadesVendidas = calcularUnidadesVendidas(estado);
+        Integer offsetPeriodo = 0;
+        BigDecimal precio = estado.getProducto().getPrecio();
 
-        BigDecimal montoVendido = estado.getProducto().getPrecio()
-                .multiply(new BigDecimal(unidadesVendidas));
-//        TODO: tato mira esto, corre los test cuando agregues funcionalidad para ver que no rompiste otra cosa.
-//        BigDecimal montoVendido = calcularMontoVendido(estado, unidadesVendidas);
+        while (offsetPeriodo < estado.getProyecto().getModalidadCobro().size()) {
+
+            BigDecimal porcentajeVentas = estado.getProyecto().getModalidadCobro().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
+            
+            BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
+            
+            cuentaService.crearCuentaFinancieraVenta(estado.getProyecto().getId(), estado.getMes() + offsetPeriodo, montoVendido);
+            offsetPeriodo = offsetPeriodo + 1;
+        }
+        
+        BigDecimal ingresosCaja = calcularIngresosCaja(estado);
+        estado.setCaja(estado.getCaja().add(ingresosCaja));
 
         estado.setStock(estado.getStock() - unidadesVendidas);
-        estado.setCaja(estado.getCaja().add(montoVendido));
-        estado.setVentas(montoVendido);
-
-        cuentaService.crearVentas(estado);
+        BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
+        estado.setVentas(montoEconomicoVendido);
+        cuentaService.crearCuentaEconomicaVenta(estado.getProyecto().getId(), estado.getMes(), estado.getVentas());
 
         return estado;
     }
@@ -32,23 +45,27 @@ public class SimuladorVentasService {
         return estado.getParametrosVentas().getMedia();
     }
 
-    private BigDecimal calcularMontoVendido(Estado estado, Long unidadesVendidas) {
-        Integer periodo = estado.getMes();
-        BigDecimal montoVendido = BigDecimal.ZERO;
+    private BigDecimal calcularIngresosCaja(Estado estado) {
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(estado.getProyecto().getId(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
 
-        while (periodo >= 1) { //TODO: tiene que cambiar también las unidadesVendidas
+        return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getMes());
+    }
 
-            BigDecimal porcentajeVentas = BigDecimal.ZERO;
-            if (estado.getProyecto().getModalidadCobro().size() > estado.getMes() - periodo) {
-                porcentajeVentas = estado.getProyecto().getModalidadCobro().get(estado.getMes() - periodo).getPorcentaje().divide(new BigDecimal(100));
-            }
-            BigDecimal precio = estado.getProducto().getPrecio();
-            montoVendido = montoVendido.add(precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas));
+    private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
+        return cuentas
+                .stream()
+                .map(cuenta -> montoPeriodo(cuenta.getCuentasPeriodo(), periodo))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
-            periodo = periodo - 1;
-        }
-
-        return montoVendido;
+    private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
+        return cuentaPeriodos
+                .stream()
+                .filter(cuentaPeriodo ->
+                        cuentaPeriodo.getPeriodo() == periodo)
+                .findFirst()
+                .map(CuentaPeriodo::getMonto)
+                .orElse(new BigDecimal(0));
     }
 
 }

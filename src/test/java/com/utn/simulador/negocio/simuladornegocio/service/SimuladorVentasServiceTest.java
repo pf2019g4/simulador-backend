@@ -2,12 +2,16 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
 import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.ModalidadCobroBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
+        estadoInicial.setMes(estadoInicial.getMes() + 1);
         Estado nuevoEstado = simuladorVentasService.simular(estadoInicial);
 
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
@@ -41,4 +46,49 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         assertThat(nuevoEstado.getCaja()).isGreaterThan(cajaInicial);
     }
 
+    @Test
+    public void simular_ventasConStock_Diferido_estado() {
+        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        
+        List<ModalidadCobro> modalidadesCobro = new ArrayList<>();
+        modalidadesCobro.add(ModalidadCobroBuilder.base(proyecto, 60L, 0).build(em)); //60% contado
+        modalidadesCobro.add(ModalidadCobroBuilder.base(proyecto, 0L, 1).build(em)); //0% a 30 dias
+        modalidadesCobro.add(ModalidadCobroBuilder.base(proyecto, 40L, 2).build(em)); //40% a 60 dias
+        proyecto.setModalidadCobro(modalidadesCobro);
+        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Long stockInicial = estadoInicial.getStock();
+        BigDecimal cajaInicial = estadoInicial.getCaja();
+
+        int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
+        int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
+
+        estadoInicial.setMes(estadoInicial.getMes() + 1);
+        Estado estadoContado = simuladorVentasService.simular(estadoInicial);
+        Long stockContado = estadoContado.getStock();
+        BigDecimal cajaContado = estadoContado.getCaja();
+        BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial);
+        
+        estadoContado.setMes(estadoContado.getMes() + 1);
+        Estado estado30D = simuladorVentasService.simular(estadoContado);
+        Long stock30D = estado30D.getStock();
+        BigDecimal caja30D = estado30D.getCaja();
+        BigDecimal variacionCaja30D = caja30D.subtract(cajaContado);
+
+        estado30D.setMes(estado30D.getMes() + 1);
+        Estado estado60D = simuladorVentasService.simular(estado30D);
+
+        assertThat(estadoContado.getId()).isEqualTo(estadoInicial.getId());
+        assertThat(stockContado).isLessThan(stockInicial);
+        assertThat(cajaContado).isGreaterThan(cajaInicial);
+        assertThat(cajaContado.subtract(cajaInicial)).isGreaterThan(BigDecimal.ZERO);
+        assertThat(stock30D).isLessThan(stockContado);
+        assertThat(caja30D).isGreaterThan(cajaContado);
+        assertThat(caja30D.subtract(cajaContado)).isGreaterThan(BigDecimal.ZERO);
+        assertThat(caja30D.subtract(cajaContado)).isEqualTo(variacionCajaContado);
+        assertThat(estado60D.getStock()).isLessThan(stock30D);
+        assertThat(estado60D.getCaja()).isGreaterThan(caja30D);
+        assertThat(estado60D.getCaja().subtract(caja30D)).isGreaterThan(BigDecimal.ZERO);
+        assertThat(estado60D.getCaja().subtract(caja30D)).isGreaterThan(variacionCaja30D);
+    }
 }
