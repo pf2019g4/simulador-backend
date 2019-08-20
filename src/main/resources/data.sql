@@ -57,11 +57,11 @@ insert into opcion
 (2, 1           , '$5000'                                                    , 0                  ,  0                      ,  0                           ),
 (3, 1           , '$10000'                                                   , 0                  ,  0                      ,  0                           ),
 (4, 2           , '$0'                                                       , 0                  ,  0                      ,  0                           ),
-(5, 2           , '$20000 -> costo fijo -50, variable +0, produccion +5'     , -50                ,  0                      ,  5                           ),
-(6, 2           , '$50000 -> costo fijo -40, variable -0.1, produccion +10'  , -40                ,  -0.1                   ,  10                          ),
-(7, 3           , '$10000 -> costo fijo 20, variable -0.1, produccion +0'    , 20                 ,  -0.1                   ,  0                           ),
-(8, 3           , '$20000 -> costo fijo 10, variable -0.2, produccion +10'   , 10                 ,  -0.2                   ,  0                           ),
-(9, 3           , '$30000 -> costo fijo 10, variable -0.3, produccion +0'    , 10                 ,  -0.3                   ,  0                           );
+(5, 2           , '$20000 -> CF -50, CV +0, P +5'     , -50                ,  0                      ,  5                           ),
+(6, 2           , '$50000 -> CF -40, CV -0.1, P +10'  , -40                ,  -0.1                   ,  10                          ),
+(7, 3           , '$10000 -> CF 20, CV -0.1, P +0'    , 20                 ,  -0.1                   ,  0                           ),
+(8, 3           , '$20000 -> CF 10, CV -0.2, P +10'   , 10                 ,  -0.2                   ,  0                           ),
+(9, 3           , '$30000 -> CF 10, CV -0.3, P +0'    , 10                 ,  -0.3                   ,  0                           );
 
 
 insert into consecuencia
