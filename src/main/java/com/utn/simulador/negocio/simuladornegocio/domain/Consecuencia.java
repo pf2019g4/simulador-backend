@@ -24,7 +24,7 @@ public class Consecuencia {
 
     @Enumerated(EnumType.STRING)
     private TipoFlujoFondo tipoFlujoFondo;
-
+    
     public Cuenta obtenerCuenta(Proyecto proyecto, int periodoActual) {
 
         CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();

@@ -63,11 +63,13 @@ public class DecisionService {
 
         Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId()
                 .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
+        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
 
         validarDecisionPendiente(proyecto, opcionTomada);
 
         marcarOpcionComoTomada(proyectoId, opcionTomada);
-        imputarCuentasPorConsecuencia(opcionTomada, proyecto);
+        imputarCuentasPorConsecuencia(opcionTomada, proyecto, estadoActual);
+        aplicarCambiosAtibutos(opcionTomada, estadoActual);
     }
 
     private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
@@ -82,8 +84,8 @@ public class DecisionService {
         }
     }
 
-    private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
-        Estado estadoActual = estadoRepository.findByProyectoIdAndActivo(proyecto.getId(), true);
+    private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto, Estado estadoActual) {
+
         List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto, estadoActual.getPeriodo());
 
         cuentaService.imputar(cuentasAImputar, estadoActual);
@@ -95,6 +97,14 @@ public class DecisionService {
         opcionProyecto.setOpcion(opcionTomada);
 
         opcionProyectoRepository.save(opcionProyecto);
+    }
+
+    private void aplicarCambiosAtibutos(Opcion opcionTomada, Estado estadoActual) {
+        estadoActual.setCostoFijo(estadoActual.getCostoFijo().add(opcionTomada.getVariacionCostoFijo()));
+        estadoActual.setCostoVariable(estadoActual.getCostoVariable().add(opcionTomada.getVariacionCostoVariable()));
+        estadoActual.setProduccionMensual(estadoActual.getProduccionMensual() + opcionTomada.getVariacionProduccion());
+
+        this.estadoRepository.save(estadoActual);
     }
 
 }

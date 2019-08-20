@@ -31,7 +31,7 @@ public class FlujoFondoService {
             throw new IllegalArgumentException();
         }
 
-        Estado estado = estadoRepository.findByProyectoIdAndActivo(idProyecto, true);
+        Estado estado = estadoRepository.findByProyectoIdAndActivoTrue(idProyecto);
         Integer periodoActual = estado.getPeriodo();
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();

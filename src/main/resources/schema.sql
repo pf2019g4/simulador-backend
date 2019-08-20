@@ -73,6 +73,9 @@ CREATE TABLE IF NOT EXISTS opcion (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(45) NOT NULL,
     decision_id bigint,
+    variacion_costo_fijo decimal(19,2) default 0,
+    variacion_costo_variable decimal(19,2) default 0,
+    variacion_produccion bigint default 0,
     PRIMARY KEY (id),
     FOREIGN KEY (decision_id) REFERENCES decision(id)
 );

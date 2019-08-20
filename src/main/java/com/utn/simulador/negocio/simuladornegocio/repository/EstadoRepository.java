@@ -7,5 +7,5 @@ public interface EstadoRepository extends JpaRepository<Estado, Long>{
 
     public Estado findByActivoTrue();
 
-    public Estado findByProyectoIdAndActivo(Long idProyecto, boolean activo);
+    public Estado findByProyectoIdAndActivoTrue(Long idProyecto);
 }
