@@ -4,6 +4,7 @@ import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTes
 import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 import java.math.BigDecimal;
@@ -23,6 +24,8 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     private OpcionProyectoRepository opcionProyectoRepository;
 
     @Autowired
+    private EstadoRepository estadoRepository;
+    @Autowired
     private CuentaRepository cuentaRepository;
 
     @Test
@@ -32,7 +35,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
 
-        OpcionBuilder.deDecision(decision)
+        OpcionBuilder.deDecisionMaquinaria(decision)
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);
@@ -53,24 +56,29 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
 
-        Opcion opcion = OpcionBuilder.deDecision(decision)
+        Opcion opcion = OpcionBuilder.deDecisionMaquinaria(decision)
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);
 
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
+        Estado estadoAntes = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
+        em.detach(estadoAntes);
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
         decisionService.tomaDecision(proyecto.getId(), opcion.getId());
 
+        Estado estadoDespues = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
 
         assertThat(cuentasDespues).isEqualTo(cuentasAntes + opcion.getConsecuencias().size());
         assertThat(cantidadDecisionesTomadasDespues).isEqualTo(cantidadDecisionesTomadasAntes + 1);
-
+        assertThat(estadoDespues.getCostoFijo()).isEqualTo(estadoAntes.getCostoFijo().subtract(BigDecimal.TEN));
+        assertThat(estadoDespues.getCostoVariable()).isEqualTo(estadoAntes.getCostoVariable().subtract(BigDecimal.TEN));
+        assertThat(estadoDespues.getProduccionMensual()).isEqualTo(estadoAntes.getProduccionMensual() + 10L);
     }
 
     @Test
@@ -80,7 +88,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Decision decision = DecisionBuilder.deEscenario(escenarioDeLaDecision).build(em);
 
-        Opcion opcion = OpcionBuilder.deDecision(decision)
+        Opcion opcion = OpcionBuilder.deDecisionMaquinaria(decision)
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);
@@ -109,7 +117,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
 
-        Opcion opcion = OpcionBuilder.deDecision(decision)
+        Opcion opcion = OpcionBuilder.deDecisionMaquinaria(decision)
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);

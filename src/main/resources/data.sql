@@ -53,16 +53,16 @@ insert into decision
 
 
 insert into opcion
-(id, decision_id, descripcion       ) values
-(1, 1           , '$0'              ),
-(2, 1           , '$5000'           ),
-(3, 1           , '$10000'          ),
-(4, 2           , '$0'              ),
-(5, 2           , '$20000'          ),
-(6, 2           , '$50000'          ),
-(7, 3           , '$10000'          ),
-(8, 3           , '$20000'          ),
-(9, 3           , '$30000'          );
+(id, decision_id, descripcion                                                ,variacion_costo_fijo, variacion_costo_variable, variacion_produccion   ) values
+(1, 1           , '$0'                                                       , 0                  ,  0                      ,  0                           ),
+(2, 1           , '$5000'                                                    , 0                  ,  0                      ,  0                           ),
+(3, 1           , '$10000'                                                   , 0                  ,  0                      ,  0                           ),
+(4, 2           , '$0'                                                       , 0                  ,  0                      ,  0                           ),
+(5, 2           , '$20000 -> costo fijo -50, variable +0, produccion +5'     , -50                ,  0                      ,  5                           ),
+(6, 2           , '$50000 -> costo fijo -40, variable -0.1, produccion +10'  , -40                ,  -0.1                   ,  10                          ),
+(7, 3           , '$10000 -> costo fijo 20, variable -0.1, produccion +0'    , 20                 ,  -0.1                   ,  0                           ),
+(8, 3           , '$20000 -> costo fijo 10, variable -0.2, produccion +10'   , 10                 ,  -0.2                   ,  0                           ),
+(9, 3           , '$30000 -> costo fijo 10, variable -0.3, produccion +0'    , 10                 ,  -0.3                   ,  0                           );
 
 
 insert into consecuencia

@@ -2,6 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -15,10 +16,13 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
         consecuencias = new ArrayList<>();
     }
 
-    public static OpcionBuilder deDecision(Decision decision) {
+    public static OpcionBuilder deDecisionMaquinaria(Decision decision) {
         OpcionBuilder decisionBuilder = new OpcionBuilder();
         decisionBuilder.instance.setDescripcion("opcion1");
         decisionBuilder.instance.setDecisionId(decision.getId());
+        decisionBuilder.instance.setVariacionCostoFijo(BigDecimal.TEN.negate());
+        decisionBuilder.instance.setVariacionCostoVariable(BigDecimal.TEN.negate());
+        decisionBuilder.instance.setVariacionProduccion(10L);
 
         return decisionBuilder;
     }
@@ -39,7 +43,7 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
             em.persist(consecuencia);
             instance.getConsecuencias().add(consecuencia);
         }
-        
+
         em.flush();
         em.detach(instance);
         return instance;
