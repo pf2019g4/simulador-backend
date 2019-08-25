@@ -28,6 +28,8 @@ public class ConsecuenciaBuilder extends AbstractPersistenceBuilder<Consecuencia
     public static ConsecuenciaBuilder financieraIngresoNoAfectoAImpuesto(BigDecimal monto) {
         ConsecuenciaBuilder consecuenciaBuilder = new ConsecuenciaBuilder();
         consecuenciaBuilder.instance.setMonto(monto);
+        consecuenciaBuilder.instance.setPeriodoInicio(0);
+        consecuenciaBuilder.instance.setCantidadPeriodos(2);
         consecuenciaBuilder.instance.setTipoCuenta(TipoCuenta.FINANCIERO);
         consecuenciaBuilder.instance.setTipoFlujoFondo(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS);
         consecuenciaBuilder.instance.setDescripcion("opcion financiera no afecta a impuestos");

@@ -65,9 +65,9 @@ public class CuentaService {
 
     public void crearCuentaEconomicaVenta(Long idProyecto, Integer periodo, BigDecimal ventas) {
         CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
-        
+
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
-        
+
         Cuenta cuentaEconomica = Cuenta.builder()
                 .descripcion("venta periodo " + periodo)
                 .tipoCuenta(TipoCuenta.ECONOMICO)
@@ -78,12 +78,12 @@ public class CuentaService {
                 .cuenta(cuentaEconomica)
                 .monto(ventas)
                 .periodo(periodo).build());
-        
+
         cuentaEconomica.setCuentasPeriodo(cuentasPeriodos);
-        
+
         cuentaRepository.save(cuentaEconomica);
     }
-    
+
     public CuentaPeriodo crearCuentaPeriodoVenta(Long idProyecto, Integer periodo, BigDecimal ventas, Cuenta cuentaFinanciera) {
 
         return CuentaPeriodo.builder()
@@ -91,9 +91,9 @@ public class CuentaService {
                 .monto(ventas)
                 .periodo(periodo).build();
     }
-    
+
     public Cuenta crearCuentaFinancieraVenta(Long idProyecto, Integer periodo) {
-                
+
         return Cuenta.builder()
                 .descripcion("venta periodo " + periodo)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
@@ -109,21 +109,25 @@ public class CuentaService {
     public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
 
         for (Cuenta cuenta : cuentasAImputar) {
-            for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
-                if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
-                        && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
-                    if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
-                            || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
-                        estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
-                    } else {
-                        estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
-                    }
-                }
-            }
-
             cuentaRepository.save(cuenta);
-            estadoRepository.save(estado);
+            for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
+                afectarEstadoSiCorresponde(cuenta, cuentaPeriodo, estado);
 
+                cuentaPeriodoRepository.save(cuentaPeriodo);
+            }
+            estadoRepository.save(estado);
+        }
+    }
+
+    private void afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
+        if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
+                && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
+            if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
+                    || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
+                estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
+            } else {
+                estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
+            }
         }
     }
 }

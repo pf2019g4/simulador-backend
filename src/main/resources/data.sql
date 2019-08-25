@@ -65,18 +65,18 @@ insert into opcion
 
 
 insert into consecuencia
-(opcion_id, monto, descripcion , tipo_cuenta , tipo_flujo_fondo) values
-(2        , 5000 ,  'publicidad', 'FINANCIERO', 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
-(2        , -5000,  'publicidad', 'ECONOMICO', null),
-(3        , 10000,  'publicidad', 'FINANCIERO', 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
-(3        ,-10000,  'publicidad', 'ECONOMICO', null),
-(5        , 20000 , 'maquinaria', 'FINANCIERO', 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
-(5        , -20000, 'maquinaria', 'ECONOMICO', null),
-(6        , 50000 , 'maquinaria', 'FINANCIERO', 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
-(6        , -50000, 'maquinaria', 'ECONOMICO', null),
-(7        , 10000 , 'cosas'     , 'FINANCIERO', 'EGRESOS_AFECTOS_A_IMPUESTOS'),
-(7        , -10000, 'cosas'     , 'ECONOMICO', null),
-(8        , 20000 , 'cosas'     , 'FINANCIERO', 'EGRESOS_AFECTOS_A_IMPUESTOS'),
-(8        , -20000, 'cosas'     , 'ECONOMICO', null),
-(9        , 30000 , 'cosas'     , 'FINANCIERO', 'EGRESOS_AFECTOS_A_IMPUESTOS'),
-(9        , -30000, 'cosas'     , 'ECONOMICO', null);
+(opcion_id, monto, descripcion , tipo_cuenta , periodo_inicio  , cantidad_periodos, tipo_flujo_fondo) values
+(2        , 5000 ,  'publicidad', 'FINANCIERO', 0              , 2                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
+(2        , -5000,  'publicidad', 'ECONOMICO',  0              , 2                ,null),
+(3        , 10000,  'publicidad', 'FINANCIERO', 0              , 2                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
+(3        ,-10000,  'publicidad', 'ECONOMICO',  0              , 2                ,null),
+(5        , 20000 , 'maquinaria', 'FINANCIERO', 0              , 2                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
+(5        , -20000, 'maquinaria', 'ECONOMICO',  0              , 2                ,null),
+(6        , 50000 , 'maquinaria', 'FINANCIERO', 0              , 2                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS'),
+(6        , -50000, 'maquinaria', 'ECONOMICO',  0              , 2                ,null),
+(7        , 10000 , 'cosas'     , 'FINANCIERO', 0              , 2                , 'EGRESOS_AFECTOS_A_IMPUESTOS'),
+(7        , -10000, 'cosas'     , 'ECONOMICO',  0              , 2                ,null),
+(8        , 20000 , 'cosas'     , 'FINANCIERO', 0              , 2                , 'EGRESOS_AFECTOS_A_IMPUESTOS'),
+(8        , -20000, 'cosas'     , 'ECONOMICO',  0              , 2                ,null),
+(9        , 30000 , 'cosas'     , 'FINANCIERO', 0              , 2                , 'EGRESOS_AFECTOS_A_IMPUESTOS'),
+(9        , -30000, 'cosas'     , 'ECONOMICO',  0              , 2                ,null);

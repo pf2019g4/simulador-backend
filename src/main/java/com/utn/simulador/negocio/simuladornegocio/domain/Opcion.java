@@ -24,11 +24,11 @@ public class Opcion {
     @OneToMany(mappedBy = "opcionId", cascade = CascadeType.ALL)
     private List<Consecuencia> consecuencias;
 
-    public List<Cuenta> obtenerCuentasAImputar(Proyecto proyecto, int periodo) {
+    public List<Cuenta> obtenerCuentasAImputar(Proyecto proyecto) {
         ArrayList<Cuenta> cuentas = new ArrayList<>();
 
         for (Consecuencia consecuencia : consecuencias) {
-            cuentas.add(consecuencia.obtenerCuenta(proyecto, periodo));
+            cuentas.add(consecuencia.obtenerCuenta(proyecto));
         }
         return cuentas;
     }

@@ -85,10 +85,12 @@ CREATE TABLE IF NOT EXISTS consecuencia (
     monto decimal(19,2) NOT NULL,
     descripcion VARCHAR(45) NOT NULL,
     opcion_id bigint,
+    periodo_inicio int not null,
+    cantidad_periodos int not null,
     tipo_cuenta varchar(20) NOT NULL,
     tipo_flujo_fondo varchar(40),
     PRIMARY KEY (id),
-    FOREIGN KEY (opcion_id) REFERENCES opcion(id),
+    FOREIGN KEY (opcion_id) REFERENCES opcion(id)
 );
 
 CREATE TABLE IF NOT EXISTS opcion_proyecto (
