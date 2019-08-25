@@ -19,6 +19,7 @@ public class Consecuencia {
     private String descripcion;
     private Long opcionId;
 
+
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc
 
@@ -43,5 +44,7 @@ public class Consecuencia {
         cuenta.setCuentasPeriodo(cuentasPeriodos);
         return cuenta;
     }
+
+
 
 }

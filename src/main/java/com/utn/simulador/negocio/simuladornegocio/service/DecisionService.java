@@ -69,7 +69,7 @@ public class DecisionService {
 
         marcarOpcionComoTomada(proyectoId, opcionTomada);
         imputarCuentasPorConsecuencia(opcionTomada, proyecto, estadoActual);
-        aplicarCambiosAtibutos(opcionTomada, estadoActual);
+        aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
 
     private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
@@ -99,7 +99,7 @@ public class DecisionService {
         opcionProyectoRepository.save(opcionProyecto);
     }
 
-    private void aplicarCambiosAtibutos(Opcion opcionTomada, Estado estadoActual) {
+    private void aplicarCambiosAtributos(Opcion opcionTomada, Estado estadoActual) {
         estadoActual.setCostoFijo(estadoActual.getCostoFijo().add(opcionTomada.getVariacionCostoFijo()));
         estadoActual.setCostoVariable(estadoActual.getCostoVariable().add(opcionTomada.getVariacionCostoVariable()));
         estadoActual.setProduccionMensual(estadoActual.getProduccionMensual() + opcionTomada.getVariacionProduccion());

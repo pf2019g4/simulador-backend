@@ -5,6 +5,8 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EstadoService {
@@ -13,6 +15,10 @@ public class EstadoService {
 
     public Estado obtenerActual() {
         return estadoRepository.findByActivoTrue();
+    }
+
+    public List<Estado> obtenerPorProyecto(Long idProyecto) {
+        return estadoRepository.findByProyectoId(idProyecto).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
     }
 
     public Estado avanzarTiempo(Estado estado) {

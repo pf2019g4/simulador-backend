@@ -50,7 +50,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     @Test
-    public void tomarDecision_escenarioValido() {
+    public void tomarDecision_dosConsecuenciasConDosIngresosCadaUna() {
 
         Escenario escenario = EscenarioBuilder.base().build(em);
 
@@ -74,7 +74,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
 
-        assertThat(cuentasDespues).isEqualTo(cuentasAntes + opcion.getConsecuencias().size());
+        assertThat(cuentasDespues).isEqualTo(cuentasAntes + (opcion.getConsecuencias().size()*2));
         assertThat(cantidadDecisionesTomadasDespues).isEqualTo(cantidadDecisionesTomadasAntes + 1);
         assertThat(estadoDespues.getCostoFijo()).isEqualTo(estadoAntes.getCostoFijo().subtract(BigDecimal.TEN));
         assertThat(estadoDespues.getCostoVariable()).isEqualTo(estadoAntes.getCostoVariable().subtract(BigDecimal.TEN));
