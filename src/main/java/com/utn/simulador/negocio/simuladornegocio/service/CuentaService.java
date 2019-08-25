@@ -109,17 +109,17 @@ public class CuentaService {
     public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
 
         for (Cuenta cuenta : cuentasAImputar) {
+            cuentaRepository.save(cuenta);
             for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
-                afectarCajaSiCorresponde(cuenta, cuentaPeriodo, estado);
+                afectarEstadoSiCorresponde(cuenta, cuentaPeriodo, estado);
 
                 cuentaPeriodoRepository.save(cuentaPeriodo);
             }
-            cuentaRepository.save(cuenta);
             estadoRepository.save(estado);
         }
     }
 
-    private void afectarCajaSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
+    private void afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
                 && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
             if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
