@@ -18,16 +18,16 @@ public class Consecuencia {
     private BigDecimal monto;
     private String descripcion;
     private Long opcionId;
+    private int periodoInicio;
+    private int cantidadPeriodos;
 
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc
 
     @Enumerated(EnumType.STRING)
     private TipoFlujoFondo tipoFlujoFondo;
-    
-    public Cuenta obtenerCuenta(Proyecto proyecto, int periodoActual) {
 
-        CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
+    public Cuenta obtenerCuenta(Proyecto proyecto) {
 
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
 
@@ -38,7 +38,9 @@ public class Consecuencia {
                 .proyectoId(proyecto.getId())
                 .build();
 
-        cuentasPeriodos.add(cuentaPeriodo.builder().monto(monto).periodo(periodoActual).cuenta(cuenta).build());
+        for (int numeroPeriodo = 0; numeroPeriodo < cantidadPeriodos; numeroPeriodo++) {
+            cuentasPeriodos.add(CuentaPeriodo.builder().monto(monto).periodo(periodoInicio + numeroPeriodo).cuenta(cuenta).build());
+        }
 
         cuenta.setCuentasPeriodo(cuentasPeriodos);
         return cuenta;

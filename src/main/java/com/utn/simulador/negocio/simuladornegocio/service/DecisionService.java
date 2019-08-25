@@ -86,7 +86,7 @@ public class DecisionService {
 
     private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto, Estado estadoActual) {
 
-        List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto, estadoActual.getPeriodo());
+        List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto);
 
         cuentaService.imputar(cuentasAImputar, estadoActual);
     }
