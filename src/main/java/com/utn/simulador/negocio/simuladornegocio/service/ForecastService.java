@@ -13,11 +13,15 @@ public class ForecastService {
 
     private final ForecastRepository forecastRepository;
 
-    void guardar(List<Forecast> listaCompletaForecast){
+    public void guardar(List<Forecast> listaCompletaForecast){
         forecastRepository.saveAll(listaCompletaForecast);
     }
 
-    Forecast obtenerPorProyectoYPeriodo(Long idProyecto, Integer periodo){
+    public void eliminarViejoForecast(Long idProyecto){
+        forecastRepository.deleteByProyectoId(idProyecto);
+    }
+
+    public Forecast obtenerPorProyectoYPeriodo(Long idProyecto, Integer periodo){
         return forecastRepository.findByProyectoIdAndPeriodo(idProyecto, periodo);
     }
 
