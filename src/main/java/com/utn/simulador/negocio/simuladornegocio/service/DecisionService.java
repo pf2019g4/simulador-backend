@@ -71,6 +71,23 @@ public class DecisionService {
         imputarCuentasPorConsecuencia(opcionTomada, proyecto, estadoActual);
         aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
+    
+    public Decision crearDecision(Decision decision) {
+        
+        return decisionRepository.save(decision);
+    }
+    
+    public Decision editarDecision(Long decisionId, Decision decision) {
+                
+        opcionRepository.deleteByDecisionId(decisionId);
+        
+        return decisionRepository.save(decision);
+    }
+    
+    public void borrarDecision(Long decisionId) {
+        
+        decisionRepository.deleteById(decisionId);
+    }
 
     private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
         for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
