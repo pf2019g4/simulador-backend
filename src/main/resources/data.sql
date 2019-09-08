@@ -14,16 +14,16 @@ delete from proyecto;
 delete from escenario;
 
 insert into escenario
-(id , descripcion  , impuesto_porcentaje) values
-(1  , 'escenario 1', 0.0              );
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(1, 'escenario 1',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundadoa', 0.0 );
 
 insert into escenario
-(id , descripcion  , impuesto_porcentaje) values
-(2  , 'escenario 2', 0.0              );
-
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(2, 'escenario 2',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundado', 0.0 );
+        
 insert into escenario
-(id , descripcion  , impuesto_porcentaje) values
-(3  , 'escenario 3', 0.0              );
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(3, 'escenario 3',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundado', 0.0 );
 
 insert into proyecto
 (id , nombre       , escenario_id) values

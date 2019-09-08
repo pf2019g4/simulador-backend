@@ -11,9 +11,12 @@ import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +31,26 @@ public class EscenariosController {
     @GetMapping("/escenarios")
     public List<Escenario> getEscenarios() {
         return escenarioService.getEscenarios();
+    }
+    
+    @GetMapping("/escenarios/{id}")
+    public Escenario getEscenarioById(@PathVariable("id") Long id) {
+        return escenarioService.getEscenarioById(id);
+    }
+    
+    @PostMapping("/escenarios")
+    public Escenario createEscenario(@RequestBody Escenario escenario) {
+        return escenarioService.createEscenario(escenario);
+    }
+    
+    @PutMapping("/escenarios/{id}")
+    public Escenario createEscenario(@PathVariable("id") Long id,@RequestBody Escenario escenario) {
+        return escenarioService.modifyEscenario(escenario);
+    }
+    
+    @DeleteMapping("/escenarios/{id}")
+    public void createEscenario(@PathVariable("id") Long id) {
+        escenarioService.deleteEscenarioById(id);
     }
 
 }
