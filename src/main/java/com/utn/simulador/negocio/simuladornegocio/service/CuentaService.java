@@ -27,6 +27,10 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
     }
 
+    public List<Cuenta> obtenerPorProyectoYOpcion(Long idProyecto, Long idOpcion) {
+        return cuentaRepository.findByProyectoIdAndOpcionId(idProyecto, idOpcion);
+    }
+
     public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
         crearCuentaFinanacieraProduccion(estado, costoPeriodo);
         crearCuentaEconomicaProduccion(estado, costoPeriodo);
@@ -127,5 +131,12 @@ public class CuentaService {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
             }
         }
+    }
+
+    public void borrarCuenta(Cuenta cuenta) {
+        for (CuentaPeriodo cp: cuenta.getCuentasPeriodo()) {
+            cuentaPeriodoRepository.deleteById(cp.getId());
+        }
+        cuentaRepository.deleteById(cuenta.getId());
     }
 }
