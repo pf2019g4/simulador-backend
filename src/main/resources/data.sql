@@ -17,6 +17,14 @@ insert into escenario
 (id , descripcion  , impuesto_porcentaje) values
 (1  , 'escenario 1', 0.0              );
 
+insert into escenario
+(id , descripcion  , impuesto_porcentaje) values
+(2  , 'escenario 2', 0.0              );
+
+insert into escenario
+(id , descripcion  , impuesto_porcentaje) values
+(3  , 'escenario 3', 0.0              );
+
 insert into proyecto
 (id , nombre       , escenario_id) values
 (1  , 'Proyecto 1' , 1           );
