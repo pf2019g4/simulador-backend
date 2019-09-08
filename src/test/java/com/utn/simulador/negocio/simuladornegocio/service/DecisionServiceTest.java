@@ -8,12 +8,14 @@ import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -221,9 +223,8 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
-//       TODO agregar nuevo chequeo que valide que se borro toda la info asociada a una vieja decision!
-//        assertThatExceptionOfType(IllegalStateException.class)
-//                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
 
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();

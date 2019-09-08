@@ -31,9 +31,9 @@ public class SimuladorController {
     @PostMapping("/proyecto/{proyectoId}/simularOpciones")
     public void tomaDecision(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
-        //simuladorService.deshacerSimulacionPrevia(proyectoId);
-        simuladorService.crearPrimerEstadoSimulacion(proyectoId);
-        //simuladorService.simularPeriodos(proyectoId);
+        simuladorService.deshacerSimulacionPrevia(proyectoId);
+        simuladorService.crearPrimerEstadoSimulacion(proyectoId, true);
+        simuladorService.simularPeriodos(proyectoId, true);
         for(Opcion opcion : opciones){
             decisionService.tomaDecision(proyectoId, opcion.getId());   
         }
