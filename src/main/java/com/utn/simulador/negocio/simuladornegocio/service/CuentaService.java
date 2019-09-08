@@ -107,12 +107,10 @@ public class CuentaService {
     }
 
     public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
-
         for (Cuenta cuenta : cuentasAImputar) {
             cuentaRepository.save(cuenta);
             for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
                 afectarEstadoSiCorresponde(cuenta, cuentaPeriodo, estado);
-
                 cuentaPeriodoRepository.save(cuentaPeriodo);
             }
             estadoRepository.save(estado);

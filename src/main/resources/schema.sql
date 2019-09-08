@@ -42,25 +42,6 @@ CREATE TABLE IF NOT EXISTS estado (
 
 );
 
-CREATE TABLE IF NOT EXISTS cuenta (
-  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  proyecto_id bigint,
-  descripcion VARCHAR(45) NOT NULL,
-  tipo_cuenta varchar(20) NOT NULL,
-  tipo_flujo_fondo varchar(40),
-  PRIMARY KEY (id),
-  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
-);
-
-CREATE TABLE IF NOT EXISTS cuenta_periodo (
-  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  cuenta_id bigint UNSIGNED not null,
-  monto decimal not null,
-  periodo int not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
-);
-
 CREATE TABLE IF NOT EXISTS decision (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(250) NOT NULL,
@@ -78,6 +59,27 @@ CREATE TABLE IF NOT EXISTS opcion (
     variacion_produccion bigint default 0,
     PRIMARY KEY (id),
     FOREIGN KEY (decision_id) REFERENCES decision(id)
+);
+
+CREATE TABLE IF NOT EXISTS cuenta (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint,
+  opcion_id bigint NULL,
+  descripcion VARCHAR(45) NOT NULL,
+  tipo_cuenta varchar(20) NOT NULL,
+  tipo_flujo_fondo varchar(40),
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
+  FOREIGN KEY (opcion_id) REFERENCES opcion(id)
+);
+
+CREATE TABLE IF NOT EXISTS cuenta_periodo (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  cuenta_id bigint UNSIGNED not null,
+  monto decimal not null,
+  periodo int not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
 );
 
 CREATE TABLE IF NOT EXISTS consecuencia (
