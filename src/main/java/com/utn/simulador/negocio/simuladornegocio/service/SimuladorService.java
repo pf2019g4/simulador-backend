@@ -1,8 +1,11 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -11,6 +14,7 @@ public class SimuladorService {
     private final EstadoService estadoService;
     private final SimuladorVentasService simuladorVentasService;
     private final SimuladorProduccionService simuladorProduccionService;
+    private final EscenarioRepository escenarioRepository;
 
     public Estado simularPeriodo(long proyectoId) {
         Estado estado = avanzarTiempo();
@@ -29,4 +33,9 @@ public class SimuladorService {
         return nuevoEstado;
     }
 
+    public void simularPeriodos(Long proyectoId) {
+        Integer maximosPeriodos = escenarioRepository.findById(proyectoId).get().getMaximosPeriodos();
+        IntStream.rangeClosed(1, maximosPeriodos)
+                .forEach(i -> simularPeriodo(proyectoId));
+    }
 }

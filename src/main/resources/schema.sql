@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   descripcion VARCHAR(300) NOT NULL,
   impuesto_porcentaje DECIMAL NOT NULL,
+  maximos_periodos DECIMAL NOT NULL,
   PRIMARY KEY (id)
 );
 

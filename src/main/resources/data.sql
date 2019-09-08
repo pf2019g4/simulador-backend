@@ -14,8 +14,8 @@ delete from proyecto;
 delete from escenario;
 
 insert into escenario
-(id , descripcion  , impuesto_porcentaje) values
-(1  , 'escenario 1', 0.0              );
+(id , descripcion  , impuesto_porcentaje, maximos_periodos) values
+(1  , 'escenario 1', 0.0                ,   12);
 
 insert into proyecto
 (id , nombre       , escenario_id) values

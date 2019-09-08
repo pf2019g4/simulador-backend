@@ -21,6 +21,7 @@ public class Escenario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
+    private Integer maximosPeriodos;
     private Double impuestoPorcentaje;  //Es un valor entre 0 y 1
 
 }
