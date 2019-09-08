@@ -1,7 +1,9 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +17,7 @@ public class SimuladorService {
     private final EstadoService estadoService;
     private final SimuladorVentasService simuladorVentasService;
     private final SimuladorProduccionService simuladorProduccionService;
-    private final EscenarioRepository escenarioRepository;
-    private final ForecastService forecastService;
+    private final ProyectoRepository proyectoRepository;
 
     public Estado simularPeriodo(long proyectoId, boolean esForecast) {
         Estado estado = avanzarTiempo(proyectoId, esForecast);
@@ -36,7 +37,8 @@ public class SimuladorService {
     }
 
     public void simularPeriodos(Long proyectoId, boolean esForecast) {
-        Integer maximosPeriodos = escenarioRepository.findById(proyectoId).get().getMaximosPeriodos();
+        Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+        Integer maximosPeriodos = proyecto.getEscenario().getMaximosPeriodos();
         IntStream.rangeClosed(1, maximosPeriodos)
                 .forEach(i -> simularPeriodo(proyectoId, esForecast));
     }
