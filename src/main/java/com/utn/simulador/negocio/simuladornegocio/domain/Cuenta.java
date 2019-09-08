@@ -33,4 +33,5 @@ public class Cuenta {
     @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CuentaPeriodo> cuentasPeriodo;
+
 }

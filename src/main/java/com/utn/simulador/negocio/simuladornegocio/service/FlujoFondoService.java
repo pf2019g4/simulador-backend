@@ -23,15 +23,16 @@ public class FlujoFondoService {
     private final ProyectoRepository proyectoRepository;
     private final EstadoRepository estadoRepository;
 
-    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto) {
+    public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, boolean esForecast) {
 
+        proyectoRepository.findAll();
         Optional<Proyecto> proyecto = proyectoRepository.findById(idProyecto);
 
         if (proyecto.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        Estado estado = estadoRepository.findByProyectoIdAndActivoTrue(idProyecto);
+        Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
@@ -53,7 +54,7 @@ public class FlujoFondoService {
                         sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
                                 subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                        periodo)).
+                        periodo, false)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
@@ -65,7 +66,7 @@ public class FlujoFondoService {
                         cuentaPeriodo.getMonto().
                                 multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
                                 ),
-                        cuentaPeriodo.getPeriodo())).
+                        cuentaPeriodo.getPeriodo(), false)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
@@ -78,7 +79,7 @@ public class FlujoFondoService {
                                 subtract(cuentaPeriodo.getMonto().
                                         multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
                                 ),
-                        cuentaPeriodo.getPeriodo())).
+                        cuentaPeriodo.getPeriodo(), false)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -88,7 +89,6 @@ public class FlujoFondoService {
         List<Cuenta> cuentasIngresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS);
         cuentas.put(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosNoAfectosAImpuestos, null));
 
-        System.out.println("RIGHT HERE");
         List<Cuenta> cuentasEgresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
         cuentas.put(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosNoAfectosAImpuestos, null));
 
@@ -106,7 +106,8 @@ public class FlujoFondoService {
                                         add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
                                         subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
                                         subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
-                                periodo
+                                periodo,
+                                false
                         )
                 ).
                 collect(Collectors.toList());

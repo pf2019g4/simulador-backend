@@ -15,6 +15,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.RespuestaRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
@@ -30,7 +31,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
         Producto producto = ProductoBuilder.base().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
 
-        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId());
+        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), false);
 
         assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
         assertThat(nuevoEstado.getActivo()).isTrue();
@@ -39,14 +40,16 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
     @Test
     public void simularPeriodos_escenarioValido_avanzaElPeriodoHastaElMaximo() {
-        Escenario escenario = EscenarioBuilder.base().build(em);
+        Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
+        Escenario escenario = EscenarioBuilder.baseConEscenario(estadoInicialEscenario).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
         Producto producto = ProductoBuilder.base().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
 
-        simuladorService.simularPeriodos(proyecto.getId());
+        simuladorService.simularPeriodos(proyecto.getId(), false);
 
-        assertThat(estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId()).getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + escenario.getMaximosPeriodos());
+        assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), false).getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + escenario.getMaximosPeriodos());
 
     }
+
 }

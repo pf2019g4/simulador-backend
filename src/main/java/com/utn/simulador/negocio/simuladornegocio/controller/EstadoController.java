@@ -17,9 +17,9 @@ public class EstadoController {
     private final EstadoService estadoService;
     private final SimuladorService simuladorService;
 
-    @GetMapping("/estado/actual")
-    public Estado obtenerEstadoActual() {
-        return estadoService.obtenerActual();
+    @GetMapping("/proyecto/{id}/estado/actual")
+    public Estado obtenerEstadoActual(@PathVariable("id") Long idProyecto) {
+        return estadoService.obtenerActual(idProyecto, false);
     }
 
     @GetMapping("/proyecto/{id}/estado")
@@ -27,9 +27,9 @@ public class EstadoController {
         return estadoService.obtenerPorProyecto(idProyecto);
     }
 
-    @PostMapping("/estado")
-    public Estado avanzarPeriodo() {
+    @PostMapping("/proyecto/{id}/estado")
+    public Estado avanzarPeriodo(@PathVariable("id") Long idProyecto) {
         //TODO recibir el id del proyecto por parámetro.
-        return simuladorService.simularPeriodo(estadoService.obtenerActual().getProyecto().getId());
+        return simuladorService.simularPeriodo(estadoService.obtenerActual(idProyecto, false).getProyecto().getId(), false);
     }
 }

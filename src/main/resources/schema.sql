@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   descripcion VARCHAR(300) NOT NULL,
   impuesto_porcentaje DECIMAL NOT NULL,
   maximos_periodos DECIMAL NOT NULL,
+  estado_id bigint NULL,
   PRIMARY KEY (id)
 );
 
@@ -25,14 +26,15 @@ CREATE TABLE IF NOT EXISTS producto (
 
 CREATE TABLE IF NOT EXISTS estado (
   id bigint UNSIGNED AUTO_INCREMENT,
-  proyecto_id bigint NOT NULL,
-  producto_id bigint NOT NULL,
+  proyecto_id bigint NULL,
+  producto_id bigint NULL,
   costo_fijo decimal(19,2),
   costo_variable decimal(19,2),
   caja decimal(19,2),
   ventas decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
+  es_forecast boolean NOT NULL default false,
   activo boolean NOT NULL DEFAULT FALSE,
   periodo integer,
   parametros_ventas_media bigint,
@@ -58,6 +60,7 @@ CREATE TABLE IF NOT EXISTS cuenta_periodo (
   cuenta_id bigint UNSIGNED not null,
   monto decimal not null,
   periodo int not null,
+  es_forecast boolean default false,
   PRIMARY KEY (id),
   FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
 );
@@ -113,3 +116,5 @@ CREATE TABLE IF NOT EXISTS modalidad_cobro (
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
+
+ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);

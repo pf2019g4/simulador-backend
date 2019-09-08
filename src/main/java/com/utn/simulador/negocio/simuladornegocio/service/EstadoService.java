@@ -13,8 +13,8 @@ public class EstadoService {
 
     private final EstadoRepository estadoRepository;
 
-    public Estado obtenerActual() {
-        return estadoRepository.findByActivoTrue();
+    public Estado obtenerActual(long proyectoId, boolean esForecast) {
+        return estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyectoId, esForecast);
     }
 
     public List<Estado> obtenerPorProyecto(Long idProyecto) {

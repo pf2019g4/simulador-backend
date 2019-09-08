@@ -1,9 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class SimuladorVentasService {
 
     private final CuentaService cuentaService;
+
+    private final ForecastService forecastService;
 
     Estado simular(Estado estado) {
         long unidadesVendidas = calcularUnidadesVendidas(estado);
@@ -48,7 +48,11 @@ public class SimuladorVentasService {
     }
 
     private long calcularUnidadesVendidas(Estado estado) {
-        return estado.getParametrosVentas().getMedia();
+        if(estado.getEsForecast()){
+            return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo()).getCantidadUnidades();
+        } else {
+            return estado.getParametrosVentas().getMedia();
+        }
     }
 
     private BigDecimal calcularIngresosCaja(Estado estado) {

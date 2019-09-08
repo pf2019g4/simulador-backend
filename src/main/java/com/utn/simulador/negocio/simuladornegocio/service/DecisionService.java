@@ -63,7 +63,7 @@ public class DecisionService {
 
         Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId()
                 .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
-        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
+        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), false);
 
         validarDecisionPendiente(proyecto, opcionTomada);
 

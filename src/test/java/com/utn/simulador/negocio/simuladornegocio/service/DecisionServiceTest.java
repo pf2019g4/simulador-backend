@@ -63,14 +63,14 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
-        Estado estadoAntes = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
+        Estado estadoAntes = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), false);
         em.detach(estadoAntes);
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
         decisionService.tomaDecision(proyecto.getId(), opcion.getId());
 
-        Estado estadoDespues = estadoRepository.findByProyectoIdAndActivoTrue(proyecto.getId());
+        Estado estadoDespues = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), false);
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
 

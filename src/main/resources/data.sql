@@ -13,9 +13,13 @@ delete from modalidad_cobro;
 delete from proyecto;
 delete from escenario;
 
+insert into estado
+(proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
+(NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , NULL       , 200  , 0.10                     , 180                ,     false    );
+
 insert into escenario
-(id , descripcion  , impuesto_porcentaje, maximos_periodos) values
-(1  , 'escenario 1', 0.0                ,   12);
+(id , descripcion  , impuesto_porcentaje, maximos_periodos, estado_id) values
+(1  , 'escenario 1', 0.0                ,   12            , NULL);
 
 insert into proyecto
 (id , nombre       , escenario_id) values
@@ -26,17 +30,17 @@ insert into producto
 (1 , 'Lentes', 500.0 , 1          );
 
 insert into estado
-(proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media ) values
-(1          , true  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150               , 1          , 200  , 0.10                     , 180                    );
+(proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
+(1          , true  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150               , 1          , 200  , 0.10                     , 180                   ,     false    );
 
 insert into cuenta
 (id, descripcion  , tipo_cuenta   ,TIPO_FLUJO_FONDO, proyecto_id) values
 (1 , 'Caja'       , 'FINANCIERO'  , null           ,1           );
 
 insert into cuenta_periodo
-(id, cuenta_id , monto , periodo) values
-(1 , 1         , 500.0 , 1      ),
-(2 , 1         , 400.0 , 2      );
+(id, cuenta_id , monto , periodo,  es_forecast) values
+(1 , 1         , 500.0 , 1      ,  false),
+(2 , 1         , 400.0 , 2      ,  false);
 
 insert into modalidad_cobro
 (id, proyecto_id, porcentaje, offset_periodo) values

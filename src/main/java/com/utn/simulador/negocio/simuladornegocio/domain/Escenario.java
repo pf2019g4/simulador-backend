@@ -1,9 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +20,9 @@ public class Escenario {
     private String descripcion;
     private Integer maximosPeriodos;
     private Double impuestoPorcentaje;  //Es un valor entre 0 y 1
+
+    @OneToOne
+    @JoinColumn(name = "estado_id")
+    private Estado estadoInicial;
 
 }

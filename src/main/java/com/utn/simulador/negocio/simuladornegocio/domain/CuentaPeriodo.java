@@ -27,4 +27,7 @@ public class CuentaPeriodo {
     private BigDecimal monto;
 
     private Integer periodo; // periodo 1, 2, 3, etc
+
+    private Boolean esForecast;
+
 }

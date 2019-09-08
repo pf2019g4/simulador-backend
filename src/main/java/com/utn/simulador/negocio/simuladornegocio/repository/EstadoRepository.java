@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface EstadoRepository extends JpaRepository<Estado, Long> {
 
-    public Estado findByActivoTrue();
+    public Estado findByActivoTrueAndEsForecast(boolean esForecast);
 
-    public Estado findByProyectoIdAndActivoTrue(Long idProyecto);
+    public Estado findByProyectoIdAndActivoTrueAndEsForecast(Long idProyecto, boolean esForecast);
 
     public Optional<List<Estado>> findByProyectoId(Long idProyecto);
 }
