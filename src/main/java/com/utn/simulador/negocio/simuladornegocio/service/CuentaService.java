@@ -27,6 +27,10 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
     }
 
+    public List<Cuenta> obtenerPorProyectoYOpcion(Long idProyecto, Long idOpcion) {
+        return cuentaRepository.findByProyectoIdAndOpcionId(idProyecto, idOpcion);
+    }
+
     public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
         crearCuentaFinanacieraProduccion(estado, costoPeriodo);
         crearCuentaEconomicaProduccion(estado, costoPeriodo);
@@ -107,12 +111,10 @@ public class CuentaService {
     }
 
     public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
-
         for (Cuenta cuenta : cuentasAImputar) {
             cuentaRepository.save(cuenta);
             for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
                 afectarEstadoSiCorresponde(cuenta, cuentaPeriodo, estado);
-
                 cuentaPeriodoRepository.save(cuentaPeriodo);
             }
             estadoRepository.save(estado);
@@ -129,5 +131,12 @@ public class CuentaService {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
             }
         }
+    }
+
+    public void borrarCuenta(Cuenta cuenta) {
+        for (CuentaPeriodo cp: cuenta.getCuentasPeriodo()) {
+            cuentaPeriodoRepository.deleteById(cp.getId());
+        }
+        cuentaRepository.deleteById(cuenta.getId());
     }
 }

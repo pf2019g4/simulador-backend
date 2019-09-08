@@ -12,8 +12,10 @@ import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepos
 import com.utn.simulador.negocio.simuladornegocio.repository.OpcionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -44,7 +46,6 @@ public class DecisionService {
         List<DecisionVo> decisionesVo = new ArrayList<>();
         for (Decision decision : decisionesPosibles) {
             Long opcionTomadaId = null;
-
             for (OpcionProyecto opcionTomadaAux : opcionesTomadas) {
                 if (opcionTomadaAux.getOpcion().getDecisionId().equals(decision.getId())) {
                     opcionTomadaId = opcionTomadaAux.getOpcion().getId();
@@ -52,7 +53,6 @@ public class DecisionService {
                 }
             }
             decisionesVo.add(new DecisionVo(decision, opcionTomadaId));
-
         }
         return decisionesVo;
     }
@@ -89,15 +89,21 @@ public class DecisionService {
         decisionRepository.deleteById(decisionId);
     }
 
-    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
+    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) {
         for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
             if (opcionTomada.getDecisionId().equals(decision.getId())) {
                 if (decision.getOpcionTomada() == null) {
                     break;
                 } else {
-                    throw new IllegalStateException("La decision ya fue tomada.");
+                    deshacerOptionTomada(proyecto.getId(), opcionTomada.getId());
                 }
             }
+        }
+    }
+
+    private void deshacerOptionTomada(Long proyectoId, Long optionId) {
+        for (Cuenta cuenta : cuentaService.obtenerPorProyectoYOpcion(proyectoId, optionId)) {
+            cuentaService.borrarCuenta(cuenta);
         }
     }
 

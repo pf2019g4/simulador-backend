@@ -221,8 +221,9 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
-        assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
+//       TODO agregar nuevo chequeo que valide que se borro toda la info asociada a una vieja decision!
+//        assertThatExceptionOfType(IllegalStateException.class)
+//                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
 
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
