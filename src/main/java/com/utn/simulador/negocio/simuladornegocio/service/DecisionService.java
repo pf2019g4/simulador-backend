@@ -72,28 +72,20 @@ public class DecisionService {
         aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
 
-    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) {
+    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
         for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
             if (opcionTomada.getDecisionId().equals(decision.getId())) {
                 if (decision.getOpcionTomada() == null) {
                     break;
                 } else {
-                    deshacerOptionTomada(proyecto.getId(), opcionTomada.getId());
+                    throw new IllegalStateException("La decision ya fue tomada.");
                 }
             }
         }
     }
 
-    private void deshacerOptionTomada(Long proyectoId, Long optionId) {
-        for (Cuenta cuenta : cuentaService.obtenerPorProyectoYOpcion(proyectoId, optionId)) {
-            cuentaService.borrarCuenta(cuenta);
-        }
-    }
-
     private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto, Estado estadoActual) {
-
         List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto);
-
         cuentaService.imputar(cuentasAImputar, estadoActual);
     }
 

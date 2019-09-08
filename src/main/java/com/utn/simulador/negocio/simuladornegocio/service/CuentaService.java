@@ -121,6 +121,7 @@ public class CuentaService {
         }
     }
 
+
     private void afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
                 && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
@@ -131,12 +132,5 @@ public class CuentaService {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
             }
         }
-    }
-
-    public void borrarCuenta(Cuenta cuenta) {
-        for (CuentaPeriodo cp: cuenta.getCuentasPeriodo()) {
-            cuentaPeriodoRepository.deleteById(cp.getId());
-        }
-        cuentaRepository.deleteById(cuenta.getId());
     }
 }

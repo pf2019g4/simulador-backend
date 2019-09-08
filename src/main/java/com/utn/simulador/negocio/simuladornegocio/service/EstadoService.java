@@ -35,4 +35,10 @@ public class EstadoService {
         estadoRepository.save(estado);
     }
 
+    public void borrarEstados(Long idProyecto) {
+       for (Estado estado: obtenerPorProyecto(idProyecto)) {
+            estadoRepository.deleteById(estado.getId());
+       }
+    }
+
 }
