@@ -25,11 +25,9 @@ CREATE TABLE IF NOT EXISTS forecast (
 
 CREATE TABLE IF NOT EXISTS producto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  proyecto_id bigint,
   nombre VARCHAR(45) NOT NULL,
   precio decimal(19,2),
-  PRIMARY KEY (id),
-  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS estado (
@@ -127,4 +125,4 @@ CREATE TABLE IF NOT EXISTS modalidad_cobro (
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
-ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);
+--ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);

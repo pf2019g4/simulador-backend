@@ -14,21 +14,21 @@ delete from proyecto;
 delete from escenario;
 delete from forecast;
 
+insert into producto
+(id, nombre  , precio) values
+(1 , 'Lentes', 500.0);
+
 insert into estado
 (id, proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
-(1 , NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , NULL       , 200  , 0.10                     , 180                ,     false    );
+(1 , NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , 1       , 200  , 0.10                     , 180                ,     false    );
 
 insert into escenario
 (id , descripcion  , impuesto_porcentaje, maximos_periodos, estado_id) values
-(1  , 'escenario 1', 0.0                ,   12            , NULL);
+(1  , 'escenario 1', 0.0                ,   12            , 1);
 
 insert into proyecto
 (id , nombre       , escenario_id) values
 (1  , 'Proyecto 1' , 1           );
-
-insert into producto 
-(id, nombre  , precio, proyecto_id) values 
-(1 , 'Lentes', 500.0 , 1          );
 
 insert into estado
 (proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
