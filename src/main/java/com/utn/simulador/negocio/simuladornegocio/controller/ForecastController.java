@@ -10,6 +10,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin
+@RestController
 public class ForecastController {
 
     private final ForecastService forecastService;

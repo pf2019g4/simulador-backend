@@ -12,3 +12,4 @@ delete from producto;
 delete from modalidad_cobro;
 delete from proyecto;
 delete from escenario;
+delete from forecast;

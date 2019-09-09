@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   descripcion VARCHAR(300) NOT NULL,
   impuesto_porcentaje DECIMAL NOT NULL,
-  maximos_periodos DECIMAL NOT NULL,
+  maximos_periodos integer NOT NULL,
   estado_id bigint NULL,
   PRIMARY KEY (id)
 );
@@ -13,6 +13,14 @@ CREATE TABLE IF NOT EXISTS proyecto (
   nombre VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+CREATE TABLE IF NOT EXISTS forecast (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint,
+  periodo integer not null,
+  cantidad_unidades bigint not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
 CREATE TABLE IF NOT EXISTS producto (
@@ -119,4 +127,4 @@ CREATE TABLE IF NOT EXISTS modalidad_cobro (
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
-ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);
+ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id) on delete cascade;

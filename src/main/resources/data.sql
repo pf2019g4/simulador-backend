@@ -12,10 +12,11 @@ delete from producto;
 delete from modalidad_cobro;
 delete from proyecto;
 delete from escenario;
+delete from forecast;
 
 insert into estado
-(proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
-(NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , NULL       , 200  , 0.10                     , 180                ,     false    );
+(id, proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
+(1 , NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , NULL       , 200  , 0.10                     , 180                ,     false    );
 
 insert into escenario
 (id , descripcion  , impuesto_porcentaje, maximos_periodos, estado_id) values
