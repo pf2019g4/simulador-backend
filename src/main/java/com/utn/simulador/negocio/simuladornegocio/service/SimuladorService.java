@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +41,22 @@ public class SimuladorService {
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
         Estado estado = proyecto.getEscenario().getEstadoInicial();
         
-        estado.setId(null); //Esto me crea una copia del estado inicial del escenario
-        estado.setEsForecast(esForecast);
-        estado.setProyecto(proyecto);
+        Estado estadoNuevo = Estado.builder()
+                .activo(true)
+                .caja(estado.getCaja())
+                .costoFijo(estado.getCostoFijo())
+                .costoVariable(estado.getCostoVariable())
+                .esForecast(esForecast)
+                .parametrosVentas(estado.getParametrosVentas())
+                .periodo(estado.getPeriodo())
+                .produccionMensual(estado.getProduccionMensual())
+                .producto(estado.getProducto())
+                .proyecto(proyecto)
+                .stock(estado.getStock())
+                .ventas(estado.getVentas())
+                .build();
         
-        estadoService.guardar(estado);
+        estadoService.guardar(estadoNuevo);
     }
 
     private Estado avanzarTiempo(long proyectoId, boolean esForecast) {
