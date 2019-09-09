@@ -15,7 +15,9 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
     public static EscenarioBuilder base() {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
-        escenarioBuilder.instance.setDescripcion("escenario de test 1");
+        escenarioBuilder.instance.setTitulo("escenario de test 1");
+        escenarioBuilder.instance.setPeriodos(5);
+        escenarioBuilder.instance.setDescripcion("descripcion de test 1");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
         escenarioBuilder.instance.setMaximosPeriodos(12);
         return escenarioBuilder;
@@ -32,7 +34,9 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
     public static EscenarioBuilder escenarioConImpuesto(Double impuesto) {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
-        escenarioBuilder.instance.setDescripcion("escenario con impuesto");
+        escenarioBuilder.instance.setTitulo("escenario con impuesto");
+        escenarioBuilder.instance.setPeriodos(5);
+        escenarioBuilder.instance.setDescripcion("descripcion de escenario con impuesto");
         escenarioBuilder.instance.setImpuestoPorcentaje(impuesto);
         escenarioBuilder.instance.setMaximosPeriodos(12);
         return escenarioBuilder;

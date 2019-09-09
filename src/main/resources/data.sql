@@ -23,8 +23,21 @@ insert into estado
 (1 , NULL       , false  , 11500.0 ,9000.0 ,200.0      , 3.5           , 0      , 150            , 1       , 200  , 0.10                     , 180                ,     false    );
 
 insert into escenario
+<<<<<<< HEAD
 (id , descripcion  , impuesto_porcentaje, maximos_periodos, estado_id) values
 (1  , 'escenario 1', 0.0                ,   12            , 1);
+=======
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(1, 'escenario 1',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundadoa', 0.0 );
+
+insert into escenario
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(2, 'escenario 2',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundado', 0.0 );
+        
+insert into escenario
+(id, titulo, periodos, descripcion, impuesto_porcentaje) values
+(3, 'escenario 3',5,'El Grupo Macri es uno de los grupos empresariales más importantes de la Argentina,2​ fundado', 0.0 );
+>>>>>>> origin/escenarios-abm
 
 insert into proyecto
 (id , nombre       , escenario_id) values
