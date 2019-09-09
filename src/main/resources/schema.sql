@@ -127,4 +127,4 @@ CREATE TABLE IF NOT EXISTS modalidad_cobro (
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
-ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);
+--ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);

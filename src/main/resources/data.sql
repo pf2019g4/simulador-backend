@@ -20,7 +20,7 @@ insert into estado
 
 insert into escenario
 (id , descripcion  , impuesto_porcentaje, maximos_periodos, estado_id) values
-(1  , 'escenario 1', 0.0                ,   12            , NULL);
+(1  , 'escenario 1', 0.0                ,   12            , 1);
 
 insert into proyecto
 (id , nombre       , escenario_id) values
