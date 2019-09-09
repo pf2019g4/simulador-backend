@@ -4,15 +4,9 @@ import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTes
 import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
-import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class EscenarioServiceTest extends SimuladorNegocioApplicationTests {
 
@@ -31,7 +25,7 @@ public class EscenarioServiceTest extends SimuladorNegocioApplicationTests {
         
         assertThat(escenarioRepository.existsById(escenarioDB.getId())).isEqualTo(true);
         assertThat(escenarioDB.getDescripcion()).isEqualTo(escenario.getDescripcion());
-        assertThat(escenarioDB.getPeriodos()).isEqualTo(escenario.getPeriodos());
+        assertThat(escenarioDB.getMaximosPeriodos()).isEqualTo(escenario.getMaximosPeriodos());
         assertThat(escenarioDB.getTitulo()).isEqualTo(escenario.getTitulo());
         assertThat(escenarioDB.getImpuestoPorcentaje()).isEqualTo(escenario.getImpuestoPorcentaje());
     }
@@ -44,7 +38,7 @@ public class EscenarioServiceTest extends SimuladorNegocioApplicationTests {
         
         assertThat(escenarioRepository.existsById(escenarioDB.getId())).isEqualTo(true);
         assertThat(escenarioDB.getDescripcion()).isEqualTo(escenario.getDescripcion());
-        assertThat(escenarioDB.getPeriodos()).isEqualTo(escenario.getPeriodos());
+        assertThat(escenarioDB.getMaximosPeriodos()).isEqualTo(escenario.getMaximosPeriodos());
         assertThat(escenarioDB.getTitulo()).isEqualTo(escenario.getTitulo());
         assertThat(escenarioDB.getImpuestoPorcentaje()).isEqualTo(escenario.getImpuestoPorcentaje());
         

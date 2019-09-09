@@ -12,10 +12,8 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
-import com.utn.simulador.negocio.simuladornegocio.repository.RespuestaRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
@@ -41,7 +39,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void simularPeriodos_escenarioValido_avanzaElPeriodoHastaElMaximo() {
         Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
-        Escenario escenario = EscenarioBuilder.baseConEscenario(estadoInicialEscenario).build(em);
+        Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
         Producto producto = ProductoBuilder.base().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);

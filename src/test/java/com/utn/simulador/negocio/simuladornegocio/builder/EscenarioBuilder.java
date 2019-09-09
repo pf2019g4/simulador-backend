@@ -3,9 +3,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import org.xmlunit.diff.ElementSelector;
-
-import java.math.BigDecimal;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
@@ -16,16 +13,16 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     public static EscenarioBuilder base() {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
         escenarioBuilder.instance.setTitulo("escenario de test 1");
-        escenarioBuilder.instance.setPeriodos(5);
         escenarioBuilder.instance.setDescripcion("descripcion de test 1");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
-        escenarioBuilder.instance.setMaximosPeriodos(12);
+        escenarioBuilder.instance.setMaximosPeriodos(5);
         return escenarioBuilder;
     }
 
-    public static EscenarioBuilder baseConEscenario(Estado estado) {
+    public static EscenarioBuilder baseConEstado(Estado estado) {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
-        escenarioBuilder.instance.setDescripcion("escenario de test 1");
+        escenarioBuilder.instance.setTitulo("escenario de test 1");
+        escenarioBuilder.instance.setDescripcion("descripcion de test 1");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
         escenarioBuilder.instance.setMaximosPeriodos(12);
         escenarioBuilder.instance.setEstadoInicial(estado);
@@ -35,10 +32,9 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     public static EscenarioBuilder escenarioConImpuesto(Double impuesto) {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
         escenarioBuilder.instance.setTitulo("escenario con impuesto");
-        escenarioBuilder.instance.setPeriodos(5);
         escenarioBuilder.instance.setDescripcion("descripcion de escenario con impuesto");
         escenarioBuilder.instance.setImpuestoPorcentaje(impuesto);
-        escenarioBuilder.instance.setMaximosPeriodos(12);
+        escenarioBuilder.instance.setMaximosPeriodos(5);
         return escenarioBuilder;
     }
 
