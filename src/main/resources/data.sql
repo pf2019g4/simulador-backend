@@ -27,8 +27,8 @@ insert into proyecto
 (1  , 'Proyecto 1' , 1           );
 
 insert into producto 
-(id, nombre  , precio, proyecto_id) values 
-(1 , 'Lentes', 500.0 , 1          );
+(id, nombre  , precio) values
+(1 , 'Lentes', 500.0);
 
 insert into estado
 (proyecto_id, activo, caja    ,ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media,  es_forecast ) values
