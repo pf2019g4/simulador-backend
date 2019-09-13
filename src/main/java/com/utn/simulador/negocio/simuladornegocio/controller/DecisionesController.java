@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,12 +34,12 @@ public class DecisionesController {
     }
     
     @PostMapping("/decisiones")
-    public Decision crearDecision(@RequestBody Decision decision) {
+    public Decision crearDecision(@ModelAttribute Decision decision) {
         return decisionService.crearDecision(decision);
     }
     
     @PutMapping("/decisiones/{decisionId}")
-    public void editarDecision(@PathVariable("decisionId") Long decisionId, @RequestBody Decision decision) {
+    public void editarDecision(@PathVariable("decisionId") Long decisionId, @ModelAttribute Decision decision) {
         decisionService.editarDecision(decisionId, decision);
     }
     
