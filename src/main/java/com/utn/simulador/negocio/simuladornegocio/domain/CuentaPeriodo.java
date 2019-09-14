@@ -25,9 +25,6 @@ public class CuentaPeriodo {
     @JsonBackReference
     private Cuenta cuenta;
     private BigDecimal monto;
-
     private Integer periodo; // periodo 1, 2, 3, etc
-
     private Boolean esForecast;
-
 }

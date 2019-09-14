@@ -1,6 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +23,6 @@ public class Escenario {
     
     @OneToOne
     @JoinColumn(name = "estado_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Estado estadoInicial;
 }

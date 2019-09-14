@@ -26,6 +26,5 @@ public class ModalidadCobro {
     private Proyecto proyecto;
 
     private BigDecimal porcentaje;
-
     private Integer offsetPeriodo; // periodo 0, 1, 2, etc
 }

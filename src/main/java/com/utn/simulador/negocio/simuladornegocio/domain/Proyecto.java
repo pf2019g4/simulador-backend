@@ -1,8 +1,5 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.List;
 import javax.persistence.*;
 
@@ -22,7 +19,6 @@ public class Proyecto {
     private String nombre;
 
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<ModalidadCobro> modalidadCobro;
 
     @ManyToOne
