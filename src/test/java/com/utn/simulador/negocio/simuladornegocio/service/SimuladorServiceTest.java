@@ -8,14 +8,12 @@ import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ForecastBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import java.math.BigDecimal;
 import org.junit.Test;
@@ -28,6 +26,9 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
     @Autowired
     private EstadoRepository estadoRepository;
+
+    @Autowired
+    private CuentaPeriodoRepository cuentaPeriodoRepository;
 
     @Test
     public void simularPeriodo_escenarioValido_avanzaElPeriodo() {
@@ -60,6 +61,27 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
         simuladorService.simularPeriodos(proyecto.getId(), true);
 
         assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true).getPeriodo()).isEqualTo(estadoInicialEscenario.getPeriodo() + escenario.getMaximosPeriodos());
+
+    }
+
+    @Test
+    public void deshacerSimulacionPrevia_conEscenarioPrevioCreado_eliminaCuentasAsociadosAlForecast(){
+
+        Producto producto = ProductoBuilder.base().build(em);
+        Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
+        Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
+        Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
+
+        Estado estadoInicial = EstadoBuilder.inicialConPeriodoYEstado(producto,proyecto,0,true).build(em);
+
+        Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        CuentaPeriodo cuentaPeriodo1 = CuentaPeriodoBuilder.deCuentaYEsForecast(cuenta,1).build(em);
+        CuentaPeriodo cuentaPeriodo2 = CuentaPeriodoBuilder.deCuentaYEsForecast(cuenta,2).build(em);
+
+
+        simuladorService.deshacerSimulacionPrevia(proyecto.getId());
+
+        assertThat(cuentaPeriodoRepository.findByCuentaProyectoIdAndEsForecast(proyecto.getId(),true)).hasSize(0);
 
     }
 

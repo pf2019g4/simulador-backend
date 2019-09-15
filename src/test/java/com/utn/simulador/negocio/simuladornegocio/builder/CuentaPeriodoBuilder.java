@@ -23,6 +23,19 @@ public class CuentaPeriodoBuilder extends AbstractPersistenceBuilder<CuentaPerio
 
     }
 
+    public static CuentaPeriodoBuilder deCuentaYEsForecast(Cuenta cuenta, int periodo) {
+        CuentaPeriodoBuilder cuentaPeriodoBuilder = new CuentaPeriodoBuilder();
+
+        cuentaPeriodoBuilder.instance = CuentaPeriodo.builder()
+                .monto(new BigDecimal("500.50"))
+                .cuenta(cuenta)
+                .esForecast(true)
+                .periodo(periodo).build();
+
+        return cuentaPeriodoBuilder;
+
+    }
+
     public static CuentaPeriodoBuilder deCuentaConMonto(Cuenta cuenta, BigDecimal monto, int periodo) {
         CuentaPeriodoBuilder cuentaPeriodoBuilder = new CuentaPeriodoBuilder();
 
