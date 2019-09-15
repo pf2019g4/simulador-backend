@@ -14,11 +14,7 @@ public class Forecast {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long proyectoId;
-
     private Integer periodo;
-
     private Long cantidadUnidades;
-
 }

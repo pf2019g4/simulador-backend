@@ -18,7 +18,7 @@ public class Proyecto {
     private Long id;
     private String nombre;
 
-    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
     private List<ModalidadCobro> modalidadCobro;
 
     @ManyToOne

@@ -55,12 +55,6 @@ insert into cuenta_periodo
 (1 , 1         , 500.0, 1      , false      ),
 (2 , 1         , 400.0, 2      , false      );
 
-insert into modalidad_cobro
-(id, proyecto_id, porcentaje, offset_periodo) values
-(1 , 1          , 60.0      , 0             ),
-(2 , 1          , 10.0      , 1             ),
-(3 , 1          , 30.0      , 2             );
-
 insert into decision 
 (id, escenario_id, descripcion                                          ) values
 (1 , 1           , 'Cuanto quiere invertir en publicidad?'              ),
