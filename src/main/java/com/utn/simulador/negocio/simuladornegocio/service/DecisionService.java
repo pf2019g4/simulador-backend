@@ -46,6 +46,10 @@ public class DecisionService {
         return decisionesVo;
     }
 
+    public List<Decision> obtenerPorEscenario(Long escenarioId) {
+        return decisionRepository.findByEscenarioId(escenarioId);
+    }
+
     private List<DecisionVo> obtenerDecisionesPorProyecto(Proyecto proyecto) {
         List<Decision> decisionesPosibles = decisionRepository.findByEscenarioId(proyecto.getEscenario().getId());
         List<OpcionProyecto> opcionesTomadas = opcionProyectoRepository.findByProyectoId(proyecto.getId());

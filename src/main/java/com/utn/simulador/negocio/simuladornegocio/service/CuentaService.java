@@ -129,6 +129,13 @@ public class CuentaService {
         return estado;
     }
 
+    public void eliminarCuentasDeProyecto(Long idProyecto, boolean esForecast){
+
+        cuentaPeriodoRepository.deleteByCuentaProyectoIdAndEsForecast(idProyecto, esForecast);
+        cuentaRepository.deleteByProyectoId(idProyecto);
+
+    }
+
     private Estado afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
                 && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {

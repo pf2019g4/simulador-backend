@@ -42,6 +42,10 @@ insert into estado
 (proyecto_id, activo, caja    , ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
 (1          , true  , 11500.0 , 9000.0 , 200.0     , 3.5           , 0      , 150               , 1          , 200  , 0.10                    , 180                    , false      );
 
+insert into estado
+(proyecto_id, activo, caja    , ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
+(1          , true  , 11500.0 , 9000.0 , 200.0     , 3.5           , 0      , 150               , 1          , 200  , 0.10                    , 180                    , true      );
+
 insert into cuenta
 (id, descripcion, tipo_cuenta, tipo_flujo_fondo, proyecto_id) values
 (1 , 'Caja'     , 'ECONOMICO', null            , 1          );
@@ -73,7 +77,7 @@ insert into opcion
 (5 , 2          , '$20000 -> CF -50, CV +0, P +5'                            , -50                 , 0                       , 5                   ),
 (6 , 2          , '$50000 -> CF -40, CV -0.1, P +10'                         , -40                 , -0.1                    , 10                  ),
 (7 , 3          , '$10000 -> CF 20, CV -0.1, P +0'                           , 20                  , -0.1                    , 0                   ),
-(8 , 3          , '$20000 -> CF 10, CV -0.2, P +10'                          , 10                  , -0.2                    , 0                   ),
+(8 , 3          , '$20000 -> CF 10, CV -0.2, P +10'                          , 10                  , -0.2                    , 10                   ),
 (9 , 3          , '$30000 -> CF 10, CV -0.3, P +0'                           , 10                  , -0.3                    , 0                   );
 
 

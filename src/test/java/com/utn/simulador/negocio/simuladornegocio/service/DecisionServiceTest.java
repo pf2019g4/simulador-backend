@@ -59,6 +59,26 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     @Test
+    public void obtenerPorEscenario_conEscenarioValido_devuelveDecisiones(){
+
+        Escenario escenario = EscenarioBuilder.base().build(em);
+
+        Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
+
+        OpcionBuilder.deDecisionMaquinaria(decision)
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .build(em);
+
+
+        List<Decision> decisiones = decisionService.obtenerPorEscenario(escenario.getId());
+        assertThat(decisiones).hasSize(1);
+        assertThat(decisiones.get(0).getOpciones()).hasSize(1);
+        assertThat(decisiones.get(0).getOpciones().get(0).getConsecuencias()).hasSize(2);
+
+    }
+
+    @Test
     public void tomarDecision_dosConsecuenciasConDosIngresosCadaUna() {
 
         Escenario escenario = EscenarioBuilder.base().build(em);
