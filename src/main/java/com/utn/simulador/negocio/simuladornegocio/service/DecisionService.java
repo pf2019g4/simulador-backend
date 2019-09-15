@@ -6,6 +6,8 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.Consecuencia;
+import com.utn.simulador.negocio.simuladornegocio.repository.ConsecuenciaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
@@ -15,6 +17,7 @@ import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors; 
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class DecisionService {
     private final OpcionProyectoRepository opcionProyectoRepository;
     private final ProyectoRepository proyectoRepository;
     private final OpcionRepository opcionRepository;
+    private final ConsecuenciaRepository consecuenciaRepository;
     private final EstadoRepository estadoRepository;
     private final CuentaService cuentaService;
 
@@ -78,8 +82,26 @@ public class DecisionService {
     }
 
     public Decision editarDecision(Long decisionId, Decision decision) {
-
-        opcionRepository.deleteByDecisionId(decisionId);
+        
+        List<Long> idOpciones = new ArrayList<>();
+        List<Long> idConsecuencias = new ArrayList<>();
+        for(Opcion opcion : decision.getOpciones()) {
+            idOpciones.add(opcion.getId());
+            idConsecuencias.addAll(opcion.getConsecuencias().stream().map(c -> c.getId()).collect(Collectors.toList()));
+        }
+        
+        List<Opcion> opcionesBD = opcionRepository.getByDecisionId(decisionId);
+        for(Opcion opcion : opcionesBD) {
+            List<Consecuencia> consecuenciasBD = consecuenciaRepository.getByOpcionId(opcion.getId());
+            for(Consecuencia consecuencia : consecuenciasBD){
+                if(!idConsecuencias.contains(consecuencia.getId())){
+                    consecuenciaRepository.deleteById(consecuencia.getId());
+                }
+            }
+            if(!idOpciones.contains(opcion.getId())){
+                opcionRepository.deleteById(opcion.getId());
+            }
+        }
 
         return decisionRepository.save(decision);
     }
