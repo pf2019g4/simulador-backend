@@ -87,8 +87,10 @@ public class DecisionService {
         //TODO: Esta es la forma correcta de persistir?
         for(Opcion opcion : decision.getOpciones()) {
             opcion.setDecision(decision);
-            for(Consecuencia consecuencia : opcion.getConsecuencias()) {
-                consecuencia.setOpcion(opcion);
+            if(opcion.getConsecuencias() != null){
+                for(Consecuencia consecuencia : opcion.getConsecuencias()) {
+                    consecuencia.setOpcion(opcion);
+                }
             }
         }
 
