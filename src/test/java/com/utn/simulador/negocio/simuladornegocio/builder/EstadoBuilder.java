@@ -25,23 +25,7 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(0);
-        estadoBuilder.instance.setEsForecast(false);
-        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
-        return estadoBuilder;
-    }
-
-    public static EstadoBuilder baseParaEscenario() {
-        EstadoBuilder estadoBuilder = new EstadoBuilder();
-        estadoBuilder.instance.setProducto(null);
-        estadoBuilder.instance.setProyecto(null);
-        estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
-        estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
-        estadoBuilder.instance.setCaja(new BigDecimal(11000));
-        estadoBuilder.instance.setStock(200L);
-        estadoBuilder.instance.setProduccionMensual(200L);
-        estadoBuilder.instance.setActivo(true);
-        estadoBuilder.instance.setPeriodo(0);
-        estadoBuilder.instance.setEsForecast(false);
+        estadoBuilder.instance.setEsForecast(true);
         estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
@@ -57,7 +41,7 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(periodoActual);
-        estadoBuilder.instance.setEsForecast(false);
+        estadoBuilder.instance.setEsForecast(true);
         estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
@@ -73,6 +57,22 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setActivo(activo);
         estadoBuilder.instance.setPeriodo(periodoActual);
+        estadoBuilder.instance.setEsForecast(true);
+        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
+        return estadoBuilder;
+    }
+
+    public static EstadoBuilder baseParaEscenario() {
+        EstadoBuilder estadoBuilder = new EstadoBuilder();
+        estadoBuilder.instance.setProducto(null);
+        estadoBuilder.instance.setProyecto(null);
+        estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
+        estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
+        estadoBuilder.instance.setCaja(new BigDecimal(11000));
+        estadoBuilder.instance.setStock(200L);
+        estadoBuilder.instance.setProduccionMensual(200L);
+        estadoBuilder.instance.setActivo(true);
+        estadoBuilder.instance.setPeriodo(0);
         estadoBuilder.instance.setEsForecast(false);
         estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;

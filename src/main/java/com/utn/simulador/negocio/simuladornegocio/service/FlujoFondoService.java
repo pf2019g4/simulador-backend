@@ -54,7 +54,7 @@ public class FlujoFondoService {
                         sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
                                 subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                        periodo, false)).
+                        periodo, true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
@@ -66,7 +66,7 @@ public class FlujoFondoService {
                         cuentaPeriodo.getMonto().
                                 multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
                                 ),
-                        cuentaPeriodo.getPeriodo(), false)).
+                        cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
@@ -79,7 +79,7 @@ public class FlujoFondoService {
                                 subtract(cuentaPeriodo.getMonto().
                                         multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
                                 ),
-                        cuentaPeriodo.getPeriodo(), false)).
+                        cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -107,7 +107,7 @@ public class FlujoFondoService {
                                         subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
                                         subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
                                 periodo,
-                                false
+                                true
                         )
                 ).
                 collect(Collectors.toList());

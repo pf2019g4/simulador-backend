@@ -5,6 +5,7 @@ import com.utn.simulador.negocio.simuladornegocio.builder.CuentaBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.CuentaPeriodoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.EscenarioBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.ForecastBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
@@ -35,11 +36,13 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
         Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodoBuilder.deCuenta(cuenta, 1).build(em);
+        
+        ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()+1).build(em);  
 
-        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), false);
+        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), true);
 
         assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
-        assertThat(nuevoEstado.getCaja()).isEqualTo(new BigDecimal("100445.50"));
+        assertThat(nuevoEstado.getCaja()).isGreaterThan(new BigDecimal("1000"));
         assertThat(nuevoEstado.getActivo()).isTrue();
 
     }
@@ -48,13 +51,15 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     public void simularPeriodos_escenarioValido_avanzaElPeriodoHastaElMaximo() {
         Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
         Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
-        Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
+        
+        for(int i = 0; i < escenario.getMaximosPeriodos(); i++ ){
+            ForecastBuilder.baseDeProyectoYPeriodo(proyecto, i+1).build(em);  
+        }
 
-        simuladorService.simularPeriodos(proyecto.getId(), false);
+        simuladorService.simularPeriodos(proyecto.getId(), true);
 
-        assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), false).getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + escenario.getMaximosPeriodos());
+        assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true).getPeriodo()).isEqualTo(estadoInicialEscenario.getPeriodo() + escenario.getMaximosPeriodos());
 
     }
 

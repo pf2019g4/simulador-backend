@@ -5,6 +5,7 @@ import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ModalidadCobroBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.ForecastBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
@@ -34,6 +35,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
+        ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
         Estado nuevoEstado = simuladorVentasService.simular(estadoInicial);
 
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
@@ -64,18 +66,21 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
+        ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
         Estado estadoContado = simuladorVentasService.simular(estadoInicial);
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial);
         
         estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
+        ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
         Estado estado30D = simuladorVentasService.simular(estadoContado);
         Long stock30D = estado30D.getStock();
         BigDecimal caja30D = estado30D.getCaja();
         BigDecimal variacionCaja30D = caja30D.subtract(cajaContado);
 
         estado30D.setPeriodo(estado30D.getPeriodo() + 1);
+        ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
         Estado estado60D = simuladorVentasService.simular(estado30D);
 
         assertThat(estadoContado.getId()).isEqualTo(estadoInicial.getId());
