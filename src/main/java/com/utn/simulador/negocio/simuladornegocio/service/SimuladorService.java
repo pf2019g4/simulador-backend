@@ -86,7 +86,7 @@ public class SimuladorService {
                 cuentaRepository.deleteById(cuenta.getId());
             }
         }
-        estadoService.borrarEstados(proyectoId);
+        estadoService.borrarEstadosForecast(proyectoId);
 
     }
 
