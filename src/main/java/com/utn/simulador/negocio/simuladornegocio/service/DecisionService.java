@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DecisionService {
 
@@ -51,7 +53,7 @@ public class DecisionService {
         for (Decision decision : decisionesPosibles) {
             Long opcionTomadaId = null;
             for (OpcionProyecto opcionTomadaAux : opcionesTomadas) {
-                if (opcionTomadaAux.getOpcion().getDecisionId().equals(decision.getId())) {
+                if (opcionTomadaAux.getOpcion().getDecision().getId().equals(decision.getId())) {
                     opcionTomadaId = opcionTomadaAux.getOpcion().getId();
                     break;
                 }
@@ -65,7 +67,7 @@ public class DecisionService {
         final Opcion opcionTomada = opcionRepository.findById(opcionId).orElseThrow(() -> new IllegalArgumentException("Opcion inexistente"));
         Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
 
-        Assert.isTrue(decisionRepository.findById(opcionTomada.getDecisionId()).get().getEscenarioId()
+        Assert.isTrue(decisionRepository.findById(opcionTomada.getDecision().getId()).get().getEscenarioId()
                 .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
         Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true);
 
@@ -77,6 +79,14 @@ public class DecisionService {
     }
 
     public Decision crearDecision(Decision decision) {
+        
+        //TODO: Esta es la forma correcta de persistir?
+        for(Opcion opcion : decision.getOpciones()) {
+            opcion.setDecision(decision);
+            for(Consecuencia consecuencia : opcion.getConsecuencias()) {
+                consecuencia.setOpcion(opcion);
+            }
+        }
 
         return decisionRepository.save(decision);
     }
@@ -104,8 +114,8 @@ public class DecisionService {
                 opcionRepository.deleteById(opcion.getId());
             }
         }
-
-        return decisionRepository.save(decision);
+        
+        return crearDecision(decision);
     }
 
     public void borrarDecision(Long decisionId) {
@@ -115,7 +125,7 @@ public class DecisionService {
 
     private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
         for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
-            if (opcionTomada.getDecisionId().equals(decision.getId())) {
+            if (opcionTomada.getDecision().getId().equals(decision.getId())) {
                 if (decision.getOpcionTomada() == null) {
                     break;
                 } else {

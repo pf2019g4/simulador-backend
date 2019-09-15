@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.OpcionRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 
 import java.math.BigDecimal;
@@ -28,6 +29,8 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     private OpcionProyectoRepository opcionProyectoRepository;
     @Autowired
     private DecisionRepository decisionRepository;
+    @Autowired
+    private OpcionRepository opcionRepository;
 
     @Autowired
     private EstadoRepository estadoRepository;
@@ -122,22 +125,25 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         
         List<Opcion> opciones = new ArrayList<>();
         
+        Decision decision = Decision.builder()
+                .descripcion("AltaDecision")
+                .escenarioId(escenario.getId())
+                .build();
+        
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
                 .variacionCostoVariable(BigDecimal.ONE)
                 .variacionProduccion(Long.MIN_VALUE)
                 .consecuencias(null)
+                .decision(decision)
                 .build());
         
-        Decision decision = Decision.builder()
-                .descripcion("AltaDecision")
-                .escenarioId(escenario.getId())
-                .opciones(opciones)
-                .build();
+        decision.setOpciones(opciones);
         
         Decision decisionDB = decisionService.crearDecision(decision);
         
+        assertThat(opcionRepository.findAll().get(0).getDecision() != null).isEqualTo(true);
         assertThat(decisionRepository.existsById(decisionDB.getId())).isEqualTo(true);
         assertThat(decisionDB.getDescripcion()).isEqualTo("AltaDecision");
     }
@@ -148,19 +154,21 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         
         List<Opcion> opciones = new ArrayList<>();
         
+        Decision decision = Decision.builder()
+                .descripcion("EditarDecision")
+                .escenarioId(escenario.getId())
+                .build();
+        
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
                 .variacionCostoVariable(BigDecimal.ONE)
                 .variacionProduccion(Long.MIN_VALUE)
                 .consecuencias(null)
+                .decision(decision)
                 .build());
         
-        Decision decision = Decision.builder()
-                .descripcion("EditarDecision")
-                .escenarioId(escenario.getId())
-                .opciones(opciones)
-                .build();
+        decision.setOpciones(opciones);
         
         Decision decisionDB = decisionService.crearDecision(decision);
         
@@ -180,19 +188,21 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         
         List<Opcion> opciones = new ArrayList<>();
         
+        Decision decision = Decision.builder()
+                .descripcion("BorrarDecision")
+                .escenarioId(escenario.getId())
+                .build();
+        
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
                 .variacionCostoVariable(BigDecimal.ONE)
                 .variacionProduccion(Long.MIN_VALUE)
                 .consecuencias(null)
+                .decision(decision)
                 .build());
         
-        Decision decision = Decision.builder()
-                .descripcion("BorrarDecision")
-                .escenarioId(escenario.getId())
-                .opciones(opciones)
-                .build();
+        decision.setOpciones(opciones);
         
         Decision decisionDB = decisionService.crearDecision(decision);
         

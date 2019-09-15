@@ -19,7 +19,7 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
     public static OpcionBuilder deDecisionMaquinaria(Decision decision) {
         OpcionBuilder decisionBuilder = new OpcionBuilder();
         decisionBuilder.instance.setDescripcion("opcion1");
-        decisionBuilder.instance.setDecisionId(decision.getId());
+        decisionBuilder.instance.setDecision(decision);
         decisionBuilder.instance.setVariacionCostoFijo(BigDecimal.TEN.negate());
         decisionBuilder.instance.setVariacionCostoVariable(BigDecimal.TEN.negate());
         decisionBuilder.instance.setVariacionProduccion(10L);
@@ -39,7 +39,7 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
         instance.setConsecuencias(new ArrayList<>());
 
         for (Consecuencia consecuencia : consecuencias) {
-            consecuencia.setOpcionId(instance.getId());
+            consecuencia.setOpcion(instance);
             em.persist(consecuencia);
             instance.getConsecuencias().add(consecuencia);
         }

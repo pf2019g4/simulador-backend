@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,7 +18,11 @@ public class Consecuencia {
 
     private BigDecimal monto;
     private String descripcion;
-    private Long opcionId;
+    
+    @ManyToOne
+    //@JoinColumn(name = "opcion_id", nullable = false)
+    @JsonBackReference
+    private Opcion opcion;
     private int periodoInicio;
     private int cantidadPeriodos;
 

@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS decision (
 CREATE TABLE IF NOT EXISTS opcion (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(45) NOT NULL,
-    decision_id bigint,
+    decision_id bigint UNSIGNED not null,
     variacion_costo_fijo decimal(19,2) default 0,
     variacion_costo_variable decimal(19,2) default 0,
     variacion_produccion bigint default 0,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS consecuencia (
     id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     monto decimal(19,2) NOT NULL,
     descripcion VARCHAR(45) NOT NULL,
-    opcion_id bigint,
+    opcion_id bigint UNSIGNED not null,
     periodo_inicio int not null,
     cantidad_periodos int not null,
     tipo_cuenta varchar(20) NOT NULL,

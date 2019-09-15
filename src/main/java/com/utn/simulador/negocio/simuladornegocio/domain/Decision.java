@@ -21,7 +21,7 @@ public class Decision {
     private String descripcion;
     private Long escenarioId;
 
-    @OneToMany(mappedBy = "decisionId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
     private List<Opcion> opciones;
 
 }
