@@ -110,19 +110,26 @@ public class CuentaService {
         cuentaRepository.save(cuenta);
     }
 
-    public void imputar(List<Cuenta> cuentasAImputar, Estado estado) {
+    public void crear(List<Cuenta> cuentasAImputar, Estado estado) {
         for (Cuenta cuenta : cuentasAImputar) {
             cuentaRepository.save(cuenta);
             for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
-                afectarEstadoSiCorresponde(cuenta, cuentaPeriodo, estado);
                 cuentaPeriodoRepository.save(cuentaPeriodo);
             }
             estadoRepository.save(estado);
         }
     }
 
+    public Estado inputarCuetasNuevoPeriodo(Estado estado) {
+        List<CuentaPeriodo> cuentasPeriodo = cuentaPeriodoRepository.findByProyectoAndPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
 
-    private void afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
+        for (CuentaPeriodo cuentaPeriodo : cuentasPeriodo) {
+            estado = afectarEstadoSiCorresponde(cuentaPeriodo.getCuenta(), cuentaPeriodo, estado);
+        }
+        return estado;
+    }
+
+    private Estado afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
                 && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
             if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
@@ -132,5 +139,7 @@ public class CuentaService {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
             }
         }
+
+        return estado;
     }
 }

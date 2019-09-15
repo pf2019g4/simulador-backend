@@ -68,24 +68,24 @@ public class DecisionService {
         validarDecisionPendiente(proyecto, opcionTomada);
 
         marcarOpcionComoTomada(proyectoId, opcionTomada);
-        imputarCuentasPorConsecuencia(opcionTomada, proyecto, estadoActual);
+        crearCuentasPorConsecuencia(opcionTomada, proyecto);
         aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
-    
+
     public Decision crearDecision(Decision decision) {
-        
+
         return decisionRepository.save(decision);
     }
-    
+
     public Decision editarDecision(Long decisionId, Decision decision) {
-                
+
         opcionRepository.deleteByDecisionId(decisionId);
-        
+
         return decisionRepository.save(decision);
     }
-    
+
     public void borrarDecision(Long decisionId) {
-        
+
         decisionRepository.deleteById(decisionId);
     }
 
@@ -101,9 +101,11 @@ public class DecisionService {
         }
     }
 
-    private void imputarCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto, Estado estadoActual) {
-        List<Cuenta> cuentasAImputar = opcionTomada.obtenerCuentasAImputar(proyecto);
-        cuentaService.imputar(cuentasAImputar, estadoActual);
+    private void crearCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
+        List<Cuenta> cuentasACrear = opcionTomada.obtenerCuentasACrear(proyecto);
+        for (Cuenta cuenta : cuentasACrear) {
+            cuentaService.guardar(cuenta);
+        }
     }
 
     private void marcarOpcionComoTomada(Long proyectoId, final Opcion opcionTomada) {

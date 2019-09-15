@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -26,21 +25,22 @@ public class SimuladorService {
     private final OpcionProyectoRepository opcionProyectoRepository;
     private final CuentaPeriodoRepository cuentaPeriodoRepository;
     private final CuentaRepository cuentaRepository;
+    private final CuentaService cuentaService;
 
     public Estado simularPeriodo(long proyectoId, boolean esForecast) {
         Estado estado = avanzarTiempo(proyectoId, esForecast);
-        
+
         simuladorProduccionService.simular(estado);
         simuladorVentasService.simular(estado);
         estadoService.guardar(estado);
         return estado;
     }
-    
+
     public void crearPrimerEstadoSimulacion(Long proyectoId, boolean esForecast) {
-        
+
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
         Estado estado = proyecto.getEscenario().getEstadoInicial();
-        
+
         Estado estadoNuevo = Estado.builder()
                 .activo(true)
                 .caja(estado.getCaja())
@@ -55,13 +55,16 @@ public class SimuladorService {
                 .stock(estado.getStock())
                 .ventas(estado.getVentas())
                 .build();
-        
+
         estadoService.guardar(estadoNuevo);
     }
 
     private Estado avanzarTiempo(long proyectoId, boolean esForecast) {
         Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
         Estado nuevoEstado = estadoService.avanzarTiempo(estado);
+        cuentaService.inputarCuetasNuevoPeriodo(nuevoEstado);
+
+        estadoRepository.save(nuevoEstado);
         return nuevoEstado;
     }
 
@@ -71,19 +74,20 @@ public class SimuladorService {
         IntStream.rangeClosed(1, maximosPeriodos)
                 .forEach(i -> simularPeriodo(proyectoId, esForecast));
     }
-    
+
+    //TODO: esto no deberia utilizar solo las de forecast?
     public void deshacerSimulacionPrevia(Long proyectoId) {
-        for (OpcionProyecto op: opcionProyectoRepository.findByProyectoId(proyectoId)) {
+        for (OpcionProyecto op : opcionProyectoRepository.findByProyectoId(proyectoId)) {
             opcionProyectoRepository.deleteById(op.getId());
             for (Cuenta cuenta : cuentaRepository.findByProyectoIdAndOpcionId(proyectoId, op.getId())) {
-                for (CuentaPeriodo cp: cuenta.getCuentasPeriodo()) {
+                for (CuentaPeriodo cp : cuenta.getCuentasPeriodo()) {
                     cuentaPeriodoRepository.deleteById(cp.getId());
                 }
                 cuentaRepository.deleteById(cuenta.getId());
             }
         }
         estadoService.borrarEstados(proyectoId);
-        
+
     }
 
 }
