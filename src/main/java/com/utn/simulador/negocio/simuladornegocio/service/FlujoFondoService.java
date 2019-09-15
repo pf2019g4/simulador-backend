@@ -172,7 +172,7 @@ public class FlujoFondoService {
 
         List<Cuenta> cuentasEgresosNoAfectosAImpuestos = agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas);
 
-        List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
+        List<CuentaPeriodo> cuentaMovimientosFinancieros = IntStream.
                 range(0, periodoActual).
                 mapToObj(periodo
                         -> new CuentaPeriodo(
@@ -188,7 +188,7 @@ public class FlujoFondoService {
                 )
                 ).
                 collect(Collectors.toList());
-        cuentas.put("TOTAL", new AgrupadorVo("Total", null, cuentaFlujoDeFondos));
+        cuentas.put("TOTAL", new AgrupadorVo("Total", null, cuentaMovimientosFinancieros));
 
         return cuentas;
 
