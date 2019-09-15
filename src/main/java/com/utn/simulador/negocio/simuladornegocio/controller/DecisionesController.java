@@ -32,7 +32,12 @@ public class DecisionesController {
     public List<DecisionVo> decisionesPorProyecto(@PathVariable("proyectoId") Long proyectoId) {
         return decisionService.obtenerPorProyecto(proyectoId);
     }
-    
+
+    @GetMapping("/escenario/{escenarioId}/decisiones")
+    public List<Decision> decisionesPorEscenario(@PathVariable("escenarioId") Long escenarioId) {
+        return decisionService.obtenerPorEscenario(escenarioId);
+    }
+
     @PostMapping("/decisiones")
     public Decision crearDecision(@RequestBody Decision decision) {
         return decisionService.crearDecision(decision);
