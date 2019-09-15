@@ -87,7 +87,9 @@ public class DecisionService {
         List<Long> idConsecuencias = new ArrayList<>();
         for(Opcion opcion : decision.getOpciones()) {
             idOpciones.add(opcion.getId());
-            idConsecuencias.addAll(opcion.getConsecuencias().stream().map(c -> c.getId()).collect(Collectors.toList()));
+            if(opcion.getConsecuencias() != null && !opcion.getConsecuencias().isEmpty()){
+                idConsecuencias.addAll(opcion.getConsecuencias().stream().map(c -> c.getId()).collect(Collectors.toList()));
+            }
         }
         
         List<Opcion> opcionesBD = opcionRepository.getByDecisionId(decisionId);
