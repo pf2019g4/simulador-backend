@@ -24,5 +24,9 @@ public class ForecastService {
     public Forecast obtenerPorProyectoYPeriodo(Long idProyecto, Integer periodo){
         return forecastRepository.findByProyectoIdAndPeriodo(idProyecto, periodo);
     }
+    
+    public List<Forecast> obtenerPorProyecto(Long idProyecto){
+        return forecastRepository.findByProyectoId(idProyecto);
+    }
 
 }

@@ -21,7 +21,7 @@ public class ModalidadCobroService {
         modalidadCobroRepository.deleteByProyectoId(idProyecto);
     }
 
-    public ModalidadCobro obtenerModalidadesCobro(Long idProyecto){
+    public List<ModalidadCobro> obtenerModalidadesCobro(Long idProyecto){
         return modalidadCobroRepository.findByProyectoId(idProyecto);
     }
 

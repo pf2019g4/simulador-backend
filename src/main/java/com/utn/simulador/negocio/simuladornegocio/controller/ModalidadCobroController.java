@@ -20,4 +20,9 @@ public class ModalidadCobroController {
         modalidadCobroService.eliminarViejasModalidadesCobro(proyectoId);
         modalidadCobroService.guardar(modalidadesCobro);
     }
+    
+    @GetMapping("/proyecto/{proyectoId}/modalidadCobro")
+    public void setearModalidadCobro(@PathVariable("proyectoId") Long proyectoId) {
+        modalidadCobroService.obtenerModalidadesCobro(proyectoId);
+    }
 }

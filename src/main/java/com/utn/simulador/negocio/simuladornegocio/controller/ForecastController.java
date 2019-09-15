@@ -20,4 +20,9 @@ public class ForecastController {
         forecastService.eliminarViejoForecast(proyectoId);
         forecastService.guardar(listaForecast);
     }
+    
+    @GetMapping("/proyecto/{proyectoId}/forecast")
+    public void darDeAltaForecast(@PathVariable("proyectoId") Long proyectoId) {
+        forecastService.obtenerPorProyecto(proyectoId);
+    }
 }
