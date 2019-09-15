@@ -33,10 +33,10 @@ public class SimuladorController {
             @RequestBody List<Opcion> opciones) {
         simuladorService.deshacerSimulacionPrevia(proyectoId);
         simuladorService.crearPrimerEstadoSimulacion(proyectoId, true);
-        simuladorService.simularPeriodos(proyectoId, true);
         for(Opcion opcion : opciones){
             decisionService.tomaDecision(proyectoId, opcion.getId());   
         }
+        simuladorService.simularPeriodos(proyectoId, true);
     }
 
 }

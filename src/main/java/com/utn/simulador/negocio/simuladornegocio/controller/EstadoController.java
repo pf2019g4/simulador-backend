@@ -25,6 +25,11 @@ public class EstadoController {
 
     @GetMapping("/proyecto/{id}/estado/actual")
     public Estado obtenerEstadoActual(@PathVariable("id") Long idProyecto) {
+        return estadoService.obtenerActual(idProyecto, true);
+    }
+
+    @GetMapping("/proyecto/{id}/estado/base")
+    public Estado obtenerEstadoBase(@PathVariable("id") Long idProyecto) {
         return estadoService.obtenerActual(idProyecto, false);
     }
 
