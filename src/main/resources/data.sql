@@ -43,8 +43,8 @@ insert into estado
 (1          , true  , 11500.0 , 9000.0 , 200.0     , 3.5           , 0      , 150               , 1          , 200  , 0.10                    , 180                    , false      );
 
 insert into cuenta
-(id, descripcion, tipo_cuenta , tipo_flujo_fondo, proyecto_id) values
-(1 , 'Caja'     , 'FINANCIERO', null            , 1          );
+(id, descripcion, tipo_cuenta, tipo_flujo_fondo, proyecto_id) values
+(1 , 'Caja'     , 'ECONOMICO', null            , 1          );
 
 insert into cuenta_periodo
 (id, cuenta_id , monto, periodo, es_forecast) values
