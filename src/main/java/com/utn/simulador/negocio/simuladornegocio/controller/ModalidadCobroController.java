@@ -22,7 +22,7 @@ public class ModalidadCobroController {
     }
     
     @GetMapping("/proyecto/{proyectoId}/modalidadCobro")
-    public void setearModalidadCobro(@PathVariable("proyectoId") Long proyectoId) {
-        modalidadCobroService.obtenerModalidadesCobro(proyectoId);
+    public List<ModalidadCobro> recuperarModalidadCobro(@PathVariable("proyectoId") Long proyectoId) {
+        return modalidadCobroService.obtenerModalidadesCobro(proyectoId);
     }
 }

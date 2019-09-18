@@ -22,7 +22,7 @@ public class ForecastController {
     }
     
     @GetMapping("/proyecto/{proyectoId}/forecast")
-    public void darDeAltaForecast(@PathVariable("proyectoId") Long proyectoId) {
-        forecastService.obtenerPorProyecto(proyectoId);
+    public List<Forecast> recuperarForecast(@PathVariable("proyectoId") Long proyectoId) {
+        return forecastService.obtenerPorProyecto(proyectoId);
     }
 }
