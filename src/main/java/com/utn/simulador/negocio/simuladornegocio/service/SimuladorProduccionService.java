@@ -1,7 +1,12 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
+import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
+import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +23,29 @@ public class SimuladorProduccionService {
     }
 
     private void imputarGastosProduccion(Estado estado) {
-        BigDecimal costoProduccionPeriodo
-                = estado.getCostoVariable().multiply(new BigDecimal(estado.getProduccionMensual()))
+        Integer offsetPeriodo = 0;
+        BigDecimal costoProduccionPeriodo = estado.getCostoVariable()
+                        .multiply(new BigDecimal(estado.getProduccionMensual()))
                         .add(estado.getCostoFijo());
+        List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
+                "costo produccion periodo " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
 
-        estado.setCaja(estado.getCaja()
-                .subtract(costoProduccionPeriodo));
+        while (offsetPeriodo < estado.getProyecto().getModalidadPago().size()) {
+            
+            BigDecimal porcentajeGastos = estado.getProyecto().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
+            
+            BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
+            
+            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo.negate(), cuentaFinanciera));
+            offsetPeriodo = offsetPeriodo + 1;
+        }
+        
+        cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
+        cuentaService.guardar(cuentaFinanciera);
 
-        cuentaService.crearProduccion(estado, costoProduccionPeriodo);
+        estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "costo produccion periodo " + estado.getPeriodo(), costoProduccionPeriodo.negate());
     }
 
     private void aumentarStock(Estado estado) {

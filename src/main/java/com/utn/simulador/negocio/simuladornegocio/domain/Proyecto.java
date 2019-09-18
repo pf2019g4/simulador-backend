@@ -20,6 +20,9 @@ public class Proyecto {
 
     @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
     private List<ModalidadCobro> modalidadCobro;
+    
+    @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
+    private List<ModalidadPago> modalidadPago;
 
     @ManyToOne
     @JoinColumn(name = "escenario_id", nullable = false)

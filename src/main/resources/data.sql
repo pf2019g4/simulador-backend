@@ -10,6 +10,7 @@ delete from cuenta;
 delete from estado;
 delete from producto;
 delete from modalidad_cobro;
+delete from modalidad_pago;
 delete from proyecto;
 delete from escenario;
 delete from forecast;
@@ -55,12 +56,28 @@ insert into cuenta_periodo
 (1 , 1         , 500.0, 1      , false      ),
 (2 , 1         , 400.0, 2      , false      );
 
+insert into forecast
+(id, proyecto_id, periodo, cantidad_unidades) values
+(1 , 1          , 0      , 100            ),
+(2 , 1          , 1      , 200            ),
+(3 , 1          , 2      , 300            ),
+(4 , 1          , 3      , 400            ),
+(5 , 1          , 4      , 500            ),
+(6 , 1          , 5      , 600            );
+
+insert into modalidad_cobro
+(id, proyecto_id, porcentaje, offset_periodo) values
+(1 , 1          , 100.00    , 0            );
+
+insert into modalidad_pago
+(id, proyecto_id, porcentaje, offset_periodo) values
+(1 , 1          , 100.00    , 0            );
+
 insert into decision 
 (id, escenario_id, descripcion                                          ) values
 (1 , 1           , 'Cuanto quiere invertir en publicidad?'              ),
 (2 , 1           , 'Cuanto quiere invertir en actualizar la maquinaria?'),
 (3 , 1           , 'Cuanto quiere invertir en otras cosas?'             );
-
 
 insert into opcion
 (id, decision_id, descripcion                                                , variacion_costo_fijo, variacion_costo_variable, variacion_produccion) values

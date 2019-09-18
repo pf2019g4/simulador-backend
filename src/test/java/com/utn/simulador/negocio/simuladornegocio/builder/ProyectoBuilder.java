@@ -5,6 +5,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
+import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -59,6 +60,9 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         ModalidadCobro modalidadCobro = ModalidadCobroBuilder.base(proyecto, 100L, 0).build(em); //Crea modalidad de cobro basica (Contado)
         modalidadesCobro.add(modalidadCobro);
         this.instance.setModalidadCobro(modalidadesCobro);
+        List<ModalidadPago> modalidadesPago = new ArrayList<>();
+        modalidadesPago.add(ModalidadPagoBuilder.base(proyecto, 100L, 0).build(em)); //Crea modalidad de  basica (Contado)
+        this.instance.setModalidadPago(modalidadesPago);
         return proyecto;
     }
 

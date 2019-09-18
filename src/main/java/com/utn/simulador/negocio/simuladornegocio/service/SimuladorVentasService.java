@@ -21,7 +21,8 @@ public class SimuladorVentasService {
         Integer offsetPeriodo = 0;
         BigDecimal precio = estado.getProducto().getPrecio();
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
-        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinancieraVenta(estado.getProyecto().getId(), estado.getPeriodo());
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
+                "ventas periodo " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
 
         while (offsetPeriodo < estado.getProyecto().getModalidadCobro().size()) {
 
@@ -29,7 +30,7 @@ public class SimuladorVentasService {
             
             BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
             
-            cuentasPeriodos.add(cuentaService.crearCuentaPeriodoVenta(estado.getProyecto().getId(), estado.getPeriodo() + offsetPeriodo, montoVendido, cuentaFinanciera));
+            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, montoVendido, cuentaFinanciera));
             offsetPeriodo = offsetPeriodo + 1;
         }
 
@@ -42,7 +43,7 @@ public class SimuladorVentasService {
         estado.setStock(estado.getStock() - unidadesVendidas);
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
-        cuentaService.crearCuentaEconomicaVenta(estado.getProyecto().getId(), estado.getPeriodo(), estado.getVentas());
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "ventas periodo " + estado.getPeriodo(), estado.getVentas());
 
         return estado;
     }
