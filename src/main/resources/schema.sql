@@ -15,14 +15,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
-CREATE TABLE IF NOT EXISTS forecast (
-  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  proyecto_id bigint,
-  periodo integer not null,
-  cantidad_unidades bigint not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
-);
 
 CREATE TABLE IF NOT EXISTS producto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -112,6 +104,15 @@ CREATE TABLE IF NOT EXISTS cuenta_periodo (
   es_forecast boolean default false,
   PRIMARY KEY (id),
   FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
+);
+
+CREATE TABLE IF NOT EXISTS forecast (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint,
+  periodo integer not null,
+  cantidad_unidades bigint not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
 CREATE TABLE IF NOT EXISTS modalidad_cobro (
