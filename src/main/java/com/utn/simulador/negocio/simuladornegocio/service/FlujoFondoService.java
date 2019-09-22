@@ -113,20 +113,6 @@ public class FlujoFondoService {
         return cuentas;
     }
 
-    private List<CuentaPeriodo> calcularUtilidadesAntesDeImpuestos(Integer periodoActual, List<Cuenta> cuentasIngresosAfectosAImpuestos, List<Cuenta> cuentasEgresosAfectosAImpuestos, List<Cuenta> cuentasGastosNoDesembolsables, Map<String, AgrupadorVo> cuentas) {
-        List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
-                range(0, periodoActual).
-                mapToObj(periodo -> new CuentaPeriodo(
-                null,
-                null,
-                sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
-                        subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
-                        subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                periodo, false)).
-                collect(Collectors.toList());
-        cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
-        return cuentaUtilidadAntesDeImpuestos;
-    }
 
     private List<Cuenta> agregarCuentasEgresosNoAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
         List<Cuenta> cuentasEgresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
