@@ -21,7 +21,7 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setCaja(new BigDecimal(11000));
-        estadoBuilder.instance.setStock(200L);
+        estadoBuilder.instance.setStock(800L);
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(0);

@@ -17,7 +17,7 @@ public class SimuladorVentasService {
     private final ForecastService forecastService;
 
     Estado simular(Estado estado) {
-        long unidadesVendidas =  Math.min(calcularUnidadesVendidas(estado),estado.getProduccionMensual());
+        long unidadesVendidas =  Math.min(Math.min(calcularUnidadesVendidas(estado),estado.getProduccionMensual()), estado.getStock());
         Integer offsetPeriodo = 0;
         BigDecimal precio = estado.getProducto().getPrecio();
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
