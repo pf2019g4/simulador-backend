@@ -48,37 +48,37 @@ public class FlujoFondoService {
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
                 range(0, periodoActual).
                 mapToObj(periodo -> new CuentaPeriodo(
-                        null,
-                        null,
-                        sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
-                                subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                        periodo, true)).
+                null,
+                null,
+                sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
+                        subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
+                        subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
+                periodo, true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
         List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(
-                        null,
-                        null,
-                        cuentaPeriodo.getMonto().
-                                multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
-                                ),
-                        cuentaPeriodo.getPeriodo(), true)).
+                null,
+                null,
+                cuentaPeriodo.getMonto().
+                        multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
+                        ),
+                cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
         List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(
-                        null,
-                        null,
-                        cuentaPeriodo.getMonto().
-                                subtract(cuentaPeriodo.getMonto().
-                                        multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
-                                ),
-                        cuentaPeriodo.getPeriodo(), true)).
+                null,
+                null,
+                cuentaPeriodo.getMonto().
+                        subtract(cuentaPeriodo.getMonto().
+                                multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
+                        ),
+                cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -94,18 +94,18 @@ public class FlujoFondoService {
 
         List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
                 range(0, periodoActual).
-                mapToObj(periodo ->
-                        new CuentaPeriodo(
-                                null,
-                                null,
-                                montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).
-                                        add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)).
-                                        add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
-                                        subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
-                                        subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
-                                periodo,
-                                true
-                        )
+                mapToObj(periodo
+                        -> new CuentaPeriodo(
+                        null,
+                        null,
+                        montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).
+                                add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)).
+                                add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
+                                subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
+                                subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
+                        periodo,
+                        true
+                )
                 ).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.FLUJO_DE_FONDOS.name(), new AgrupadorVo(TipoFlujoFondo.FLUJO_DE_FONDOS.getDescripcion(), null, cuentaFlujoDeFondos));
@@ -174,13 +174,11 @@ public class FlujoFondoService {
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasIngresos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
+        cuentasIngresos.addAll(agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas));
 
-        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
-
-        List<Cuenta> cuentasIngresosNoAfectosAImpuestos = agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas);
-
-        List<Cuenta> cuentasEgresosNoAfectosAImpuestos = agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasEgresos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
+        cuentasEgresos.addAll(agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas));
 
         List<CuentaPeriodo> cuentaMovimientosFinancieros = IntStream.
                 range(0, periodoActual).
@@ -189,10 +187,8 @@ public class FlujoFondoService {
                         null,
                         null,
                         new BigDecimal(BigInteger.ZERO).
-                                add(sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo)).
-                                add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)),
+                                add(sumaMontoPeriodo(cuentasIngresos, periodo)).
+                                subtract(sumaMontoPeriodo(cuentasEgresos, periodo)),
                         periodo,
                         false
                 )
