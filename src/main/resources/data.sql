@@ -9,11 +9,11 @@ delete from decision;
 delete from cuenta;
 delete from estado;
 delete from producto;
+delete from forecast;
 delete from modalidad_cobro;
 delete from modalidad_pago;
 delete from proyecto;
 delete from escenario;
-delete from forecast;
 
 insert into producto
 (id, nombre  , precio) values
