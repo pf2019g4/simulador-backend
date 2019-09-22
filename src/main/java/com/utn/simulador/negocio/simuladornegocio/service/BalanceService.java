@@ -19,7 +19,7 @@ public class BalanceService {
 
     public BalanceVo obtenerPorProyecto(Long proyectoId) {
         Estado estado = estadoService.obtenerActual(proyectoId, false);
-        Activo activo = new Activo(estado.getCaja(), null, estado.getStock(), null, null);
+        Activo activo = new Activo(estado.getCaja(), null, estado.getStock(), estado.getMaquinarias(), estado.getAmortizacionAcumulada());
         Pasivo pasivo = new Pasivo();
         PatrimonioNeto patrimonioNeto = new PatrimonioNeto();
         return new BalanceVo(activo, pasivo, patrimonioNeto);

@@ -40,8 +40,8 @@ insert into proyecto
 (1 , 'Proyecto 1', 1           );
 
 insert into estado
-(proyecto_id, activo, caja    , ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
-(1          , true  , 11500.0 , 9000.0 , 200.0     , 3.5           , 0      , 150               , 1          , 200  , 0.10                    , 180                    , false      );
+(proyecto_id, activo, caja    , ventas , maquinarias, amortizacion_acumulada, costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
+(1          , true  , 11500.0 , 9000.0 , 0, 0, 200.0     , 3.5           , 0      , 150               , 1          , 200  , 0.10                    , 180                    , false      );
 
 insert into estado
 (proyecto_id, activo, caja    , ventas , costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values

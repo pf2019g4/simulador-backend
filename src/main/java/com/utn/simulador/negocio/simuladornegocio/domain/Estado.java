@@ -27,6 +27,8 @@ public class Estado {
     private BigDecimal costoVariable;
     private BigDecimal caja;
     private BigDecimal ventas;
+    private BigDecimal maquinarias;
+    private BigDecimal amortizacionAcumulada;
     private Long stock;
     private Long produccionMensual;
     private Boolean activo;
