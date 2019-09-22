@@ -26,6 +26,11 @@ public class FlujoFondoController {
     public Map<String, AgrupadorVo> obtenerFlujoFondoForecast(@PathVariable("id") Long id){
         return flujoFondoService.calcularCuentas(id, true);
     }
+    
+    @GetMapping("/proyecto/{id}/presupuesto-financiero")
+    public Map<String, AgrupadorVo> obtenerPresupuestoFinanciero(@PathVariable("id") Long id){
+        return flujoFondoService.obtenerFlujoFinanciero(id, true);
+    }
 
 
 }
