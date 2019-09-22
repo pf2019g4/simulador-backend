@@ -23,9 +23,14 @@ public class EstadoFinancieroController {
 
     private final FlujoFondoService flujoFondoService;
 
+    @GetMapping("/proyecto/{id}/presupuesto-financiero-forecast")
+    public Map<String, AgrupadorVo> obtenerPresupuestoFinancieroForecast(@PathVariable("id") Long id) {
+        return flujoFondoService.obtenerFlujoFinanciero(id, true);
+    }
+
     @GetMapping("/proyecto/{id}/presupuesto-financiero")
     public Map<String, AgrupadorVo> obtenerPresupuestoFinanciero(@PathVariable("id") Long id) {
-        return flujoFondoService.obtenerFlujoFinanciero(id, true);
+        return flujoFondoService.obtenerFlujoFinanciero(id, false);
     }
 
 }
