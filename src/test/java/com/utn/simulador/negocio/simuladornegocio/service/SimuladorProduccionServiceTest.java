@@ -45,7 +45,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         assertThat(estado.getCaja()).isLessThan(cajaInicial);
 
     }
-    
+
     @Test
     public void simular_produccionValida_Diferido_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
