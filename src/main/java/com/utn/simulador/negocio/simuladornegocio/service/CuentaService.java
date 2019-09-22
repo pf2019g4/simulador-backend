@@ -30,80 +30,41 @@ public class CuentaService {
     public List<Cuenta> obtenerPorProyectoYOpcion(Long idProyecto, Long idOpcion) {
         return cuentaRepository.findByProyectoIdAndOpcionId(idProyecto, idOpcion);
     }
-
-    public void crearProduccion(Estado estado, BigDecimal costoPeriodo) {
-        crearCuentaFinanacieraProduccion(estado, costoPeriodo);
-        crearCuentaEconomicaProduccion(estado, costoPeriodo);
-
+    
+    public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {
+        return CuentaPeriodo.builder()
+                .cuenta(cuentaFinanciera)
+                .monto(montoPeriodo)
+                .periodo(periodo).build();
     }
 
-    private void crearCuentaFinanacieraProduccion(Estado estado, BigDecimal costoPeriodo) {
-        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getPeriodo())
+    public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo) {
+        return Cuenta.builder()
+                .descripcion(desc)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
-                .tipoFlujoFondo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
-                .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyecto().getId())
+                .tipoFlujoFondo(tipoFlujoFondo)
+                .proyectoId(idProyecto)
                 .build();
-        cuenta = cuentaRepository.save(cuenta);
-
-        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
-                .cuenta(cuenta)
-                .monto(costoPeriodo.negate())
-                .periodo(estado.getPeriodo()).build());
     }
 
-    private void crearCuentaEconomicaProduccion(Estado estado, BigDecimal costoPeriodo) {
-
-        Cuenta cuenta = Cuenta.builder().descripcion("costo produccion periodo " + estado.getPeriodo())
-                .tipoCuenta(TipoCuenta.ECONOMICO)
-                .cuentasPeriodo(new ArrayList<>())
-                .proyectoId(estado.getProyecto().getId())
-                .build();
-        cuenta = cuentaRepository.save(cuenta);
-
-        cuentaPeriodoRepository.save(CuentaPeriodo.builder()
-                .cuenta(cuenta)
-                .monto(costoPeriodo.negate())
-                .periodo(estado.getPeriodo()).build());
-    }
-
-    public void crearCuentaEconomicaVenta(Long idProyecto, Integer periodo, BigDecimal ventas) {
+    public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo) {
         CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
-
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
 
         Cuenta cuentaEconomica = Cuenta.builder()
-                .descripcion("venta periodo " + periodo)
+                .descripcion(desc)
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .proyectoId(idProyecto)
                 .build();
 
         cuentasPeriodos.add(cuentaPeriodo.builder()
                 .cuenta(cuentaEconomica)
-                .monto(ventas)
+                .monto(montoPeriodo)
                 .periodo(periodo).build());
 
         cuentaEconomica.setCuentasPeriodo(cuentasPeriodos);
 
         cuentaRepository.save(cuentaEconomica);
-    }
-
-    public CuentaPeriodo crearCuentaPeriodoVenta(Long idProyecto, Integer periodo, BigDecimal ventas, Cuenta cuentaFinanciera) {
-
-        return CuentaPeriodo.builder()
-                .cuenta(cuentaFinanciera)
-                .monto(ventas)
-                .periodo(periodo).build();
-    }
-
-    public Cuenta crearCuentaFinancieraVenta(Long idProyecto, Integer periodo) {
-
-        return Cuenta.builder()
-                .descripcion("venta periodo " + periodo)
-                .tipoCuenta(TipoCuenta.FINANCIERO)
-                .tipoFlujoFondo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
-                .proyectoId(idProyecto)
-                .build();
     }
 
     public void guardar(Cuenta cuenta) {
@@ -129,6 +90,13 @@ public class CuentaService {
         return estado;
     }
 
+    public void eliminarCuentasDeProyecto(Long idProyecto, boolean esForecast){
+
+        cuentaPeriodoRepository.deleteByCuentaProyectoIdAndEsForecast(idProyecto, esForecast);
+        cuentaRepository.deleteByProyectoId(idProyecto);
+
+    }
+
     private Estado afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
                 && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
@@ -142,4 +110,5 @@ public class CuentaService {
 
         return estado;
     }
+
 }

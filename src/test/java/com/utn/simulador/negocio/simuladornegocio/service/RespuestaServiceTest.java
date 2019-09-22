@@ -30,7 +30,7 @@ public class RespuestaServiceTest extends SimuladorNegocioApplicationTests {
 
         Opcion respuesta = new Opcion();
         respuesta.setDescripcion("Desc1");
-        respuesta.setDecisionId(decision.getId());
+        respuesta.setDecision(decision);
 
         respuestaService.guardar(respuesta);
 

@@ -11,7 +11,7 @@ public class RespuestaBuilder extends AbstractPersistenceBuilder<Opcion> {
 
     public static RespuestaBuilder deDecision(Decision decision) {
         RespuestaBuilder respuestaBuilder = new RespuestaBuilder();
-        respuestaBuilder.instance.setDecisionId(decision.getId());
+        respuestaBuilder.instance.setDecision(decision);
         respuestaBuilder.instance.setDescripcion("DESC");
 
         return respuestaBuilder;

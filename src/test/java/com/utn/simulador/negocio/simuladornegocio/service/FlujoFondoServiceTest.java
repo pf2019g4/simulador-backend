@@ -79,7 +79,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 2).build(em);
 
 
-        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), false);
+        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), true);
 
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
@@ -198,7 +198,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV2, new BigDecimal(400), 2).build(em);
 
 
-        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), false);
+        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), true);
 
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);

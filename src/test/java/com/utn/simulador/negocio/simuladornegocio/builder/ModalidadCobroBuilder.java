@@ -13,7 +13,7 @@ public class ModalidadCobroBuilder extends AbstractPersistenceBuilder<ModalidadC
 
     public static ModalidadCobroBuilder base(Proyecto proyecto, Long porcentaje, Integer offsetPeriodo) {
         ModalidadCobroBuilder modalidadCobroBuilder = new ModalidadCobroBuilder();
-        modalidadCobroBuilder.instance.setProyecto(proyecto);
+        modalidadCobroBuilder.instance.setProyectoId(proyecto.getId());
         modalidadCobroBuilder.instance.setPorcentaje(BigDecimal.valueOf(porcentaje));
         modalidadCobroBuilder.instance.setOffsetPeriodo(offsetPeriodo);
 

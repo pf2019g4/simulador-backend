@@ -1,27 +1,25 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Decision {
+public class ModalidadPago {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descripcion;
-    private Long escenarioId;
-
-    @OneToMany(mappedBy = "decision", cascade = CascadeType.ALL)
-    private List<Opcion> opciones;
-
+    private Long proyectoId;
+    private BigDecimal porcentaje;
+    private Integer offsetPeriodo; // periodo 0, 1, 2, etc
 }

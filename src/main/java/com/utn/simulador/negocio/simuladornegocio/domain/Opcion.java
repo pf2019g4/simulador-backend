@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import lombok.Data;
@@ -21,13 +22,17 @@ public class Opcion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
-    private Long decisionId;
+    
+    @ManyToOne
+    //@JoinColumn(name = "decision_id", nullable = false)
+    @JsonBackReference
+    private Decision decision;
 
     private BigDecimal variacionCostoFijo;
     private BigDecimal variacionCostoVariable;
     private Long variacionProduccion;
 
-    @OneToMany(mappedBy = "opcionId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "opcion", cascade = CascadeType.ALL)
     private List<Consecuencia> consecuencias;
 
     public List<Cuenta> obtenerCuentasACrear(Proyecto proyecto) {

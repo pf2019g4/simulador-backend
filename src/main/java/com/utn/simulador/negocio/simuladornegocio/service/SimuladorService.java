@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SimuladorService {
 
     private final EstadoService estadoService;
@@ -75,18 +77,12 @@ public class SimuladorService {
                 .forEach(i -> simularPeriodo(proyectoId, esForecast));
     }
 
-    //TODO: esto no deberia utilizar solo las de forecast?
     public void deshacerSimulacionPrevia(Long proyectoId) {
         for (OpcionProyecto op : opcionProyectoRepository.findByProyectoId(proyectoId)) {
             opcionProyectoRepository.deleteById(op.getId());
-            for (Cuenta cuenta : cuentaRepository.findByProyectoIdAndOpcionId(proyectoId, op.getId())) {
-                for (CuentaPeriodo cp : cuenta.getCuentasPeriodo()) {
-                    cuentaPeriodoRepository.deleteById(cp.getId());
-                }
-                cuentaRepository.deleteById(cuenta.getId());
-            }
         }
-        estadoService.borrarEstados(proyectoId);
+        cuentaService.eliminarCuentasDeProyecto(proyectoId, true);
+        estadoService.borrarEstadosForecast(proyectoId);
 
     }
 

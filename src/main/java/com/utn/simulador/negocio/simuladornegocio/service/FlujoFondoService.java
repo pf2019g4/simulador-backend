@@ -45,30 +45,40 @@ public class FlujoFondoService {
         List<Cuenta> cuentasGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
-        List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = calcularUtilidadesAntesDeImpuestos(periodoActual, cuentasIngresosAfectosAImpuestos, cuentasEgresosAfectosAImpuestos, cuentasGastosNoDesembolsables, cuentas);
+        List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
+                range(0, periodoActual).
+                mapToObj(periodo -> new CuentaPeriodo(
+                        null,
+                        null,
+                        sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
+                                subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
+                                subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
+                        periodo, true)).
+                collect(Collectors.toList());
+        cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
         List<CuentaPeriodo> cuentaImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(
-                null,
-                null,
-                cuentaPeriodo.getMonto().
-                        multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
-                        ),
-                cuentaPeriodo.getPeriodo(), false)).
+                        null,
+                        null,
+                        cuentaPeriodo.getMonto().
+                                multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
+                                ),
+                        cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
         List<CuentaPeriodo> cuentaUtilidadDespuesDeImpuestos = cuentaUtilidadAntesDeImpuestos.
                 stream().
                 map(cuentaPeriodo -> new CuentaPeriodo(
-                null,
-                null,
-                cuentaPeriodo.getMonto().
-                        subtract(cuentaPeriodo.getMonto().
-                                multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
-                        ),
-                cuentaPeriodo.getPeriodo(), false)).
+                        null,
+                        null,
+                        cuentaPeriodo.getMonto().
+                                subtract(cuentaPeriodo.getMonto().
+                                        multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
+                                ),
+                        cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -84,18 +94,18 @@ public class FlujoFondoService {
 
         List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
                 range(0, periodoActual).
-                mapToObj(periodo
-                        -> new CuentaPeriodo(
-                        null,
-                        null,
-                        montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).
-                                add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)).
-                                add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
-                        periodo,
-                        false
-                )
+                mapToObj(periodo ->
+                        new CuentaPeriodo(
+                                null,
+                                null,
+                                montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).
+                                        add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)).
+                                        add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
+                                        subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
+                                        subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
+                                periodo,
+                                true
+                        )
                 ).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.FLUJO_DE_FONDOS.name(), new AgrupadorVo(TipoFlujoFondo.FLUJO_DE_FONDOS.getDescripcion(), null, cuentaFlujoDeFondos));
