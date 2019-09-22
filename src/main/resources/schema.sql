@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS estado (
   costo_variable decimal(19,2),
   caja decimal(19,2),
   ventas decimal(19,2),
+  demanda_insatisfecha decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
   es_forecast boolean NOT NULL default false,
