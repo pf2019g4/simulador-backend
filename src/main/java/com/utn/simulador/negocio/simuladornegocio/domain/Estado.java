@@ -33,6 +33,7 @@ public class Estado {
     private BigDecimal capitalSocial;
     private Long stock;
     private Long produccionMensual;
+    private BigDecimal demandaInsatisfecha;
     private Boolean activo;
     private Integer periodo; //TODO usar time en vez de contador
     @Embedded

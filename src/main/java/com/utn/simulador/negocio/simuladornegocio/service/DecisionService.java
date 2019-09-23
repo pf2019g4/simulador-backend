@@ -17,7 +17,7 @@ import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors; 
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -75,20 +75,18 @@ public class DecisionService {
                 .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
         Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true);
 
-        validarDecisionPendiente(proyecto, opcionTomada);
-
-        marcarOpcionComoTomada(proyectoId, opcionTomada);
+        marcarOpcionComoTomada(proyecto, opcionTomada);
         crearCuentasPorConsecuencia(opcionTomada, proyecto);
         aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
 
     public Decision crearDecision(Decision decision) {
-        
+
         //TODO: Esta es la forma correcta de persistir?
-        for(Opcion opcion : decision.getOpciones()) {
+        for (Opcion opcion : decision.getOpciones()) {
             opcion.setDecision(decision);
-            if(opcion.getConsecuencias() != null){
-                for(Consecuencia consecuencia : opcion.getConsecuencias()) {
+            if (opcion.getConsecuencias() != null) {
+                for (Consecuencia consecuencia : opcion.getConsecuencias()) {
                     consecuencia.setOpcion(opcion);
                 }
             }
@@ -98,47 +96,35 @@ public class DecisionService {
     }
 
     public Decision editarDecision(Long decisionId, Decision decision) {
-        
+
         List<Long> idOpciones = new ArrayList<>();
         List<Long> idConsecuencias = new ArrayList<>();
-        for(Opcion opcion : decision.getOpciones()) {
+        for (Opcion opcion : decision.getOpciones()) {
             idOpciones.add(opcion.getId());
-            if(opcion.getConsecuencias() != null && !opcion.getConsecuencias().isEmpty()){
+            if (opcion.getConsecuencias() != null && !opcion.getConsecuencias().isEmpty()) {
                 idConsecuencias.addAll(opcion.getConsecuencias().stream().map(c -> c.getId()).collect(Collectors.toList()));
             }
         }
-        
+
         List<Opcion> opcionesBD = opcionRepository.getByDecisionId(decisionId);
-        for(Opcion opcion : opcionesBD) {
+        for (Opcion opcion : opcionesBD) {
             List<Consecuencia> consecuenciasBD = consecuenciaRepository.getByOpcionId(opcion.getId());
-            for(Consecuencia consecuencia : consecuenciasBD){
-                if(!idConsecuencias.contains(consecuencia.getId())){
+            for (Consecuencia consecuencia : consecuenciasBD) {
+                if (!idConsecuencias.contains(consecuencia.getId())) {
                     consecuenciaRepository.deleteById(consecuencia.getId());
                 }
             }
-            if(!idOpciones.contains(opcion.getId())){
+            if (!idOpciones.contains(opcion.getId())) {
                 opcionRepository.deleteById(opcion.getId());
             }
         }
-        
+
         return crearDecision(decision);
     }
 
     public void borrarDecision(Long decisionId) {
 
         decisionRepository.deleteById(decisionId);
-    }
-
-    private void validarDecisionPendiente(Proyecto proyecto, final Opcion opcionTomada) throws IllegalStateException {
-        for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
-            if (opcionTomada.getDecision().getId().equals(decision.getId())) {
-                if (decision.getOpcionTomada() == null) {
-                    break;
-                } else {
-                    throw new IllegalStateException("La decision ya fue tomada.");
-                }
-            }
-        }
     }
 
     private void crearCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
@@ -148,9 +134,20 @@ public class DecisionService {
         }
     }
 
-    private void marcarOpcionComoTomada(Long proyectoId, final Opcion opcionTomada) {
+    private void marcarOpcionComoTomada(Proyecto proyecto, final Opcion opcionTomada) {
+
+        for (DecisionVo decision : obtenerDecisionesPorProyecto(proyecto)) {
+            if (opcionTomada.getDecision().getId().equals(decision.getId())) {
+                if (decision.getOpcionTomada() == null) {
+                    break;
+                } else {
+                    opcionProyectoRepository.deleteById(decision.getOpcionTomada());
+                }
+            }
+        }
+
         OpcionProyecto opcionProyecto = new OpcionProyecto();
-        opcionProyecto.setProyectoId(proyectoId);
+        opcionProyecto.setProyectoId(proyecto.getId());
         opcionProyecto.setOpcion(opcionTomada);
 
         opcionProyectoRepository.save(opcionProyecto);
