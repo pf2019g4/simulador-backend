@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS estado (
   ventas decimal(19,2),
   maquinarias decimal(19,2),
   amortizacion_acumulada decimal(19,2),
+  capital_social decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
   es_forecast boolean NOT NULL default false,

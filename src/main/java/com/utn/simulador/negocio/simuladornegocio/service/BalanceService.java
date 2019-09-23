@@ -28,7 +28,7 @@ public class BalanceService {
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES), estado.getPeriodo()),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo())
         );
-        PatrimonioNeto patrimonioNeto = new PatrimonioNeto();
+        PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial());
         return new BalanceVo(activo, pasivo, patrimonioNeto);
     }
 
