@@ -5,13 +5,14 @@ import javax.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder(toBuilder=true)
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Estado {
@@ -27,6 +28,9 @@ public class Estado {
     private BigDecimal costoVariable;
     private BigDecimal caja;
     private BigDecimal ventas;
+    private BigDecimal maquinarias;
+    private BigDecimal amortizacionAcumulada;
+    private BigDecimal capitalSocial;
     private Long stock;
     private Long produccionMensual;
     private BigDecimal demandaInsatisfecha;

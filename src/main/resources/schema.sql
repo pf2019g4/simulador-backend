@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS estado (
   costo_variable decimal(19,2),
   caja decimal(19,2),
   ventas decimal(19,2),
+  maquinarias decimal(19,2),
+  amortizacion_acumulada decimal(19,2),
+  capital_social decimal(19,2),
   demanda_insatisfecha decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
@@ -81,6 +84,7 @@ CREATE TABLE IF NOT EXISTS consecuencia (
     cantidad_periodos int not null,
     tipo_cuenta varchar(20) NOT NULL,
     tipo_flujo_fondo varchar(40),
+    tipo_balance varchar(40),
     PRIMARY KEY (id),
     FOREIGN KEY (opcion_id) REFERENCES opcion(id)
 );
@@ -92,6 +96,7 @@ CREATE TABLE IF NOT EXISTS cuenta (
   descripcion VARCHAR(45) NOT NULL,
   tipo_cuenta varchar(20) NOT NULL,
   tipo_flujo_fondo varchar(40),
+  tipo_balance varchar(40),
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
   FOREIGN KEY (opcion_id) REFERENCES opcion(id)
