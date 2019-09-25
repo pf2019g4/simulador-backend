@@ -1,10 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
@@ -29,6 +25,10 @@ public class CuentaService {
 
     public List<Cuenta> obtenerPorProyectoYOpcion(Long idProyecto, Long idOpcion) {
         return cuentaRepository.findByProyectoIdAndOpcionId(idProyecto, idOpcion);
+    }
+
+    public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance) {
+        return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
     }
     
     public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {

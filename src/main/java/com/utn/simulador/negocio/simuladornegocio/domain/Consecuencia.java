@@ -33,6 +33,9 @@ public class Consecuencia {
     @Enumerated(EnumType.STRING)
     private TipoFlujoFondo tipoFlujoFondo;
 
+    @Enumerated(EnumType.STRING)
+    private TipoBalance tipoBalance;
+
     public Cuenta obtenerCuenta(Proyecto proyecto) {
 
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();

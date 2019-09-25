@@ -28,6 +28,9 @@ public class Cuenta {
     @Enumerated(EnumType.STRING)
     private TipoFlujoFondo tipoFlujoFondo;
 
+    @Enumerated(EnumType.STRING)
+    private TipoBalance tipoBalance;
+
     @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     private List<CuentaPeriodo> cuentasPeriodo;
 
