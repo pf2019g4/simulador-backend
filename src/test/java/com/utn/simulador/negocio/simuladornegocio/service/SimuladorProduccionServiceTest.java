@@ -5,9 +5,11 @@ import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ModalidadPagoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.ProveedorBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -52,10 +54,14 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         Producto producto = ProductoBuilder.base().build(em);
         
         List<ModalidadPago> modalidadesPago = new ArrayList<>();
-        modalidadesPago.add(ModalidadPagoBuilder.base(proyecto, 60L, 0).build(em)); //60% contado
-        modalidadesPago.add(ModalidadPagoBuilder.base(proyecto, 0L, 1).build(em)); //0% a 30 dias
-        modalidadesPago.add(ModalidadPagoBuilder.base(proyecto, 40L, 2).build(em)); //40% a 60 dias
-        proyecto.setModalidadPago(modalidadesPago);
+        modalidadesPago.add(ModalidadPagoBuilder.base(60L, 0).build(em)); //60% contado
+        modalidadesPago.add(ModalidadPagoBuilder.base(0L, 1).build(em)); //0% a 30 dias
+        modalidadesPago.add(ModalidadPagoBuilder.base(40L, 2).build(em)); //40% a 60 dias
+        
+        Proveedor proveedor = ProveedorBuilder.base(3.5D, 5).build(em);
+        proveedor.setModalidadPago(modalidadesPago);
+        
+        proyecto.setProveedorSeleccionado(proveedor);
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();

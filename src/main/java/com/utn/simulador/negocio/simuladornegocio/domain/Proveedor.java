@@ -2,6 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,12 +15,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModalidadPago {
+public class Proveedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long proveedorId;
-    private BigDecimal porcentaje;
-    private Integer offsetPeriodo; // periodo 0, 1, 2, etc
+    private Long escenarioId;
+    private String nombre;
+    private BigDecimal variacionCostoVariable;
+    private Integer variacionCalidad;
+    
+    @OneToMany(mappedBy = "proveedorId", cascade = CascadeType.ALL)
+    private List<ModalidadPago> modalidadPago;
 }

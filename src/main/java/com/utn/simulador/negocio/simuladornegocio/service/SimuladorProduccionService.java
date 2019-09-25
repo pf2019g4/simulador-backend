@@ -24,16 +24,14 @@ public class SimuladorProduccionService {
 
     private void imputarGastosProduccion(Estado estado) {
         Integer offsetPeriodo = 0;
-        BigDecimal costoProduccionPeriodo = estado.getCostoVariable()
-                        .multiply(new BigDecimal(estado.getProduccionMensual()))
-                        .add(estado.getCostoFijo());
+        BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 "costo produccion periodo " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
 
-        while (offsetPeriodo < estado.getProyecto().getModalidadPago().size()) {
+        while (offsetPeriodo < estado.getProyecto().getProveedorSeleccionado().getModalidadPago().size()) {
             
-            BigDecimal porcentajeGastos = estado.getProyecto().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
+            BigDecimal porcentajeGastos = estado.getProyecto().getProveedorSeleccionado().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
             
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
             
@@ -50,5 +48,12 @@ public class SimuladorProduccionService {
 
     private void aumentarStock(Estado estado) {
         estado.setStock(estado.getStock() + estado.getProduccionMensual());
+    }
+    
+    private BigDecimal calcularCostoProduccionPeriodo(Estado estado) {
+        return estado.getCostoVariable()
+            .add(estado.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable())
+            .multiply(new BigDecimal(estado.getProduccionMensual()))
+            .add(estado.getCostoFijo());
     }
 }

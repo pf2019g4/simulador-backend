@@ -6,6 +6,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -48,6 +49,14 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
             this.instance.setEscenario(escenario);
         }
+        
+        List<ModalidadPago> modalidadesPago = new ArrayList<>();
+        modalidadesPago.add(ModalidadPagoBuilder.base(100L, 0).build(em)); //Crea modalidad de  basica (Contado)
+
+        Proveedor proveedor = ProveedorBuilder.base(3.5D, 5).build(em);
+        proveedor.setModalidadPago(modalidadesPago);
+
+        this.instance.setProveedorSeleccionado(proveedor);
 
         Proyecto proyecto = super.build(em);
 
@@ -60,9 +69,6 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         ModalidadCobro modalidadCobro = ModalidadCobroBuilder.base(proyecto, 100L, 0).build(em); //Crea modalidad de cobro basica (Contado)
         modalidadesCobro.add(modalidadCobro);
         this.instance.setModalidadCobro(modalidadesCobro);
-        List<ModalidadPago> modalidadesPago = new ArrayList<>();
-        modalidadesPago.add(ModalidadPagoBuilder.base(proyecto, 100L, 0).build(em)); //Crea modalidad de  basica (Contado)
-        this.instance.setModalidadPago(modalidadesPago);
         return proyecto;
     }
 

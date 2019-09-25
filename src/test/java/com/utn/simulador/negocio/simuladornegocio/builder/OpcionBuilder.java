@@ -17,14 +17,15 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
     }
 
     public static OpcionBuilder deDecisionMaquinaria(Decision decision) {
-        OpcionBuilder decisionBuilder = new OpcionBuilder();
-        decisionBuilder.instance.setDescripcion("opcion1");
-        decisionBuilder.instance.setDecision(decision);
-        decisionBuilder.instance.setVariacionCostoFijo(BigDecimal.TEN.negate());
-        decisionBuilder.instance.setVariacionCostoVariable(BigDecimal.TEN.negate());
-        decisionBuilder.instance.setVariacionProduccion(10L);
+        OpcionBuilder opcionBuilder = new OpcionBuilder();
+        opcionBuilder.instance.setDescripcion("opcion1");
+        opcionBuilder.instance.setDecision(decision);
+        opcionBuilder.instance.setVariacionCostoFijo(BigDecimal.TEN.negate());
+        opcionBuilder.instance.setVariacionCostoVariable(BigDecimal.TEN.negate());
+        opcionBuilder.instance.setVariacionProduccion(10L);
+        opcionBuilder.instance.setVariacionCalidad(0);
 
-        return decisionBuilder;
+        return opcionBuilder;
     }
 
     public OpcionBuilder conConsecuencia(Consecuencia consecuencia) {

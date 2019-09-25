@@ -17,12 +17,8 @@ public class ModalidadPagoService {
         modalidadPagoRepository.saveAll(listaModalidadesPago);
     }
 
-    public void eliminarViejasModalidadesPago(Long idProyecto){
-        modalidadPagoRepository.deleteByProyectoId(idProyecto);
-    }
-
-    public List<ModalidadPago> obtenerModalidadesPago(Long idProyecto){
-        return modalidadPagoRepository.findByProyectoId(idProyecto);
+    public List<ModalidadPago> obtenerModalidadesPagoProveedor(Long idProveedor){
+        return modalidadPagoRepository.findByProveedorId(idProveedor);
     }
 
 }

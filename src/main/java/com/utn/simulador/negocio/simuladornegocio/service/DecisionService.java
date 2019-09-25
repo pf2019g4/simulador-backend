@@ -160,6 +160,7 @@ public class DecisionService {
         estadoActual.setCostoFijo(estadoActual.getCostoFijo().add(opcionTomada.getVariacionCostoFijo()));
         estadoActual.setCostoVariable(estadoActual.getCostoVariable().add(opcionTomada.getVariacionCostoVariable()));
         estadoActual.setProduccionMensual(estadoActual.getProduccionMensual() + opcionTomada.getVariacionProduccion());
+        estadoActual.setCalidad(estadoActual.getCalidad() + opcionTomada.getVariacionCalidad());
 
         this.estadoRepository.save(estadoActual);
     }

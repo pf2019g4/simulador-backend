@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 import javax.persistence.*;
 
@@ -21,8 +22,10 @@ public class Proyecto {
     @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
     private List<ModalidadCobro> modalidadCobro;
     
-    @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
-    private List<ModalidadPago> modalidadPago;
+    @OneToOne
+    @JoinColumn(name = "proveedor_id")
+    @JsonBackReference
+    private Proveedor proveedorSeleccionado;
 
     @ManyToOne
     @JoinColumn(name = "escenario_id", nullable = false)
