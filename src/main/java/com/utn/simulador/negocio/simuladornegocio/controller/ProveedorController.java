@@ -2,6 +2,8 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.service.ProveedorService;
+import com.utn.simulador.negocio.simuladornegocio.vo.ProveedorVo;
+import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,16 +24,16 @@ public class ProveedorController {
     
     @GetMapping("/escenario/{escenarioId}/proveedores")
     public List<Proveedor> obtenerProveedoresEscenario(@PathVariable("escenarioId") Long escenarioId) {
-        return proveedorService.obtenerProveedoresEscenario(escenarioId);
+        return proveedorService.obtenerPorEscenario(escenarioId);
     }
 
-    @PostMapping("/proyecto/{proyectoId}/proveedor/{proveedorId}")
-    public void setearProveedorProyecto(@PathVariable("proyectoId") Long proyectoId, @PathVariable("proveedorId") Long proveedorId) {
+    @PostMapping("/proyecto/{proyectoId}/proveedor")
+    public void setearProveedorProyecto(@PathVariable("proyectoId") Long proyectoId, @RequestBody Long proveedorId) {
         proveedorService.guardarProveedorProyecto(proyectoId, proveedorId);
     }
     
     @GetMapping("/proyecto/{proyectoId}/proveedor")
-    public Proveedor obtenerProveedorProyecto(@PathVariable("proyectoId") Long proyectoId) {
-        return proveedorService.obtenerProveedorProyecto(proyectoId);
+    public List<ProveedorVo> obtenerProveedoresProyecto(@PathVariable("proyectoId") Long proyectoId) {
+        return proveedorService.obtenerPorProyecto(proyectoId);
     }
 }

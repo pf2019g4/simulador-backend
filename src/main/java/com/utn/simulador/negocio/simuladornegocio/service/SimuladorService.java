@@ -52,6 +52,7 @@ public class SimuladorService {
                 .parametrosVentas(estado.getParametrosVentas())
                 .periodo(estado.getPeriodo())
                 .produccionMensual(estado.getProduccionMensual())
+                .calidad(estado.getCalidad())
                 .producto(estado.getProducto())
                 .proyecto(proyecto)
                 .stock(estado.getStock())
