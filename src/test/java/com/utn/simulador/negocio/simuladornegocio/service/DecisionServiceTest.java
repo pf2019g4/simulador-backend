@@ -59,7 +59,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     @Test
-    public void obtenerPorEscenario_conEscenarioValido_devuelveDecisiones(){
+    public void obtenerPorEscenario_conEscenarioValido_devuelveDecisiones() {
 
         Escenario escenario = EscenarioBuilder.base().build(em);
 
@@ -69,7 +69,6 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);
-
 
         List<Decision> decisiones = decisionService.obtenerPorEscenario(escenario.getId());
         assertThat(decisiones).hasSize(1);
@@ -138,18 +137,18 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(cantidadDecisionesTomadasDespues).isEqualTo(cantidadDecisionesTomadasAntes);
 
     }
-    
+
     @Test
     public void abmAltaDecisiones() {
         Escenario escenario = EscenarioBuilder.base().build(em);
-        
+
         List<Opcion> opciones = new ArrayList<>();
-        
+
         Decision decision = Decision.builder()
                 .descripcion("AltaDecision")
                 .escenarioId(escenario.getId())
                 .build();
-        
+
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
@@ -158,27 +157,27 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
                 .consecuencias(null)
                 .decision(decision)
                 .build());
-        
+
         decision.setOpciones(opciones);
-        
+
         Decision decisionDB = decisionService.crearDecision(decision);
-        
+
         assertThat(opcionRepository.findAll().get(0).getDecision() != null).isEqualTo(true);
         assertThat(decisionRepository.existsById(decisionDB.getId())).isEqualTo(true);
         assertThat(decisionDB.getDescripcion()).isEqualTo("AltaDecision");
     }
-    
+
     @Test
     public void abmEditarDecisiones() {
         Escenario escenario = EscenarioBuilder.base().build(em);
-        
+
         List<Opcion> opciones = new ArrayList<>();
-        
+
         Decision decision = Decision.builder()
                 .descripcion("EditarDecision")
                 .escenarioId(escenario.getId())
                 .build();
-        
+
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
@@ -187,32 +186,32 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
                 .consecuencias(null)
                 .decision(decision)
                 .build());
-        
+
         decision.setOpciones(opciones);
-        
+
         Decision decisionDB = decisionService.crearDecision(decision);
-        
+
         assertThat(decisionRepository.existsById(decisionDB.getId())).isEqualTo(true);
         assertThat(decisionDB.getDescripcion()).isEqualTo("EditarDecision");
-        
+
         decisionDB.setDescripcion("EditarDecision2");
-        
+
         Decision decisionDB2 = decisionService.editarDecision(decisionDB.getId(), decision);
         assertThat(decisionRepository.existsById(decisionDB2.getId())).isEqualTo(true);
         assertThat(decisionDB2.getDescripcion()).isEqualTo("EditarDecision2");
     }
-    
+
     @Test
     public void abmBorrarDecisiones() {
         Escenario escenario = EscenarioBuilder.base().build(em);
-        
+
         List<Opcion> opciones = new ArrayList<>();
-        
+
         Decision decision = Decision.builder()
                 .descripcion("BorrarDecision")
                 .escenarioId(escenario.getId())
                 .build();
-        
+
         opciones.add(Opcion.builder()
                 .descripcion("opcion")
                 .variacionCostoFijo(BigDecimal.ZERO)
@@ -221,16 +220,16 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
                 .consecuencias(null)
                 .decision(decision)
                 .build());
-        
+
         decision.setOpciones(opciones);
-        
+
         Decision decisionDB = decisionService.crearDecision(decision);
-        
+
         assertThat(decisionRepository.existsById(decisionDB.getId())).isEqualTo(true);
         assertThat(decisionDB.getDescripcion()).isEqualTo("BorrarDecision");
-        
+
         decisionService.borrarDecision(decisionDB.getId());
-        
+
         assertThat(!decisionRepository.existsById(decisionDB.getId())).isEqualTo(true);
     }
 
@@ -253,8 +252,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
-        assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
+        decisionService.tomaDecision(proyecto.getId(), opcion.getId());
 
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
