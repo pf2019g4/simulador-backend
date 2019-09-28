@@ -32,6 +32,7 @@ public class Estado {
     private BigDecimal maquinarias;
     private BigDecimal amortizacionAcumulada;
     private BigDecimal capitalSocial;
+    private BigDecimal resultadoDelEjercicio;
     private Long stock;
     private Long produccionMensual;
     private BigDecimal demandaInsatisfecha;

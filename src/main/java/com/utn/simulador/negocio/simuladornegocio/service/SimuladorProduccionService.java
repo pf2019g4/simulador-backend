@@ -24,7 +24,6 @@ public class SimuladorProduccionService {
     }
 
     private void imputarGastosProduccion(Estado estado) {
-        ;
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
