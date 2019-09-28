@@ -10,7 +10,6 @@ import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.service.DecisionService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
-import com.utn.simulador.negocio.simuladornegocio.vo.DecisionVo;
 import java.util.List;
 import java.util.Arrays; 
 import lombok.RequiredArgsConstructor;

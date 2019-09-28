@@ -15,8 +15,8 @@ public class BalanceService {
     private final EstadoService estadoService;
     private final CuentaService cuentaService;
 
-    public BalanceVo obtenerPorProyecto(Long proyectoId) {
-        Estado estado = estadoService.obtenerActual(proyectoId, false);
+    public BalanceVo obtenerPorProyecto(Long proyectoId, Boolean esForecast) {
+        Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
         Activo activo = new Activo(
                 estado.getCaja(),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES), estado.getPeriodo()),
@@ -28,7 +28,7 @@ public class BalanceService {
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES), estado.getPeriodo()),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo())
         );
-        PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial());
+        PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), estado.getResultadoDelEjercicio());
         return new BalanceVo(activo, pasivo, patrimonioNeto);
     }
 

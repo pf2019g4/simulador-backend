@@ -3,6 +3,8 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+
+import java.math.BigDecimal;
 import java.util.stream.IntStream;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
@@ -30,12 +32,15 @@ public class SimuladorService {
     private final CuentaService cuentaService;
 
     public Estado simularPeriodo(long proyectoId, boolean esForecast) {
-        Estado estado = avanzarTiempo(proyectoId, esForecast);
-
-        simuladorProduccionService.simular(estado);
-        simuladorVentasService.simular(estado);
-        estadoService.guardar(estado);
-        return estado;
+        Estado estadoInicial = estadoService.obtenerActual(proyectoId, esForecast);
+        BigDecimal cajaInicial = estadoInicial.getCaja();
+        Estado nuevoEstado = avanzarTiempo(estadoInicial, esForecast);
+        simuladorProduccionService.simular(nuevoEstado);
+        simuladorVentasService.simular(nuevoEstado);
+        //TODO este calculo esta mal revisar. Esta calculando solo para el ultimo ejercicio y tendria que hacerse para todos los periodos sumarizados.
+        nuevoEstado.setResultadoDelEjercicio(cajaInicial.subtract(nuevoEstado.getCaja()).negate());
+        estadoService.guardar(nuevoEstado);
+        return nuevoEstado;
     }
 
     public void crearPrimerEstadoSimulacion(Long proyectoId, boolean esForecast) {
@@ -62,8 +67,7 @@ public class SimuladorService {
         estadoService.guardar(estadoNuevo);
     }
 
-    private Estado avanzarTiempo(long proyectoId, boolean esForecast) {
-        Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
+    private Estado avanzarTiempo(Estado estado, boolean esForecast) {
         Estado nuevoEstado = estadoService.avanzarTiempo(estado);
         cuentaService.inputarCuetasNuevoPeriodo(nuevoEstado);
 
