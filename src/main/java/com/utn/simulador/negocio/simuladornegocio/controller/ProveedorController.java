@@ -3,7 +3,6 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.service.ProveedorService;
 import com.utn.simulador.negocio.simuladornegocio.vo.ProveedorVo;
-import java.math.BigInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +16,24 @@ public class ProveedorController {
 
     private final ProveedorService proveedorService;
     
-    @PostMapping("/escenario/{escenarioId}/proveedores")
-    public void setearProveedoresEscenario(@PathVariable("escenarioId") Long escenarioId, @RequestBody List<Proveedor> proveedores) {
-        proveedorService.guardarProveedoresEscenario(escenarioId, proveedores);
-    }
-    
     @GetMapping("/escenario/{escenarioId}/proveedores")
     public List<Proveedor> obtenerProveedoresEscenario(@PathVariable("escenarioId") Long escenarioId) {
         return proveedorService.obtenerPorEscenario(escenarioId);
+    }
+    
+    @PostMapping("/proveedor")
+    public Proveedor crearProveedor(@RequestBody Proveedor proveedor) {
+        return proveedorService.crearProveedor(proveedor);
+    }
+    
+    @PutMapping("/proveedores/{proveedorId}")
+    public void editarProveedor(@PathVariable("proveedorId") Long proveedorId, @RequestBody Proveedor proveedor) {
+        proveedorService.editarProveedor(proveedorId, proveedor);
+    }
+    
+    @DeleteMapping("/proveedores/{proveedorId}")
+    public void borrarProveedor(@PathVariable("proveedorId") Long proveedorId) {
+        proveedorService.borrarProveedor(proveedorId);
     }
 
     @PostMapping("/proyecto/{proyectoId}/proveedor")

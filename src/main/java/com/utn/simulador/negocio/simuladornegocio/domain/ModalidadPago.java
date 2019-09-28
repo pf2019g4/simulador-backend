@@ -19,7 +19,10 @@ public class ModalidadPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long proveedorId;
+    @ManyToOne    
+    //@JoinColumn(name = "proveedor_id", nullable = false)
+    @JsonBackReference
+    private Proveedor proveedor;
     private BigDecimal porcentaje;
     private Integer offsetPeriodo; // periodo 0, 1, 2, etc
 }

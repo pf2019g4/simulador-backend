@@ -2,6 +2,8 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
+import com.utn.simulador.negocio.simuladornegocio.repository.ModalidadPagoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProveedorRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.ProveedorVo;
@@ -17,13 +19,36 @@ public class ProveedorService {
 
     private final ProveedorRepository proveedorRepository;
     private final ProyectoRepository proyectoRepository;
-
-    public void guardarProveedoresEscenario(Long idEscenario, List<Proveedor> listaProveedores){
-        proveedorRepository.saveAll(listaProveedores);
-    }
+    private final ModalidadPagoRepository modalidadPagoRepository;
 
     public List<Proveedor> obtenerPorEscenario(Long idEscenario){
         return proveedorRepository.findByEscenarioId(idEscenario);
+    }
+    
+    public Proveedor crearProveedor(Proveedor proveedor) {
+        
+        //Necesario??
+        for(ModalidadPago modalidadPago : proveedor.getModalidadPago()){
+            modalidadPago.setProveedor(proveedor);
+        }
+        return proveedorRepository.save(proveedor);
+    }
+
+    public Proveedor editarProveedor(Long proveedorId, Proveedor proveedor) {
+
+        List<ModalidadPago> modalidadesPagoBD = modalidadPagoRepository.findByProveedorId(proveedorId);
+        for (ModalidadPago modalidadPago : modalidadesPagoBD) {
+            if (!proveedor.getModalidadPago().contains(modalidadPago)) {
+                modalidadPagoRepository.deleteById(modalidadPago.getId());
+            }
+        }
+
+        return crearProveedor(proveedor);
+    }
+
+    public void borrarProveedor(Long proveedorId) {
+
+        proveedorRepository.deleteById(proveedorId);
     }
     
     public void guardarProveedorProyecto(Long idProyecto, Long idProveedor){
