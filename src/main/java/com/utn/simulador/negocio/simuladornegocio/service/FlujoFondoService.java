@@ -46,7 +46,7 @@ public class FlujoFondoService {
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
-                range(0, periodoActual).
+                range(0, periodoActual + 1).
                 mapToObj(periodo -> new CuentaPeriodo(
                 null,
                 null,
@@ -93,7 +93,7 @@ public class FlujoFondoService {
         cuentas.put(TipoFlujoFondo.INVERSIONES.name(), new AgrupadorVo(TipoFlujoFondo.INVERSIONES.getDescripcion(), cuentasInversiones, null));
 
         List<CuentaPeriodo> cuentaFlujoDeFondos = IntStream.
-                range(0, periodoActual).
+                range(0, periodoActual + 1).
                 mapToObj(periodo
                         -> new CuentaPeriodo(
                         null,

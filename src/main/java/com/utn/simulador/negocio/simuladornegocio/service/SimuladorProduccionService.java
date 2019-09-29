@@ -32,9 +32,8 @@ public class SimuladorProduccionService {
             BigDecimal porcentajeGastos = estado.getProyecto().getProveedorSeleccionado().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
             
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
-            
-            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo.negate(), cuentaFinanciera));
-
+            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo, cuentaFinanciera));
+            offsetPeriodo = offsetPeriodo + 1;
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
