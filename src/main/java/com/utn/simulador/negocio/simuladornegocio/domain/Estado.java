@@ -29,10 +29,7 @@ public class Estado {
     private BigDecimal caja;
     private BigDecimal ventas;
     private Integer calidad;
-    private BigDecimal maquinarias;
-    private BigDecimal amortizacionAcumulada;
-    private BigDecimal capitalSocial;
-    private BigDecimal resultadoDelEjercicio;   //TODO actualmente no se usa, deprecar?
+    private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
     private Long stock;
     private Long produccionMensual;
     private BigDecimal demandaInsatisfecha;

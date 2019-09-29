@@ -44,6 +44,7 @@ public class Consecuencia {
                 .descripcion(descripcion)
                 .tipoCuenta(tipoCuenta)
                 .tipoFlujoFondo(tipoFlujoFondo)
+                .tipoBalance(tipoBalance)
                 .proyectoId(proyecto.getId())
                 .build();
 
