@@ -1,5 +1,9 @@
 # Simulador-backend 
 Por ahora utiliza una BD en memoria.
+  Para Conectarse: http://localhost:8080/h2-console
+  Cambiar donde dice JDBC URL y poner -> jdbc:h2:mem:testdb
+  USER: sa
+  PASS: password
 
 ## Requerimientos
 - Maven > 3.1

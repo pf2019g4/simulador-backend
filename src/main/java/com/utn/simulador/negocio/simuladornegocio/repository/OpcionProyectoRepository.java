@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface OpcionProyectoRepository extends JpaRepository<OpcionProyecto, Long> {
 
+    List<OpcionProyecto> findByProyectoId(Long proyectoId);
 
-    public List<OpcionProyecto> findByProyectoId(Long proyectoId);
+    List<OpcionProyecto> deleteByOpcionId(Long opcionId);
 
 }
