@@ -2,6 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,15 @@ public class EstadoService {
 
     public Estado obtenerActual(long proyectoId, boolean esForecast) {
         return estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyectoId, esForecast);
+    }
+
+    public Estado crearEstadoBaseParaProyecto(Proyecto proyecto) {
+        Estado nuevoEstado = proyecto.getEscenario().getEstadoInicial().toBuilder()
+                .id(null)
+                .proyecto(proyecto)
+                .esForecast(Boolean.FALSE).build();
+        estadoRepository.save(nuevoEstado);
+        return nuevoEstado;
     }
 
     public List<Estado> obtenerPorProyecto(Long idProyecto) {
@@ -36,7 +46,7 @@ public class EstadoService {
     }
 
     public void borrarEstadosForecast(Long idProyecto) {
-       estadoRepository.deleteByProyectoIdAndEsForecast(idProyecto, true);
+        estadoRepository.deleteByProyectoIdAndEsForecast(idProyecto, true);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.controller;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +18,7 @@ public class ProyectoController {
     private final ProyectoService proyectoService;
 
     @GetMapping("/escenario/{escenacionId}/usuario/{usuarioId}/proyecto")
-    public Proyecto obtenerPorMail(@PathVariable("escenacionId") long escenacionId,
+    public Estado obtenerEstadoPorEscenarioYUsuario(@PathVariable("escenacionId") long escenacionId,
             @PathVariable("usuarioId") long usuarioId) {
         return proyectoService.obtener(escenacionId, usuarioId);
     }

@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
+import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
@@ -13,19 +14,22 @@ public class ProyectoService {
 
     private final ProyectoRepository proyectoRepository;
     private final EscenarioRepository escenarioRepository;
+    private final EstadoService estadoService;
 
-    public Proyecto obtener(long escenarionId, long usuarioId) {
+    public Estado obtener(long escenarionId, long usuarioId) {
+        Estado estado = null;
         Proyecto proyecto = proyectoRepository.findByUsuarioIdAndEscenarioId(usuarioId, escenarionId);
 
         if (proyecto == null) {
-            proyecto = crearProyecto(escenarionId, usuarioId);
+            estado = crearProyecto(escenarionId, usuarioId);
+        } else {
+            estado = estadoService.obtenerActual(proyecto.getId(), true);
         }
 
-        return proyecto;
+        return estado;
     }
 
-    private Proyecto crearProyecto(long escenarionId, long usuarioId) {
-
+    private Estado crearProyecto(long escenarionId, long usuarioId) {
         Escenario escenario = escenarioRepository.findById(escenarionId).orElseThrow();
 
         Proyecto proyecto = Proyecto.builder()
@@ -36,7 +40,8 @@ public class ProyectoService {
 
         proyectoRepository.save(proyecto);
 
-        return proyecto;
+        Estado estado = estadoService.crearEstadoBaseParaProyecto(proyecto);
+        return estado;
     }
 
 }
