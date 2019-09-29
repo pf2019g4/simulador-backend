@@ -20,6 +20,7 @@ public class Escenario {
     private String titulo;
     private String descripcion;
     private Integer maximosPeriodos;
+    private String nombrePeriodos;
     private Double impuestoPorcentaje;  //Es un valor entre 0 y 1
     
     @OneToMany(mappedBy = "escenarioId", cascade = CascadeType.ALL)

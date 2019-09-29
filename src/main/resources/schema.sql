@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   descripcion VARCHAR(1024) NOT NULL,
   impuesto_porcentaje decimal(19,2) NOT NULL,
   maximos_periodos integer NOT NULL,
+  nombre_periodos VARCHAR(45),
   estado_id bigint NULL,
   PRIMARY KEY (id)
 );

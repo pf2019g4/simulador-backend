@@ -44,12 +44,12 @@ public class EscenariosController {
     }
     
     @PutMapping("/escenarios/{id}")
-    public Escenario createEscenario(@PathVariable("id") Long id,@RequestBody Escenario escenario) {
+    public Escenario modifyEscenario(@PathVariable("id") Long id,@RequestBody Escenario escenario) {
         return escenarioService.modifyEscenario(escenario);
     }
     
     @DeleteMapping("/escenarios/{id}")
-    public void createEscenario(@PathVariable("id") Long id) {
+    public void deleteEscenario(@PathVariable("id") Long id) {
         escenarioService.deleteEscenarioById(id);
     }
 

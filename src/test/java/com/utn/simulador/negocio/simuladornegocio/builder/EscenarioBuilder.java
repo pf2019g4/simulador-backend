@@ -16,6 +16,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         escenarioBuilder.instance.setDescripcion("descripcion de test 1");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
         escenarioBuilder.instance.setMaximosPeriodos(5);
+        escenarioBuilder.instance.setNombrePeriodos("Mes");
         return escenarioBuilder;
     }
 
@@ -25,6 +26,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         escenarioBuilder.instance.setDescripcion("descripcion de test 1");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
         escenarioBuilder.instance.setMaximosPeriodos(12);
+        escenarioBuilder.instance.setNombrePeriodos("Mes");
         escenarioBuilder.instance.setEstadoInicial(estado);
         return escenarioBuilder;
     }
@@ -35,6 +37,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         escenarioBuilder.instance.setDescripcion("descripcion de escenario con impuesto");
         escenarioBuilder.instance.setImpuestoPorcentaje(impuesto);
         escenarioBuilder.instance.setMaximosPeriodos(5);
+        escenarioBuilder.instance.setNombrePeriodos("Mes");
         return escenarioBuilder;
     }
 
@@ -43,6 +46,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         escenarioBuilder.instance.setDescripcion("escenario con peridos");
         escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
         escenarioBuilder.instance.setMaximosPeriodos(maximosPeriodos);
+        escenarioBuilder.instance.setNombrePeriodos("Mes");
         return escenarioBuilder;
     }
 }
