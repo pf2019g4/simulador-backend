@@ -23,7 +23,7 @@ public class ProyectoService {
         if (proyecto == null) {
             estado = crearProyecto(escenarionId, usuarioId);
         } else {
-            estado = estadoService.obtenerActual(proyecto.getId(), true);
+            estado = estadoService.obtenerActual(proyecto.getId(), false);
         }
 
         return estado;
