@@ -15,5 +15,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
     List<Cuenta> findByProyectoIdAndTipoBalance(Long proyectoId, TipoBalance tipo);
 
+    List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndTipoBalance(Long proyectoId, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance);
+
     void deleteByProyectoId(Long proyectoId);
 }

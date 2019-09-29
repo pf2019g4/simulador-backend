@@ -1,9 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +26,14 @@ public class SimuladorProduccionService {
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 "costo produccion periodo " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+        cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
 
-        for (Integer offsetPeriodo = 0; offsetPeriodo < estado.getProyecto().getProveedorSeleccionado().getModalidadPago().size(); offsetPeriodo += 1) {
-            
-            BigDecimal porcentajeGastos = estado.getProyecto().getProveedorSeleccionado().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
-            
+
+        for(ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
+            BigDecimal porcentajeGastos = modalidadPago.getPorcentaje().divide(new BigDecimal(100));
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
-            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo, cuentaFinanciera));
+            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
+
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);

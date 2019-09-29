@@ -23,7 +23,7 @@ public class SimuladorVentasService {
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 "ventas periodo " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
-
+        cuentaFinanciera.setTipoBalance(TipoBalance.CREDITO_CLIENTES);
         for (Integer offsetPeriodo = 0; offsetPeriodo < estado.getProyecto().getModalidadCobro().size(); offsetPeriodo += 1) {
 
             BigDecimal porcentajeVentas = estado.getProyecto().getModalidadCobro().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
