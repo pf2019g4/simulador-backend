@@ -31,7 +31,7 @@ public class Estado {
     private Integer calidad;
     private BigDecimal maquinarias;
     private BigDecimal amortizacionAcumulada;
-    private BigDecimal capitalSocial;
+    private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
     private BigDecimal resultadoDelEjercicio;   //TODO actualmente no se usa, deprecar?
     private Long stock;
     private Long produccionMensual;
