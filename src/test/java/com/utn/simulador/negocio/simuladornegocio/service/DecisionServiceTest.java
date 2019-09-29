@@ -245,19 +245,20 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
                 .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
                 .build(em);
 
+        Opcion opcion2 = OpcionBuilder.deDecisionMaquinaria(decision)
+                .conConsecuencia(ConsecuenciaBuilder.financieraIngresoNoAfectoAImpuesto(BigDecimal.ONE).build())
+                .build(em);
+
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
         OpcionProyectoBuilder.deOpcionYProyecto(opcion, proyecto).build(em);
 
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
-        long cuentasAntes = cuentaRepository.count();
 
-        decisionService.tomaDecision(proyecto.getId(), opcion.getId());
+        decisionService.tomaDecision(proyecto.getId(), opcion2.getId());
 
-        long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
 
-        assertThat(cuentasDespues).isEqualTo(cuentasAntes);
         assertThat(cantidadDecisionesTomadasDespues).isEqualTo(cantidadDecisionesTomadasAntes);
 
     }
