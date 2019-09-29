@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +63,8 @@ public class FlujoFondoService {
                 map(cuentaPeriodo -> new CuentaPeriodo(
                 null,
                 null,
-                cuentaPeriodo.getMonto().
-                        multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
+                calcularMontoImpuestos(cuentaPeriodo.getMonto(),
+                        new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
                         ),
                 cuentaPeriodo.getPeriodo(), true)).
                 collect(Collectors.toList());
@@ -145,6 +146,18 @@ public class FlujoFondoService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    private BigDecimal calcularMontoImpuestos(BigDecimal montoSinImpuesto, BigDecimal impuesto) {
+
+        if(montoSinImpuesto.signum() < 0){
+            return BigDecimal.ZERO;
+        } else {
+            return montoSinImpuesto.multiply(impuesto).setScale(2, RoundingMode.FLOOR);
+        }
+
+    }
+
+
+
     private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
         return cuentaPeriodos
                 .stream()
@@ -167,7 +180,7 @@ public class FlujoFondoService {
         cuentasEgresos.addAll(agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas));
 
         List<CuentaPeriodo> cuentaMovimientosFinancieros = IntStream.
-                range(0, periodoActual).
+                range(0, periodoActual + 1).
                 mapToObj(periodo
                         -> new CuentaPeriodo(
                         null,

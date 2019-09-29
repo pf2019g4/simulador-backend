@@ -33,7 +33,6 @@ public class SimuladorProduccionService {
             
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
             cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo, cuentaFinanciera));
-            offsetPeriodo = offsetPeriodo + 1;
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
