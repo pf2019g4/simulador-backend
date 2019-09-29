@@ -25,6 +25,6 @@ public class Proveedor {
     private BigDecimal variacionCostoVariable;
     private Integer variacionCalidad;
     
-    @OneToMany(mappedBy = "proveedorId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL)
     private List<ModalidadPago> modalidadPago;
 }
