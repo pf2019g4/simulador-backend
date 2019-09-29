@@ -5,11 +5,13 @@ import java.util.List;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Proyecto {
@@ -21,11 +23,13 @@ public class Proyecto {
 
     @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
     private List<ModalidadCobro> modalidadCobro;
-    
+
     @OneToOne
     @JoinColumn(name = "proveedor_id")
     @JsonBackReference
     private Proveedor proveedorSeleccionado;
+
+    private Long usuarioId;
 
     @ManyToOne
     @JoinColumn(name = "escenario_id", nullable = false)
