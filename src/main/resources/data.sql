@@ -18,12 +18,12 @@ delete from proveedor;
 delete from escenario;
 
 insert into producto
-(id, nombre  , precio) values
-(1 , 'Lentes', 500.0 );
+(id, nombre) values
+(1 , 'Lentes');
 
 insert into estado
-(id, proyecto_id, activo, caja   , ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, producto_id, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
-(1 , NULL       , false , 11500.0, 9000.0, 1500          , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , 0.10                    , 180                    , false      );
+(id, proyecto_id, activo, caja   , ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, producto_id, stock, es_forecast) values
+(1 , NULL       , false , 11500.0, 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      );
 
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id) values
@@ -44,10 +44,6 @@ insert into modalidad_pago
 (3 , 2           , 30.00     , 1            ),
 (4 , 2           , 50.00     , 2            ),
 (5 , 3           , 100.00    , 1            );
-
-insert into usuario
-(id, mail                   ) values
-(1 , 'tatoviviani@gmail.com');
 
 insert into decision 
 (id, escenario_id, descripcion                                          ) values

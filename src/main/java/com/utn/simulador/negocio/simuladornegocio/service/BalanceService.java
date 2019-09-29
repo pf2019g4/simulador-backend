@@ -14,6 +14,7 @@ public class BalanceService {
 
     private final EstadoService estadoService;
     private final CuentaService cuentaService;
+    private final ForecastService forecastService;
 
     public BalanceVo obtenerPorProyecto(Long proyectoId, Boolean esForecast) {
         Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
@@ -63,7 +64,7 @@ public class BalanceService {
     }
 
     private BigDecimal calcularInventario(Estado estado) {
-        return estado.getProducto().getPrecio().multiply(new BigDecimal(estado.getStock()));
+        return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(),estado.getPeriodo()).getPrecio().multiply(new BigDecimal(estado.getStock()));
     }
 
     private BigDecimal calcularResultadoDelEjercicio(Activo activo, Pasivo pasivo, PatrimonioNeto pn) {

@@ -19,6 +19,7 @@ public class ForecastBuilder extends AbstractPersistenceBuilder<Forecast> {
         forecastBuilder.instance.setCantidadUnidades(5000L);
         forecastBuilder.instance.setPeriodo(periodo);
         forecastBuilder.instance.setProyectoId(proyecto.getId());
+        forecastBuilder.instance.setPrecio( new BigDecimal(1000));
 
         return forecastBuilder;
     }

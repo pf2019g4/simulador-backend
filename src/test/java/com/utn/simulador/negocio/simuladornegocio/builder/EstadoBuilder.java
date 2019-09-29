@@ -2,7 +2,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.ParametrosVentas;
 import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 
@@ -27,7 +26,6 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(0);
         estadoBuilder.instance.setEsForecast(true);
-        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
 
@@ -44,7 +42,6 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(periodoActual);
         estadoBuilder.instance.setEsForecast(true);
-        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
 
@@ -61,7 +58,6 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setActivo(activo);
         estadoBuilder.instance.setPeriodo(periodoActual);
         estadoBuilder.instance.setEsForecast(true);
-        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
 
@@ -78,7 +74,6 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(0);
         estadoBuilder.instance.setEsForecast(false);
-        estadoBuilder.instance.setParametrosVentas(ParametrosVentas.builder().media(100L).desvioEstandar(new BigDecimal("10.5")).build());
         return estadoBuilder;
     }
 }

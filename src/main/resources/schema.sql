@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
 CREATE TABLE IF NOT EXISTS producto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
-  precio decimal(19,2),
   PRIMARY KEY (id)
 );
 
@@ -59,8 +58,6 @@ CREATE TABLE IF NOT EXISTS estado (
   es_forecast boolean NOT NULL DEFAULT FALSE,
   activo boolean NOT NULL DEFAULT FALSE,
   periodo integer,
-  parametros_ventas_media bigint,
-  parametros_ventas_desvio decimal(10,5),
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
   FOREIGN KEY (producto_id) REFERENCES producto(id)
@@ -136,6 +133,7 @@ CREATE TABLE IF NOT EXISTS forecast (
   proyecto_id bigint,
   periodo integer not null,
   cantidad_unidades bigint not null,
+  precio decimal(19,2) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );

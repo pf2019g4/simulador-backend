@@ -15,7 +15,6 @@ public class ProductoBuilder extends AbstractPersistenceBuilder<Producto> {
         ProductoBuilder productoBuilder = new ProductoBuilder();
         
         productoBuilder.instance.setNombre("Nombre producto");
-        productoBuilder.instance.setPrecio(new BigDecimal(1000));
         return productoBuilder;
     }
     
