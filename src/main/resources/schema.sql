@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS estado (
   maquinarias decimal(19,2),
   amortizacion_acumulada decimal(19,2),
   capital_social decimal(19,2),
+  resultado_del_ejercicio decimal(19,2),
   demanda_insatisfecha decimal(19,2),
   stock bigint,
   produccion_mensual bigint,

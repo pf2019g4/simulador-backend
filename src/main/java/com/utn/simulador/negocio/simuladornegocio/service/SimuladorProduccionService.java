@@ -19,24 +19,24 @@ public class SimuladorProduccionService {
     Estado simular(Estado estado) {
         aumentarStock(estado);
         imputarGastosProduccion(estado);
+        //TODO aca habria que amortizar la maquinaria para el periodo
         return estado;
     }
 
     private void imputarGastosProduccion(Estado estado) {
-        Integer offsetPeriodo = 0;
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 "costo produccion periodo " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
 
-        while (offsetPeriodo < estado.getProyecto().getProveedorSeleccionado().getModalidadPago().size()) {
+        for (Integer offsetPeriodo = 0; offsetPeriodo < estado.getProyecto().getProveedorSeleccionado().getModalidadPago().size(); offsetPeriodo += 1) {
             
             BigDecimal porcentajeGastos = estado.getProyecto().getProveedorSeleccionado().getModalidadPago().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
             
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
             
             cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, costoPeriodo.negate(), cuentaFinanciera));
-            offsetPeriodo = offsetPeriodo + 1;
+
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);

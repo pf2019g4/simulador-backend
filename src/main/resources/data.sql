@@ -51,8 +51,8 @@ insert into proyecto
 (1 , 'Proyecto 1', 1           , NULL        , 1);
 
 insert into estado
-(id, proyecto_id, activo, caja   , ventas, maquinarias, amortizacion_acumulada, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, calidad, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
-(2 , 1          , true  , 11500.0, 9000.0, 0          , 0                     , 0             , 200.0     , 3.5           , 0      , 150               , 1          , 0      , 200  , 0.10                    , 180                    , false      );
+(id, proyecto_id, activo, caja   , ventas, maquinarias, amortizacion_acumulada, capital_social, resultado_del_ejercicio, costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, calidad, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values
+(2 , 1          , true  , 11500.0, 9000.0, 0          , 0                     , 0             , 0                      , 200.0     , 3.5           , 0      , 150               , 1          , 0      , 200  , 0.10                    , 180                    , false      );
 
 insert into cuenta
 (id, descripcion, tipo_cuenta, tipo_flujo_fondo, proyecto_id, tipo_balance) values

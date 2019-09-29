@@ -15,5 +15,6 @@ import java.math.BigDecimal;
 public class PatrimonioNeto {
 
     private BigDecimal capitalSocial;
+    private BigDecimal resultadoDelEjercicio;
 
 }
