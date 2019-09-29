@@ -22,6 +22,7 @@ public class EstadoService {
         Estado nuevoEstado = proyecto.getEscenario().getEstadoInicial().toBuilder()
                 .id(null)
                 .proyecto(proyecto)
+                .activo(Boolean.TRUE)
                 .esForecast(Boolean.FALSE).build();
         estadoRepository.save(nuevoEstado);
         return nuevoEstado;
