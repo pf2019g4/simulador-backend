@@ -13,9 +13,10 @@ public class BalanceController {
 
     private final BalanceService balanceService;
 
+    //TODO pasar por parametro si es forecast?
     @GetMapping("/proyecto/{proyectoId}/balance_final")
     public BalanceVo balanceFinal(@PathVariable("proyectoId") Long proyectoId) {
-        return balanceService.obtenerPorProyecto(proyectoId);
+        return balanceService.obtenerPorProyecto(proyectoId, true);
     }
 
 }

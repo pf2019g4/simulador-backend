@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   descripcion VARCHAR(1024) NOT NULL,
   impuesto_porcentaje decimal(19,2) NOT NULL,
   maximos_periodos integer NOT NULL,
+  nombre_periodos VARCHAR(45),
   estado_id bigint NULL,
   PRIMARY KEY (id)
 );
@@ -18,9 +19,16 @@ CREATE TABLE IF NOT EXISTS proveedor (
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
+
+CREATE TABLE IF NOT EXISTS usuario (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  mail VARCHAR(60) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
+  usuario_id bigint,
   proveedor_id bigint NULL,
   nombre VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
@@ -46,6 +54,7 @@ CREATE TABLE IF NOT EXISTS estado (
   maquinarias decimal(19,2),
   amortizacion_acumulada decimal(19,2),
   capital_social decimal(19,2),
+  resultado_del_ejercicio decimal(19,2),
   demanda_insatisfecha decimal(19,2),
   stock bigint,
   produccion_mensual bigint,

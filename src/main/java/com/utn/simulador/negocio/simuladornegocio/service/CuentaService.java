@@ -98,16 +98,13 @@ public class CuentaService {
     }
 
     private Estado afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
-        if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO)
-                && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
-            if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS)
-                    || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
+        if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO) && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
+            if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS) || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
                 estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
             } else {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
             }
         }
-
         return estado;
     }
 
