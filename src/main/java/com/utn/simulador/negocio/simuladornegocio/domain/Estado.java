@@ -29,8 +29,8 @@ public class Estado {
     private BigDecimal caja;
     private BigDecimal ventas;
     private Integer calidad;
-    private BigDecimal maquinarias;
-    private BigDecimal amortizacionAcumulada;
+    private BigDecimal maquinarias; //TODO borrar esto? Ahora se calcula con cuenta periodos
+    private BigDecimal amortizacionAcumulada; //TODO borrar esto? Ahora se calcula con cuenta periodos
     private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
     private BigDecimal resultadoDelEjercicio;   //TODO actualmente no se usa, deprecar?
     private Long stock;
