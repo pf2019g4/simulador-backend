@@ -46,7 +46,6 @@ public class SimuladorService {
                 .costoFijo(estado.getCostoFijo())
                 .costoVariable(estado.getCostoVariable())
                 .esForecast(esForecast)
-                .parametrosVentas(estado.getParametrosVentas())
                 .periodo(estado.getPeriodo())
                 .produccionMensual(estado.getProduccionMensual())
                 .calidad(estado.getCalidad())

@@ -35,8 +35,6 @@ public class Estado {
     private BigDecimal demandaInsatisfecha;
     private Boolean activo;
     private Integer periodo; //TODO usar time en vez de contador
-    @Embedded
-    private ParametrosVentas parametrosVentas;
     private Boolean esForecast;
 
 }
