@@ -42,9 +42,13 @@ insert into proveedor
 (2 , 1           , 'Prov 1', 3.5                     , 5                ),
 (3 , 1           , 'Prov 2', 1.5                     , 2                );
 
+insert into usuario
+(id, mail                   ) values
+(1 , 'tatoviviani@gmail.com');
+
 insert into proyecto
-(id, nombre      , escenario_id, proveedor_id) values
-(1 , 'Proyecto 1', 1           , NULL        );
+(id, nombre      , escenario_id, proveedor_id, usuario_id) values
+(1 , 'Proyecto 1', 1           , NULL        , 1);
 
 insert into estado
 (id, proyecto_id, activo, caja   , ventas, maquinarias, amortizacion_acumulada, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, producto_id, calidad, stock, parametros_ventas_desvio, parametros_ventas_media, es_forecast) values

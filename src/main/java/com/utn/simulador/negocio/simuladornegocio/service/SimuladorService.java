@@ -1,7 +1,5 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.CuentaPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import java.util.stream.IntStream;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
@@ -25,8 +23,6 @@ public class SimuladorService {
     private final EstadoRepository estadoRepository;
     private final ProyectoRepository proyectoRepository;
     private final OpcionProyectoRepository opcionProyectoRepository;
-    private final CuentaPeriodoRepository cuentaPeriodoRepository;
-    private final CuentaRepository cuentaRepository;
     private final CuentaService cuentaService;
 
     public Estado simularPeriodo(long proyectoId, boolean esForecast) {
