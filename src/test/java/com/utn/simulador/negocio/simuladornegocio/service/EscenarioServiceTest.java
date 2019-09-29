@@ -26,6 +26,7 @@ public class EscenarioServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(escenarioRepository.existsById(escenarioDB.getId())).isEqualTo(true);
         assertThat(escenarioDB.getDescripcion()).isEqualTo(escenario.getDescripcion());
         assertThat(escenarioDB.getMaximosPeriodos()).isEqualTo(escenario.getMaximosPeriodos());
+        assertThat(escenarioDB.getNombrePeriodos()).isEqualTo(escenario.getNombrePeriodos());
         assertThat(escenarioDB.getTitulo()).isEqualTo(escenario.getTitulo());
         assertThat(escenarioDB.getImpuestoPorcentaje()).isEqualTo(escenario.getImpuestoPorcentaje());
     }
@@ -39,6 +40,7 @@ public class EscenarioServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(escenarioRepository.existsById(escenarioDB.getId())).isEqualTo(true);
         assertThat(escenarioDB.getDescripcion()).isEqualTo(escenario.getDescripcion());
         assertThat(escenarioDB.getMaximosPeriodos()).isEqualTo(escenario.getMaximosPeriodos());
+        assertThat(escenarioDB.getNombrePeriodos()).isEqualTo(escenario.getNombrePeriodos());
         assertThat(escenarioDB.getTitulo()).isEqualTo(escenario.getTitulo());
         assertThat(escenarioDB.getImpuestoPorcentaje()).isEqualTo(escenario.getImpuestoPorcentaje());
         

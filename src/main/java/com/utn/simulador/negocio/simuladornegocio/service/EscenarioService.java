@@ -31,6 +31,7 @@ public class EscenarioService {
     	Escenario escenarioToUpdate = escenarioRepository.getOne(escenario.getId());
     	escenarioToUpdate.setTitulo(escenario.getTitulo());
     	escenarioToUpdate.setMaximosPeriodos(escenario.getMaximosPeriodos());
+        escenarioToUpdate.setNombrePeriodos(escenario.getNombrePeriodos());
     	escenarioToUpdate.setDescripcion(escenario.getDescripcion());
     	escenarioToUpdate.setImpuestoPorcentaje(escenario.getImpuestoPorcentaje());
     	return escenarioRepository.save(escenarioToUpdate);
