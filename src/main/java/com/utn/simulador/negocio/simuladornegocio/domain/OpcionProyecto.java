@@ -12,7 +12,7 @@ public class OpcionProyecto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long proyectoId;
-    @OneToOne
+    @ManyToOne
     private Opcion opcion;
 
 }
