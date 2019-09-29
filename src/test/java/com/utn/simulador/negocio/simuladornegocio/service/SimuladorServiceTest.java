@@ -98,7 +98,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
         simuladorService.deshacerSimulacionPrevia(proyecto.getId());
 
-        assertThat(cuentaPeriodoRepository.findByCuentaProyectoIdAndEsForecast(proyecto.getId(),true)).hasSize(0);
+        assertThat(cuentaPeriodoRepository.findByCuentaProyectoId(proyecto.getId())).hasSize(0);
 
     }
 

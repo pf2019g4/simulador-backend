@@ -94,9 +94,8 @@ public class CuentaService {
         return estado;
     }
 
-    public void eliminarCuentasDeProyecto(Long idProyecto, boolean esForecast){
+    public void eliminarCuentasDeProyecto(Long idProyecto){
 
-        cuentaPeriodoRepository.deleteByCuentaProyectoIdAndEsForecast(idProyecto, esForecast);
         cuentaRepository.deleteByProyectoId(idProyecto);
 
     }

@@ -54,7 +54,7 @@ public class FlujoFondoService {
                 sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo).
                         subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo)).
                         subtract(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)),
-                periodo, true)).
+                periodo)).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_ANTES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadAntesDeImpuestos));
 
@@ -66,7 +66,7 @@ public class FlujoFondoService {
                 calcularMontoImpuestos(cuentaPeriodo.getMonto(),
                         new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
                         ),
-                cuentaPeriodo.getPeriodo(), true)).
+                cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
 
@@ -79,7 +79,7 @@ public class FlujoFondoService {
                         subtract(cuentaPeriodo.getMonto().
                                 multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
                         ),
-                cuentaPeriodo.getPeriodo(), true)).
+                cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
 
@@ -104,8 +104,7 @@ public class FlujoFondoService {
                                 add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
-                        periodo,
-                        true
+                        periodo
                 )
                 ).
                 collect(Collectors.toList());
@@ -188,8 +187,7 @@ public class FlujoFondoService {
                         new BigDecimal(BigInteger.ZERO).
                                 add(sumaMontoPeriodo(cuentasIngresos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasEgresos, periodo)),
-                        periodo,
-                        false
+                        periodo
                 )
                 ).
                 collect(Collectors.toList());

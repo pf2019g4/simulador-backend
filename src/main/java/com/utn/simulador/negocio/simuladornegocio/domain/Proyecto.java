@@ -26,7 +26,6 @@ public class Proyecto {
 
     @OneToOne
     @JoinColumn(name = "proveedor_id")
-    @JsonBackReference
     private Proveedor proveedorSeleccionado;
 
     private Long usuarioId;

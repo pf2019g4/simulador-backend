@@ -12,7 +12,7 @@ public interface CuentaPeriodoRepository extends JpaRepository<CuentaPeriodo, Lo
     @Query("select cp from CuentaPeriodo cp where cp.cuenta.proyectoId = ?1 and cp.periodo = ?2 ")
     List<CuentaPeriodo> findByProyectoAndPeriodo(Long proyectoId, int periodo);
 
-    List<CuentaPeriodo> findByCuentaProyectoIdAndEsForecast(Long proyectoId, boolean esForecast);
+    List<CuentaPeriodo> findByCuentaProyectoId(Long proyectoId);
 
-    void deleteByCuentaProyectoIdAndEsForecast(Long proyectoId, boolean esForecast);
+    void deleteByCuentaProyectoId(Long proyectoId);
 }

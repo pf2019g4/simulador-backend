@@ -39,21 +39,11 @@ public class SimuladorService {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
         Estado estado = proyecto.getEscenario().getEstadoInicial();
-
-        Estado estadoNuevo = Estado.builder()
+        
+        Estado estadoNuevo = estado.toBuilder().id(null)
                 .activo(true)
-                .caja(estado.getCaja())
-                .costoFijo(estado.getCostoFijo())
-                .costoVariable(estado.getCostoVariable())
                 .esForecast(esForecast)
-                .parametrosVentas(estado.getParametrosVentas())
-                .periodo(estado.getPeriodo())
-                .produccionMensual(estado.getProduccionMensual())
-                .calidad(estado.getCalidad())
-                .producto(estado.getProducto())
                 .proyecto(proyecto)
-                .stock(estado.getStock())
-                .ventas(estado.getVentas())
                 .build();
 
         estadoService.guardar(estadoNuevo);
@@ -78,7 +68,7 @@ public class SimuladorService {
         for (OpcionProyecto op : opcionProyectoRepository.findByProyectoId(proyectoId)) {
             opcionProyectoRepository.deleteById(op.getId());
         }
-        cuentaService.eliminarCuentasDeProyecto(proyectoId, true);
+        cuentaService.eliminarCuentasDeProyecto(proyectoId);
         estadoService.borrarEstadosForecast(proyectoId);
 
     }

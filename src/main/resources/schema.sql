@@ -127,7 +127,6 @@ CREATE TABLE IF NOT EXISTS cuenta_periodo (
   cuenta_id bigint UNSIGNED not null,
   monto decimal(19,2) not null,
   periodo int not null,
-  es_forecast boolean default false,
   PRIMARY KEY (id),
   FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
 );
