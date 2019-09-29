@@ -26,7 +26,7 @@ insert into estado
 
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id) values
-(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.0                , 1        );
+(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        );
 
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id) values
