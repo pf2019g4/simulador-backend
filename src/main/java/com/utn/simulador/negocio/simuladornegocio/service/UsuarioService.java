@@ -15,7 +15,7 @@ public class UsuarioService {
 
     public Usuario obtenerPorEmail(String mail) {
 
-        Usuario usuario = usuarioRepository.findByEmail(mail);
+        Usuario usuario = usuarioRepository.findByMail(mail);
 
         if (usuario == null) {
             usuario = new Usuario();

@@ -18,9 +18,16 @@ CREATE TABLE IF NOT EXISTS proveedor (
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
+
+CREATE TABLE IF NOT EXISTS usuario (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  mail VARCHAR(60) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
+  usuario_id bigint,
   proveedor_id bigint NULL,
   nombre VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
