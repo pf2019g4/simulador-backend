@@ -16,7 +16,7 @@ public class Activo {
 
     private BigDecimal caja;
     private BigDecimal cuentasACobrar;
-    private BigDecimal stock;
+    private BigDecimal inventario;
     private BigDecimal maquinaria;
     private BigDecimal amortizacionAcumulada;
 
