@@ -20,7 +20,7 @@ public class BalanceService {
         Activo activo = new Activo(
                 estado.getCaja(),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES), estado.getPeriodo()),
-                estado.getStock(),
+                estado.getProducto().getPrecio().multiply(new BigDecimal(estado.getStock())),
                 estado.getMaquinarias(),
                 estado.getAmortizacionAcumulada()
         );
@@ -28,6 +28,7 @@ public class BalanceService {
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES), estado.getPeriodo()),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo())
         );
+        //TODO dibujar el resultado del ejercicio para que de A = P + PN?
         PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), estado.getResultadoDelEjercicio());
         return new BalanceVo(activo, pasivo, patrimonioNeto);
     }
