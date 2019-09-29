@@ -70,19 +70,19 @@ public class BalanceService {
     private BigDecimal sumaActivo(Activo activo) {
         BigDecimal sum = new BigDecimal(0);
         if (activo.getCaja() != null) {
-            sum.add(activo.getCaja());
+            sum = sum.add(activo.getCaja());
         }
         if (activo.getCuentasACobrar() != null) {
-            sum.add(activo.getCuentasACobrar());
+            sum = sum.add(activo.getCuentasACobrar());
         }
         if (activo.getInventario() != null) {
-            sum.add(activo.getInventario());
+            sum = sum.add(activo.getInventario());
         }
         if (activo.getMaquinaria() != null) {
-            sum.add(activo.getMaquinaria());
+            sum = sum.add(activo.getMaquinaria());
         }
         if (activo.getAmortizacionAcumulada() != null) {
-            sum.add(activo.getAmortizacionAcumulada());
+            sum = sum.add(activo.getAmortizacionAcumulada());
         }
         return sum;
     }
@@ -90,10 +90,10 @@ public class BalanceService {
     private BigDecimal sumaPasivo(Pasivo pasivo) {
         BigDecimal sum = new BigDecimal(0);
         if (pasivo.getDeudasBancarias() != null) {
-            sum.add(pasivo.getDeudasBancarias());
+            sum = sum.add(pasivo.getDeudasBancarias());
         }
         if (pasivo.getProveedores() != null) {
-            sum.add(pasivo.getProveedores());
+            sum = sum.add(pasivo.getProveedores());
         }
         return sum;
     }
@@ -101,10 +101,10 @@ public class BalanceService {
     private BigDecimal sumaPatrimonioNeto(PatrimonioNeto pn) {
         BigDecimal sum = new BigDecimal(0);
         if (pn.getCapitalSocial() != null) {
-            sum.add(pn.getCapitalSocial());
+            sum = sum.add(pn.getCapitalSocial());
         }
         if (pn.getResultadoDelEjercicio() != null) {
-            sum.add(pn.getResultadoDelEjercicio());
+            sum = sum.add(pn.getResultadoDelEjercicio());
         }
         return sum;
     }
