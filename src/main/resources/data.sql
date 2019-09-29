@@ -65,13 +65,13 @@ insert into cuenta_periodo
 (2 , 1         , 400.0, 2      , false      );
 
 insert into forecast
-(id, proyecto_id, periodo, cantidad_unidades) values
-(1 , 1          , 0      , 100            ),
-(2 , 1          , 1      , 200            ),
-(3 , 1          , 2      , 300            ),
-(4 , 1          , 3      , 400            ),
-(5 , 1          , 4      , 500            ),
-(6 , 1          , 5      , 600            );
+(id, proyecto_id, periodo, cantidad_unidades, precio) values
+(1 , 1          , 0      , 100              ,   10.0),
+(2 , 1          , 1      , 200              ,   10.0),
+(3 , 1          , 2      , 300              ,   12.2),
+(4 , 1          , 3      , 400              ,   12.2),
+(5 , 1          , 4      , 500              ,   13.0),
+(6 , 1          , 5      , 600              ,   14.0);
 
 insert into modalidad_cobro
 (id, proyecto_id, porcentaje, offset_periodo) values

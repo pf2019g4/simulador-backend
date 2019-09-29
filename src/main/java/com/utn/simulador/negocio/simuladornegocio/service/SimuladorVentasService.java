@@ -19,7 +19,7 @@ public class SimuladorVentasService {
     Estado simular(Estado estado) {
         long unidadesPosiblesParaVender = calcularUnidadesVendidas(estado);
         long unidadesVendidas =  Math.min(Math.max(estado.getStock(),estado.getProduccionMensual()), calcularUnidadesVendidas(estado));
-        BigDecimal precio = estado.getProducto().getPrecio();
+        BigDecimal precio = obtenerUnidadesVendidas(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 "ventas periodo " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
@@ -47,6 +47,14 @@ public class SimuladorVentasService {
         estado.setDemandaInsatisfecha(precio.multiply( new BigDecimal(unidadesPosiblesParaVender - unidadesVendidas)));
 
         return estado;
+    }
+
+    private BigDecimal obtenerUnidadesVendidas(Estado estado){
+        if(estado.getEsForecast()){
+            return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo()).getPrecio();
+        } else {
+            return estado.getProducto().getPrecio();
+        }
     }
 
     private long calcularUnidadesVendidas(Estado estado) {
