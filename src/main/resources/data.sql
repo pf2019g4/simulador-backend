@@ -13,6 +13,7 @@ delete from forecast;
 delete from modalidad_cobro;
 delete from modalidad_pago;
 delete from proyecto;
+delete from usuario;
 delete from proveedor;
 delete from escenario;
 
