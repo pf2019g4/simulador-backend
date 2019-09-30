@@ -23,19 +23,20 @@ insert into producto
 
 insert into estado
 (id, proyecto_id, activo, caja   , ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, producto_id, stock, es_forecast) values
-(1 , NULL       , false , 11500.0, 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      );
+(1 , NULL       , false , 11500.0, 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      ),
+(2 , NULL       , false , 5000.0 , 0     , 1000.0        , 100.0     , 1.0           , 0      , 100               , 2      , 1          , 400  , false      );
 
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id) values
 (1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        ),
-(2 , 'escenario 2', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.0                , 1        ),
-(3 , 'escenario 3', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.0                , 1        );
+(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        );
 
 insert into proveedor
 (id, escenario_id, nombre  , variacion_costo_variable, variacion_calidad) values
 (1 , 1           , 'Prov 1', 2                       , 5                ),
 (2 , 1           , 'Prov 1', 3.5                     , 5                ),
-(3 , 1           , 'Prov 2', 1.5                     , 2                );
+(3 , 1           , 'Prov 2', 1.5                     , 2                ),
+(4 , 2           , 'Unico' , 0                       , 0                );
 
 insert into modalidad_pago
 (id, proveedor_id, porcentaje, offset_periodo) values
@@ -43,7 +44,8 @@ insert into modalidad_pago
 (2 , 2           , 20.00     , 0            ),
 (3 , 2           , 30.00     , 1            ),
 (4 , 2           , 50.00     , 2            ),
-(5 , 3           , 100.00    , 1            );
+(5 , 3           , 100.00    , 1            ),
+(6 , 4           , 100.00    , 0            );
 
 insert into decision 
 (id, escenario_id, descripcion                                          ) values
