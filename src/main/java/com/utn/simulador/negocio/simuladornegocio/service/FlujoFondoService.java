@@ -45,6 +45,8 @@ public class FlujoFondoService {
 
         List<Cuenta> cuentasGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
+        cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
+
 
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
                 range(0, periodoActual + 1).
@@ -76,15 +78,12 @@ public class FlujoFondoService {
                 null,
                 null,
                 cuentaPeriodo.getMonto().
-                        subtract(cuentaPeriodo.getMonto().
-                                multiply(new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje()))
-                        ),
+                        subtract(calcularMontoImpuestos(cuentaPeriodo.getMonto(),
+                                new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
+                                )),
                 cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
-
-        List<Cuenta> cuentasAjusteGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES);
-        cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasAjusteGastosNoDesembolsables, null));
 
         List<Cuenta> cuentasIngresosNoAfectosAImpuestos = agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas);
 
@@ -100,7 +99,7 @@ public class FlujoFondoService {
                         null,
                         null,
                         montoPeriodo(cuentaUtilidadDespuesDeImpuestos, periodo).
-                                add(sumaMontoPeriodo(cuentasAjusteGastosNoDesembolsables, periodo)).
+                                add(sumaMontoPeriodo(cuentasGastosNoDesembolsables, periodo)).
                                 add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAImpuestos, periodo)).
                                 subtract(sumaMontoPeriodo(cuentasInversiones, periodo)),
