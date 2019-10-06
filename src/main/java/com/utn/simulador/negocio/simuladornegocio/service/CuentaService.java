@@ -129,36 +129,42 @@ public class CuentaService {
     }
 
     private void crearCuentasFinancierasCobroClientes(Balance balanceInicial, Long proyectoId) {
-        BigDecimal cuentasPorCobrarPorPeriodo = balanceInicial.getActivo().getCuentasPorCobrar()
-                .divide(new BigDecimal(balanceInicial.getActivo().getCuentasPorCobrarPeriodos()), RoundingMode.HALF_DOWN);
+        if (balanceInicial.getActivo().getCuentasPorCobrarPeriodos() > 0) {
+            BigDecimal cuentasPorCobrarPorPeriodo = balanceInicial.getActivo().getCuentasPorCobrar()
+                    .divide(new BigDecimal(balanceInicial.getActivo().getCuentasPorCobrarPeriodos()), RoundingMode.HALF_DOWN);
 
-        Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
 
-        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
-            crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
+            for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+                crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
+            }
         }
     }
 
     private void crearCuentasFinancierasPagoProveedores(Balance balanceInicial, Long proyectoId) {
-        BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
-                .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
+        if (balanceInicial.getPasivo().getProveedoresPeriodos() > 0) {
+            BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
+                    .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
 
-        Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
 
-        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
-            crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
+            for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+                crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
+            }
         }
 
     }
 
     private void crearCuentasFinancierasPagoBancos(Balance balanceInicial, Long proyectoId) {
-        BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
-                .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
+        if (balanceInicial.getPasivo().getDeudasBancariasPeriodos() > 0) {
+            BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
+                    .divide(new BigDecimal(balanceInicial.getPasivo().getDeudasBancariasPeriodos()), RoundingMode.HALF_DOWN);
 
-        Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
 
-        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
-            crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoDeudasBancarias);
+            for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+                crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoDeudasBancarias);
+            }
         }
     }
 
