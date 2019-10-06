@@ -1,7 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
-import com.utn.simulador.negocio.simuladornegocio.vo.BalanceVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,12 @@ public class BalanceService {
     private final CuentaService cuentaService;
     private final ForecastService forecastService;
 
-    public BalanceVo obtenerPorProyecto(Long proyectoId, Boolean esForecast) {
+    public Balance obtenerPorProyecto(Long proyectoId, Boolean esForecast) {
         Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
         Activo activo = new Activo(
                 estado.getCaja(),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES), estado.getPeriodo()),
+                null,
                 calcularInventario(estado),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
                         proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS)),
@@ -29,11 +29,13 @@ public class BalanceService {
         );
         Pasivo pasivo = new Pasivo(
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES), estado.getPeriodo()),
-                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo())
+                null,
+                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo()),
+                null
         );
         PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), null);
         patrimonioNeto.setResultadoDelEjercicio(calcularResultadoDelEjercicio(activo, pasivo, patrimonioNeto));
-        return new BalanceVo(activo, pasivo, patrimonioNeto);
+        return new Balance(null, activo, pasivo, patrimonioNeto);
     }
 
     private BigDecimal sumaPeriodos(List<Cuenta> cuentas) {
@@ -64,7 +66,7 @@ public class BalanceService {
     }
 
     private BigDecimal calcularInventario(Estado estado) {
-        return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(),estado.getPeriodo()).getPrecio().multiply(new BigDecimal(estado.getStock()));
+        return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo()).getPrecio().multiply(new BigDecimal(estado.getStock()));
     }
 
     private BigDecimal calcularResultadoDelEjercicio(Activo activo, Pasivo pasivo, PatrimonioNeto pn) {
@@ -86,8 +88,8 @@ public class BalanceService {
         if (activo.getCaja() != null) {
             sum = sum.add(activo.getCaja());
         }
-        if (activo.getCuentasACobrar() != null) {
-            sum = sum.add(activo.getCuentasACobrar());
+        if (activo.getCuentasPorCobrar() != null) {
+            sum = sum.add(activo.getCuentasPorCobrar());
         }
         if (activo.getInventario() != null) {
             sum = sum.add(activo.getInventario());

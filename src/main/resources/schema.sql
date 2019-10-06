@@ -6,7 +6,25 @@ CREATE TABLE IF NOT EXISTS escenario (
   maximos_periodos integer NOT NULL,
   nombre_periodos VARCHAR(45),
   estado_id bigint NULL,
+  balance_id bigint NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS balance (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  caja decimal(19,2),
+  cuentas_por_cobrar decimal(19,2),
+  cuentas_por_cobrar_periodos integer null,
+  inventario decimal(19,2),
+  maquinaria decimal(19,2),
+  amortizacion_acumulada decimal(19,2),
+  proveedores decimal(19,2),
+  proveedores_periodos integer null,
+  deudas_bancarias decimal(19,2),
+  deudas_bancarias_periodos integer null,
+  capital_social decimal(19,2),
+  resultado_del_ejercicio decimal(19,2),
+  PRIMARY KEY (id),
 );
 
 CREATE TABLE IF NOT EXISTS proveedor (
