@@ -4,7 +4,9 @@ import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class CuentaService {
     private final CuentaRepository cuentaRepository;
     private final CuentaPeriodoRepository cuentaPeriodoRepository;
     private final EstadoRepository estadoRepository;
+    private final ProyectoRepository proyectoRepository;
 
     public List<Cuenta> obtenerPorProyectoYTipoFlujoFondo(Long idProyecto, TipoFlujoFondo tipoFlujoFondo) {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
@@ -113,8 +116,50 @@ public class CuentaService {
         return estado;
     }
 
-    void crearPorBalanceInicial(Long proyectoId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void crearPorBalanceInicial(Long proyectoId) {
+
+        Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+
+        Balance balanceInicial = proyecto.getEscenario().getBalanceInicial();
+
+        crearCuentasFinancierasCobroClientes(balanceInicial, proyectoId);
+        crearCuentasFinancierasPagoProveedores(balanceInicial, proyectoId);
+        crearCuentasFinancierasPagoBancos(balanceInicial, proyectoId);
+
+    }
+
+    private void crearCuentasFinancierasCobroClientes(Balance balanceInicial, Long proyectoId) {
+        BigDecimal cuentasPorCobrarPorPeriodo = balanceInicial.getActivo().getCuentasPorCobrar()
+                .divide(new BigDecimal(balanceInicial.getActivo().getCuentasPorCobrarPeriodos()), RoundingMode.HALF_DOWN);
+
+        Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
+
+        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+            crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
+        }
+    }
+
+    private void crearCuentasFinancierasPagoProveedores(Balance balanceInicial, Long proyectoId) {
+        BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
+                .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
+
+        Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+
+        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+            crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
+        }
+
+    }
+
+    private void crearCuentasFinancierasPagoBancos(Balance balanceInicial, Long proyectoId) {
+        BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
+                .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
+
+        Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+
+        for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
+            crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoDeudasBancarias);
+        }
     }
 
 }
