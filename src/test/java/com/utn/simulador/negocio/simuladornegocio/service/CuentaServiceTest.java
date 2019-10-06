@@ -62,16 +62,19 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
         int cantidadCuentasProveedoresAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%proveedores%' and proyecto_id = " + proyecto.getId());
         int cantidadCuentasPorCobrarAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%clientes%' and proyecto_id = " + proyecto.getId());
         int cantidadCuentasBancariasAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%deudas bancarias%' and proyecto_id = " + proyecto.getId());
+        int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         cuentaService.crearPorBalanceInicial(proyecto.getId());
 
         int cantidadCuentasProveedoresDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%proveedores%' and proyecto_id = " + proyecto.getId());
         int cantidadCuentasPorCobrarDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%clientes%' and proyecto_id = " + proyecto.getId());
         int cantidadCuentasBancariasDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%deudas bancarias%' and proyecto_id = " + proyecto.getId());
+        int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         assertThat(cantidadCuentasProveedoresDespues).isEqualTo(cantidadCuentasProveedoresAntes + 1);
         assertThat(cantidadCuentasPorCobrarDespues).isEqualTo(cantidadCuentasPorCobrarAntes + 1);
         assertThat(cantidadCuentasBancariasDespues).isEqualTo(cantidadCuentasBancariasAntes + 1);
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 3);
 
     }
 }
