@@ -1,6 +1,7 @@
 delete from consecuencia;
 delete from opcion;
 delete from decision;
+delete from credito;
 delete from cuenta_periodo;
 delete from opcion_proyecto;
 delete from consecuencia;
@@ -12,9 +13,10 @@ delete from producto;
 delete from forecast;
 delete from modalidad_cobro;
 delete from modalidad_pago;
+delete from financiacion;
+delete from proveedor;
 delete from proyecto;
 delete from usuario;
-delete from proveedor;
 delete from escenario;
 
 insert into producto
@@ -37,6 +39,13 @@ insert into proveedor
 (2 , 1           , 'Prov 1', 3.5                     , 5                ),
 (3 , 1           , 'Prov 2', 1.5                     , 2                ),
 (4 , 2           , 'Unico' , 0                       , 0                );
+
+insert into financiacion
+(id, escenario_id, descripcion, tna , cantidad_cuotas) values
+(1 , 1           , 'Nación'   , 2   , 5              ),
+(2 , 1           , 'Santander', 3.5 , 10             ),
+(3 , 1           , 'Macro'    , 1.5 , 6              ),
+(4 , 2           , 'Macro'    , 3   , 12             );
 
 insert into modalidad_pago
 (id, proveedor_id, porcentaje, offset_periodo) values

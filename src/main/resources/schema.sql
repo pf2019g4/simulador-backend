@@ -19,6 +19,26 @@ CREATE TABLE IF NOT EXISTS proveedor (
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
+CREATE TABLE IF NOT EXISTS financiacion (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  descripcion VARCHAR(45) NOT NULL,
+  escenario_id bigint,
+  tna decimal(5,2) NOT NULL,
+  cantidad_cuotas integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS credito (
+    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    proyecto_id  bigint UNSIGNED,
+    financiacion_id  bigint UNSIGNED,
+    monto decimal(19,2) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
+    FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
+);
+
 
 CREATE TABLE IF NOT EXISTS usuario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
