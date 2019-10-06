@@ -21,6 +21,7 @@ public class BalanceBuilder extends AbstractPersistenceBuilder<Balance> {
                 Activo.builder()
                         .amortizacionAcumulada(BigDecimal.ZERO)
                         .caja(BigDecimal.TEN)
+                        .maquinaria(BigDecimal.ZERO)
                         .cuentasPorCobrar(BigDecimal.TEN)
                         .cuentasPorCobrarPeriodos(1)
                         .inventario(BigDecimal.TEN)
