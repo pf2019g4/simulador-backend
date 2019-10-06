@@ -28,10 +28,15 @@ insert into estado
 (1 , NULL       , false , 11500.0, 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      ),
 (2 , NULL       , false , 5000.0 , 0     , 1000.0        , 100.0     , 1.0           , 0      , 100               , 2      , 1          , 400  , false      );
 
+insert into balance
+(id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
+(1 , 9500.0, 0                 , null                       , 1500.0    , 0         , 0                     , 0          , null                , 0               , null                     , 200           , 0                      ),
+(2 , 9500.0, 0                 , null                       , 1500.0    , 0         , 0                     , 0          , null                , 0               , null                     , 200           , 0                      );
+
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id, balance_id) values
-(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        ,       null),
-(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        ,       null);
+(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        ,          1),
+(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        ,          2);
 
 insert into proveedor
 (id, escenario_id, nombre  , variacion_costo_variable, variacion_calidad) values

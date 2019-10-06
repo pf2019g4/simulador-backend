@@ -33,6 +33,5 @@ public class Escenario {
 
     @OneToOne
     @JoinColumn(name = "balance_id")
-    @JsonBackReference
     private Balance balanceInicial;
 }
