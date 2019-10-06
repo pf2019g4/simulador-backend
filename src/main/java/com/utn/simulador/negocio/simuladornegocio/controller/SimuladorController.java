@@ -8,6 +8,7 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.service.CuentaService;
 import com.utn.simulador.negocio.simuladornegocio.service.DecisionService;
 import com.utn.simulador.negocio.simuladornegocio.service.FinanciacionService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
@@ -31,6 +32,7 @@ public class SimuladorController {
     private final DecisionService decisionService;
     private final SimuladorService simuladorService;
     private final FinanciacionService financiacionService;
+    private final CuentaService cuentaService;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -43,14 +45,15 @@ public class SimuladorController {
     }
 
     @PostMapping("/proyecto/{proyectoId}/simularOpciones")
-    public void tomaDecision(@PathVariable("proyectoId") Long proyectoId,
+    public void simularForecast(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
         simuladorService.deshacerSimulacionPrevia(proyectoId);
         simuladorService.crearPrimerEstadoSimulacion(proyectoId, true);
-        for(Opcion opcion : opciones){
-            decisionService.tomaDecision(proyectoId, opcion.getId());   
+        for (Opcion opcion : opciones) {
+            decisionService.tomaDecision(proyectoId, opcion.getId());
         }
-        
+
+        cuentaService.crearPorBalanceInicial(proyectoId);
         financiacionService.acreditar(proyectoId);
         simuladorService.simularPeriodos(proyectoId, true);
     }

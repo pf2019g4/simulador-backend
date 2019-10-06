@@ -12,6 +12,7 @@ delete from producto;
 delete from forecast;
 delete from modalidad_cobro;
 delete from modalidad_pago;
+delete from balance;
 delete from proyecto;
 delete from proveedor;
 delete from financiacion;
