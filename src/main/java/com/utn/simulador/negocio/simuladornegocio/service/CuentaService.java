@@ -45,9 +45,10 @@ public class CuentaService {
                 .periodo(periodo)
                 .build();
 
-        cuentaPeriodo = cuentaPeriodoRepository.save(cuentaPeriodo);
-
         cuentaFinanciera.agregarCuenta(cuentaPeriodo);
+        
+        
+        cuentaPeriodo = cuentaPeriodoRepository.save(cuentaPeriodo);
         cuentaRepository.save(cuentaFinanciera);
         return cuentaPeriodo;
     }
