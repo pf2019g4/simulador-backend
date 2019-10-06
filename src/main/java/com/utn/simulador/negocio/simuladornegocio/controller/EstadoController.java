@@ -2,14 +2,12 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.service.EstadoService;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class EstadoController {
 
     private final EstadoService estadoService;
-    private final SimuladorService simuladorService;
 
     @GetMapping("/proyecto/{id}/estado/actual")
     public Estado obtenerEstadoActual(@PathVariable("id") Long idProyecto) {
@@ -38,9 +35,4 @@ public class EstadoController {
         return estadoService.obtenerPorProyecto(idProyecto);
     }
 
-    @PostMapping("/proyecto/{id}/estado")
-    public Estado avanzarPeriodo(@PathVariable("id") Long idProyecto) {
-        //TODO recibir el id del proyecto por parámetro.
-        return simuladorService.simularPeriodo(estadoService.obtenerActual(idProyecto, false).getProyecto().getId(), false);
-    }
 }
