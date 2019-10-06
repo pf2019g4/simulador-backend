@@ -45,7 +45,7 @@ public class SimuladorController {
     }
 
     @PostMapping("/proyecto/{proyectoId}/simularOpciones")
-    public void tomaDecision(@PathVariable("proyectoId") Long proyectoId,
+    public void simularForecast(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
         simuladorService.deshacerSimulacionPrevia(proyectoId);
         simuladorService.crearPrimerEstadoSimulacion(proyectoId, true);
