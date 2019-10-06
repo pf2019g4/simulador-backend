@@ -30,7 +30,7 @@ insert into estado
 
 insert into balance
 (id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
-(1 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 200           , 0                      ),
+(1 , 9500.0, 10000             , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 200           , 0                      ),
 (2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 200           , 0                      );
 
 insert into escenario
