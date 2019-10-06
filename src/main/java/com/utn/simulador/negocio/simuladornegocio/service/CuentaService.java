@@ -43,7 +43,13 @@ public class CuentaService {
                 .cuenta(cuentaFinanciera)
                 .monto(montoPeriodo)
                 .periodo(periodo).build();
-        return cuentaPeriodoRepository.save(cuentaPeriodo);
+
+        cuentaPeriodo = cuentaPeriodoRepository.save(cuentaPeriodo);
+        
+               
+        cuentaFinanciera.agregarCuenta(cuentaPeriodo);
+        cuentaRepository.save(cuentaFinanciera);
+        return cuentaPeriodo;
     }
 
     public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo) {

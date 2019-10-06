@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import java.util.ArrayList;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,5 +34,13 @@ public class Cuenta {
 
     @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     private List<CuentaPeriodo> cuentasPeriodo;
+
+    public void agregarCuenta(CuentaPeriodo cuentaPeriodo) {
+
+        if (cuentasPeriodo == null) {
+            cuentasPeriodo = new ArrayList<>();
+        }
+        cuentasPeriodo.add(cuentaPeriodo);
+    }
 
 }

@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.test.jdbc.JdbcTestUtils;
@@ -71,5 +72,6 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(cantidadCuentasProveedoresDespues).isEqualTo(cantidadCuentasProveedoresAntes + 1);
         assertThat(cantidadCuentasPorCobrarDespues).isEqualTo(cantidadCuentasPorCobrarAntes + 1);
         assertThat(cantidadCuentasBancariasDespues).isEqualTo(cantidadCuentasBancariasAntes + 1);
+
     }
 }
