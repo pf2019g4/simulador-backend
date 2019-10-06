@@ -20,24 +20,23 @@ public class SimuladorVentasService {
 
         Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
         long unidadesPosiblesParaVender = forecast.getCantidadUnidades();
-        long unidadesVendidas =  Math.min(Math.max(estado.getStock(),estado.getProduccionMensual()), unidadesPosiblesParaVender);
+        long unidadesVendidas = Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
         BigDecimal precio = forecast.getPrecio();
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
-        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
-                "ventas periodo " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
-        cuentaFinanciera.setTipoBalance(TipoBalance.CREDITO_CLIENTES);
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(),
+                "ventas periodo " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES);
         for (Integer offsetPeriodo = 0; offsetPeriodo < estado.getProyecto().getModalidadCobro().size(); offsetPeriodo += 1) {
 
             BigDecimal porcentajeVentas = estado.getProyecto().getModalidadCobro().get(offsetPeriodo).getPorcentaje().divide(new BigDecimal(100));
-            
+
             BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
-            
+
             cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + offsetPeriodo, montoVendido, cuentaFinanciera));
         }
 
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
-        
+
         BigDecimal ingresosCaja = calcularIngresosCaja(estado);
         estado.setCaja(estado.getCaja().add(ingresosCaja));
 
@@ -46,7 +45,7 @@ public class SimuladorVentasService {
         estado.setVentas(montoEconomicoVendido);
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "ventas periodo " + estado.getPeriodo(), estado.getVentas());
 
-        estado.setDemandaInsatisfecha(precio.multiply( new BigDecimal(unidadesPosiblesParaVender - unidadesVendidas)));
+        estado.setDemandaInsatisfecha(precio.multiply(new BigDecimal(unidadesPosiblesParaVender - unidadesVendidas)));
 
         return estado;
     }
@@ -56,7 +55,7 @@ public class SimuladorVentasService {
 
         return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
     }
-    
+
     private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
         return cuentas
                 .stream()
@@ -67,8 +66,8 @@ public class SimuladorVentasService {
     private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
         return cuentaPeriodos
                 .stream()
-                .filter(cuentaPeriodo ->
-                        cuentaPeriodo.getPeriodo() == periodo)
+                .filter(cuentaPeriodo
+                        -> cuentaPeriodo.getPeriodo() == periodo)
                 .findFirst()
                 .map(CuentaPeriodo::getMonto)
                 .orElse(new BigDecimal(0));

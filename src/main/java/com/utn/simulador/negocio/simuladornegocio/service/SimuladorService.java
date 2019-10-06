@@ -39,7 +39,7 @@ public class SimuladorService {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
         Estado estado = proyecto.getEscenario().getEstadoInicial();
-        
+
         Estado estadoNuevo = estado.toBuilder().id(null)
                 .activo(true)
                 .esForecast(esForecast)

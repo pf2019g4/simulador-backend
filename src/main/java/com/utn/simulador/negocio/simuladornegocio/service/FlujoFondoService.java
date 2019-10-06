@@ -112,7 +112,6 @@ public class FlujoFondoService {
         return cuentas;
     }
 
-
     private List<Cuenta> agregarCuentasEgresosNoAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
         List<Cuenta> cuentasEgresosNoAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
         cuentas.put(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosNoAfectosAImpuestos, null));
@@ -153,8 +152,6 @@ public class FlujoFondoService {
         }
 
     }
-
-
 
     private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
         return cuentaPeriodos

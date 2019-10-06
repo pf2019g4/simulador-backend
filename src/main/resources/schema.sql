@@ -6,15 +6,43 @@ CREATE TABLE IF NOT EXISTS escenario (
   maximos_periodos integer NOT NULL,
   nombre_periodos VARCHAR(45),
   estado_id bigint NULL,
+  balance_id bigint NULL,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS balance (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  caja decimal(19,2) not null DEFAULT 0,
+  cuentas_por_cobrar decimal(19,2) not null DEFAULT 0,
+  cuentas_por_cobrar_periodos integer not null DEFAULT 0,
+  inventario decimal(19,2) not null DEFAULT 0,
+  maquinaria decimal(19,2) not null DEFAULT 0,
+  amortizacion_acumulada decimal(19,2) not null DEFAULT 0,
+  proveedores decimal(19,2) not null DEFAULT 0,
+  proveedores_periodos integer not null DEFAULT 0,
+  deudas_bancarias decimal(19,2)  not null DEFAULT 0,
+  deudas_bancarias_periodos integer  not null DEFAULT 0,
+  capital_social decimal(19,2) not null DEFAULT 0,
+  resultado_del_ejercicio decimal(19,2) not null DEFAULT 0,
+  PRIMARY KEY (id),
 );
 
 CREATE TABLE IF NOT EXISTS proveedor (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
-  escenario_id bigint,
+  escenario_id bigint UNSIGNED,
   variacion_costo_variable decimal(19,2) NOT NULL,
   variacion_calidad integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS financiacion (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  descripcion VARCHAR(45) NOT NULL,
+  escenario_id bigint UNSIGNED,
+  tna decimal(5,2) NOT NULL,
+  cantidad_cuotas integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
@@ -34,6 +62,16 @@ CREATE TABLE IF NOT EXISTS proyecto (
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
+);
+
+CREATE TABLE IF NOT EXISTS credito (
+    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    proyecto_id  bigint UNSIGNED,
+    financiacion_id  bigint UNSIGNED,
+    monto decimal(19,2) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
+    FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
 );
 
 CREATE TABLE IF NOT EXISTS producto (

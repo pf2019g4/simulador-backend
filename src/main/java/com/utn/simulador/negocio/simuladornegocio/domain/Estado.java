@@ -20,7 +20,7 @@ public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     private Proyecto proyecto;
     @ManyToOne
     private Producto producto;

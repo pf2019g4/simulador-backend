@@ -30,4 +30,8 @@ public class Escenario {
     @JoinColumn(name = "estado_id")
     @JsonBackReference
     private Estado estadoInicial;
+
+    @OneToOne
+    @JoinColumn(name = "balance_id")
+    private Balance balanceInicial;
 }
