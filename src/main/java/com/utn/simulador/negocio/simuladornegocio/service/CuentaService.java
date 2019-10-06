@@ -34,21 +34,23 @@ public class CuentaService {
     public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance) {
         return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
     }
-    
+
     public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {
-        return CuentaPeriodo.builder()
+        CuentaPeriodo cuentaPeriodo = CuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
                 .monto(montoPeriodo)
                 .periodo(periodo).build();
+        return cuentaPeriodoRepository.save(cuentaPeriodo);
     }
 
     public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo) {
-        return Cuenta.builder()
+        Cuenta cuenta = Cuenta.builder()
                 .descripcion(desc)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoFlujoFondo(tipoFlujoFondo)
                 .proyectoId(idProyecto)
                 .build();
+        return cuentaRepository.save(cuenta);
     }
 
     public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo) {
@@ -94,15 +96,15 @@ public class CuentaService {
         return estado;
     }
 
-    public void eliminarCuentasDeProyecto(Long idProyecto){
-
+    public void eliminarCuentasDeProyecto(Long idProyecto) {
         cuentaRepository.deleteByProyectoId(idProyecto);
 
     }
 
     private Estado afectarEstadoSiCorresponde(Cuenta cuenta, CuentaPeriodo cuentaPeriodo, Estado estado) {
         if (cuenta.getTipoCuenta().equals(TipoCuenta.FINANCIERO) && cuentaPeriodo.getPeriodo().equals(estado.getPeriodo())) {
-            if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS) || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
+            if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS) 
+                    || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
                 estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
             } else {
                 estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));

@@ -44,7 +44,7 @@ insert into financiacion
 (id, escenario_id, descripcion, tna , cantidad_cuotas) values
 (1 , 1           , 'Nación'   , 2   , 5              ),
 (2 , 1           , 'Santander', 3.5 , 10             ),
-(3 , 1           , 'Macro'    , 1.5 , 6              ),
+(3 , 1           , 'Macro'    , 3.8 , 12              ),
 (4 , 2           , 'Macro'    , 3   , 12             );
 
 insert into modalidad_pago

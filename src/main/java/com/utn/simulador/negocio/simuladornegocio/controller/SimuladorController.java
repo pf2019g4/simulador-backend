@@ -9,9 +9,10 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.service.DecisionService;
+import com.utn.simulador.negocio.simuladornegocio.service.FinanciacionService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import java.util.List;
-import java.util.Arrays; 
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,17 +30,18 @@ public class SimuladorController {
 
     private final DecisionService decisionService;
     private final SimuladorService simuladorService;
-    
+    private final FinanciacionService financiacionService;
+
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
         return Arrays.asList(TipoFlujoFondo.values());
     }
-    
+
     @GetMapping("/tipoCuentas")
     public List<TipoCuenta> getTipoCuentas() {
         return Arrays.asList(TipoCuenta.values());
     }
-    
+
     @PostMapping("/proyecto/{proyectoId}/simularOpciones")
     public void tomaDecision(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
@@ -48,6 +50,8 @@ public class SimuladorController {
         for(Opcion opcion : opciones){
             decisionService.tomaDecision(proyectoId, opcion.getId());   
         }
+        
+        financiacionService.acreditar(proyectoId);
         simuladorService.simularPeriodos(proyectoId, true);
     }
 
