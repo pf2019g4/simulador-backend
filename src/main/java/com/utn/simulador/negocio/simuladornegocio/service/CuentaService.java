@@ -117,7 +117,10 @@ public class CuentaService {
                     || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
                 estado.setCaja(estado.getCaja().add(cuentaPeriodo.getMonto()));
             } else {
-                estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
+                if ((cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS)
+                        || cuenta.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS))) {
+                    estado.setCaja(estado.getCaja().subtract(cuentaPeriodo.getMonto()));
+                }
             }
         }
         return estado;
