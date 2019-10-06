@@ -9,11 +9,22 @@ Por ahora utiliza una BD en memoria.
 - Maven > 3.1
 - Java 11
 
+- Proyecto "utn-simulador-ui" a la misma altura
+
+carpeta-padre
+|
+|->utn-simulador-ui
+|->simulador-backend
+
+
 
 ## Links útiles
 
 ## Para compilar 
 mvn clean install
+
+## Para compilar el front
+mvn clean compile -Dbuild=frontend
 
 ## Para levantar
 mvn spring-boot:run
