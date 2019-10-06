@@ -42,20 +42,21 @@ public class CuentaService {
         CuentaPeriodo cuentaPeriodo = CuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
                 .monto(montoPeriodo)
-                .periodo(periodo).build();
+                .periodo(periodo)
+                .build();
 
         cuentaPeriodo = cuentaPeriodoRepository.save(cuentaPeriodo);
-        
-               
+
         cuentaFinanciera.agregarCuenta(cuentaPeriodo);
         cuentaRepository.save(cuentaFinanciera);
         return cuentaPeriodo;
     }
 
-    public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo) {
+    public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance) {
         Cuenta cuenta = Cuenta.builder()
                 .descripcion(desc)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
+                .tipoBalance(tipoBalance)
                 .tipoFlujoFondo(tipoFlujoFondo)
                 .proyectoId(idProyecto)
                 .build();
@@ -139,7 +140,7 @@ public class CuentaService {
             BigDecimal cuentasPorCobrarPorPeriodo = balanceInicial.getActivo().getCuentasPorCobrar()
                     .divide(new BigDecimal(balanceInicial.getActivo().getCuentasPorCobrarPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES);
 
             for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
                 crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
@@ -152,7 +153,7 @@ public class CuentaService {
             BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
                     .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_PROVEEDORES);
 
             for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
                 crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
@@ -166,7 +167,7 @@ public class CuentaService {
             BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
                     .divide(new BigDecimal(balanceInicial.getPasivo().getDeudasBancariasPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
+            Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_BANCARIA);
 
             for (int i = 1; (i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos()); i++) {
                 crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoDeudasBancarias);

@@ -3,6 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Financiacion;
 import com.utn.simulador.negocio.simuladornegocio.domain.Credito;
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
+import com.utn.simulador.negocio.simuladornegocio.domain.TipoBalance;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.repository.CreditoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.FinanciacionRepository;
@@ -68,11 +69,11 @@ public class FinanciacionService {
 
     private void crearCuentasFinancieras(Long proyectoId, Credito credito, BigDecimal montoADevolverPorPeriodo, Financiacion financionTomada) {
         //CREAR CUENTA FINANCIERA DE INGRESO
-        Cuenta cuentaObtencionCredito = cuentaService.crearCuentaFinanciera(proyectoId, "credito", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS);
+        Cuenta cuentaObtencionCredito = cuentaService.crearCuentaFinanciera(proyectoId, "credito", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS, null);
         cuentaService.crearCuentaFinancieraPeriodo(1, credito.getMonto(), cuentaObtencionCredito);
 
         //CREAR CUENTAS FINANCIERAS por pago cuotas
-        Cuenta cuentaFinancieraPagoCredito = cuentaService.crearCuentaFinanciera(proyectoId, "credito", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS);
+        Cuenta cuentaFinancieraPagoCredito = cuentaService.crearCuentaFinanciera(proyectoId, "credito", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA);
 
         for (int i = 1; (i <= financionTomada.getCantidadCuotas()); i++) {
 
