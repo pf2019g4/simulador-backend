@@ -49,14 +49,16 @@ public class FinanciacionService {
 
     public void acreditar(Long proyectoId) {
         Credito credito = creditoRepository.findByProyectoId(proyectoId);
-        Financiacion financionTomada = financiacionRepository.findById(credito.getFinanciacionId()).orElseThrow();
 
-        BigDecimal intereses = calcularIntereses(credito, financionTomada);
-        BigDecimal montoADevolver = credito.getMonto().add(intereses);
-        BigDecimal montoADevolverPorPeriodo = montoADevolver.divide(new BigDecimal(financionTomada.getCantidadCuotas()), RoundingMode.DOWN);
+        if (credito.getMonto().compareTo(BigDecimal.ZERO) > 0) {
+            Financiacion financionTomada = financiacionRepository.findById(credito.getFinanciacionId()).orElseThrow();
+            BigDecimal intereses = calcularIntereses(credito, financionTomada);
+            BigDecimal montoADevolver = credito.getMonto().add(intereses);
+            BigDecimal montoADevolverPorPeriodo = montoADevolver.divide(new BigDecimal(financionTomada.getCantidadCuotas()), RoundingMode.DOWN);
 
-        crearCuentasFinancieras(proyectoId, credito, montoADevolverPorPeriodo, financionTomada);
-        crearCuentaEconómica(proyectoId, intereses);
+            crearCuentasFinancieras(proyectoId, credito, montoADevolverPorPeriodo, financionTomada);
+            crearCuentaEconómica(proyectoId, intereses);
+        }
     }
 
     private void crearCuentaEconómica(Long proyectoId, BigDecimal intereses) {
