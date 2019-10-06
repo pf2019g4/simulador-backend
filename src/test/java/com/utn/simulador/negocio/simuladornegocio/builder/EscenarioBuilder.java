@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
+import com.utn.simulador.negocio.simuladornegocio.domain.Balance;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 
@@ -48,5 +49,10 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         escenarioBuilder.instance.setMaximosPeriodos(maximosPeriodos);
         escenarioBuilder.instance.setNombrePeriodos("Mes");
         return escenarioBuilder;
+    }
+
+    public EscenarioBuilder conBalanceInicial(Balance balance) {
+        this.instance.setBalanceInicial(balance);
+        return this;
     }
 }
