@@ -40,7 +40,7 @@ public class ProyectoService {
 
         proyectoRepository.save(proyecto);
 
-        Estado estado = estadoService.crearEstadoBaseParaProyecto(proyecto);
+        Estado estado = estadoService.crearEstadoBaseParaProyecto(proyecto, false);
         return estado;
     }
 

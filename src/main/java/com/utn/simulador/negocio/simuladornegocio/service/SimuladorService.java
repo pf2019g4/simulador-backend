@@ -36,17 +36,8 @@ public class SimuladorService {
     }
 
     public void crearPrimerEstadoSimulacion(Long proyectoId, boolean esForecast) {
-
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
-        Estado estado = proyecto.getEscenario().getEstadoInicial();
-
-        Estado estadoNuevo = estado.toBuilder().id(null)
-                .activo(true)
-                .esForecast(esForecast)
-                .proyecto(proyecto)
-                .build();
-
-        estadoService.guardar(estadoNuevo);
+        estadoService.crearEstadoBaseParaProyecto(proyecto, esForecast);
     }
 
     private Estado avanzarTiempo(Estado estado, boolean esForecast) {

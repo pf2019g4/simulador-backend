@@ -18,12 +18,14 @@ public class EstadoService {
         return estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyectoId, esForecast);
     }
 
-    public Estado crearEstadoBaseParaProyecto(Proyecto proyecto) {
+    public Estado crearEstadoBaseParaProyecto(Proyecto proyecto, boolean esForecast) {
         Estado nuevoEstado = proyecto.getEscenario().getEstadoInicial().toBuilder()
                 .id(null)
                 .proyecto(proyecto)
+                .caja(proyecto.getEscenario().getBalanceInicial().getActivo().getCaja())
+                //TODO sacar el stock del balance inicial.
                 .activo(Boolean.TRUE)
-                .esForecast(Boolean.FALSE).build();
+                .esForecast(esForecast).build();
         estadoRepository.save(nuevoEstado);
         return nuevoEstado;
     }
