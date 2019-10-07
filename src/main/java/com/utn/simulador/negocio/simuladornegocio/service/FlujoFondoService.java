@@ -47,7 +47,6 @@ public class FlujoFondoService {
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
         cuentas.put(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
 
-
         List<CuentaPeriodo> cuentaUtilidadAntesDeImpuestos = IntStream.
                 range(0, periodoActual + 1).
                 mapToObj(periodo -> new CuentaPeriodo(
@@ -67,7 +66,7 @@ public class FlujoFondoService {
                 null,
                 calcularMontoImpuestos(cuentaPeriodo.getMonto(),
                         new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
-                        ),
+                ),
                 cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.IMPUESTOS.getDescripcion(), null, cuentaImpuestos));
@@ -80,7 +79,7 @@ public class FlujoFondoService {
                 cuentaPeriodo.getMonto().
                         subtract(calcularMontoImpuestos(cuentaPeriodo.getMonto(),
                                 new BigDecimal(proyecto.get().getEscenario().getImpuestoPorcentaje())
-                                )),
+                        )),
                 cuentaPeriodo.getPeriodo())).
                 collect(Collectors.toList());
         cuentas.put(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.UTILIDAD_DESPUES_DE_IMPUESTOS.getDescripcion(), null, cuentaUtilidadDespuesDeImpuestos));
@@ -145,7 +144,7 @@ public class FlujoFondoService {
 
     private BigDecimal calcularMontoImpuestos(BigDecimal montoSinImpuesto, BigDecimal impuesto) {
 
-        if(montoSinImpuesto.signum() < 0){
+        if (montoSinImpuesto.signum() < 0) {
             return BigDecimal.ZERO;
         } else {
             return montoSinImpuesto.multiply(impuesto).setScale(2, RoundingMode.FLOOR);
@@ -168,11 +167,11 @@ public class FlujoFondoService {
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
-        List<Cuenta> cuentasIngresos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
-        cuentasIngresos.addAll(agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas));
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasIngresosNoAfectosAImpuestos = agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas);
 
-        List<Cuenta> cuentasEgresos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
-        cuentasEgresos.addAll(agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas));
+        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasEgresosNoAfectosAIMpuestos = agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas);
 
         List<CuentaPeriodo> cuentaMovimientosFinancieros = IntStream.
                 range(0, periodoActual + 1).
@@ -180,9 +179,11 @@ public class FlujoFondoService {
                         -> new CuentaPeriodo(
                         null,
                         null,
-                        new BigDecimal(BigInteger.ZERO).
-                                add(sumaMontoPeriodo(cuentasIngresos, periodo)).
-                                subtract(sumaMontoPeriodo(cuentasEgresos, periodo)),
+                        new BigDecimal(BigInteger.ZERO)
+                                .add(sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, periodo))
+                                .add(sumaMontoPeriodo(cuentasIngresosNoAfectosAImpuestos, periodo))
+                                .subtract(sumaMontoPeriodo(cuentasEgresosAfectosAImpuestos, periodo))
+                                .subtract(sumaMontoPeriodo(cuentasEgresosNoAfectosAIMpuestos, periodo)),
                         periodo
                 )
                 ).
