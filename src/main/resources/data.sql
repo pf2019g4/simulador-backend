@@ -24,9 +24,9 @@ insert into producto
 (1 , 'Lentes');
 
 insert into estado
-(id, proyecto_id, activo, caja   , ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, producto_id, stock, es_forecast) values
-(1 , NULL       , false , 11500.0, 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      ),
-(2 , NULL       , false , 5000.0 , 0     , 1000.0        , 100.0     , 1.0           , 0      , 100               , 2      , 1          , 400  , false      );
+(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, producto_id, stock, es_forecast) values
+(1 , NULL       , false , 0.0 , 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 1          , 200  , false      ),
+(2 , NULL       , false , 0.0 , 0     , 1000.0        , 100.0     , 1.0           , 0      , 100               , 2      , 1          , 400  , false      );
 
 insert into balance
 (id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
