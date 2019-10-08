@@ -50,9 +50,19 @@ public class SimuladorService {
 
     public void simularPeriodos(Long proyectoId, boolean esForecast) {
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+        imputarCuentasPeriodo0(proyectoId, esForecast);
+
         Integer maximosPeriodos = proyecto.getEscenario().getMaximosPeriodos();
         IntStream.rangeClosed(1, maximosPeriodos)
                 .forEach(i -> simularPeriodo(proyectoId, esForecast));
+    }
+
+    private void imputarCuentasPeriodo0(Long proyectoId, boolean esForecast) {
+        Estado estadoInicial = estadoService.obtenerActual(proyectoId, esForecast);
+        
+        cuentaService.inputarCuetasNuevoPeriodo(estadoInicial);
+        
+        estadoRepository.save(estadoInicial);
     }
 
     public void deshacerSimulacionPrevia(Long proyectoId) {
