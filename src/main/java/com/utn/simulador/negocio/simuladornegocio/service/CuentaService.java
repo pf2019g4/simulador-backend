@@ -37,6 +37,10 @@ public class CuentaService {
     public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance) {
         return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
     }
+    
+    public List<Cuenta> obtenerPorProyectoYTipoCuenta(Long idProyecto, TipoCuenta tipoCuenta) {
+        return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
+    }
 
     public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {
         CuentaPeriodo cuentaPeriodo = CuentaPeriodo.builder()

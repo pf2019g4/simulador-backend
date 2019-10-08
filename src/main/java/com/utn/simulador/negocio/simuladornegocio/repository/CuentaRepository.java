@@ -2,6 +2,7 @@ package com.utn.simulador.negocio.simuladornegocio.repository;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoBalance;
+import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,5 +18,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
     List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndTipoBalance(Long proyectoId, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance);
 
+    List<Cuenta> findByProyectoIdAndTipoCuenta(Long proyectoId, TipoCuenta tipo);
+        
     void deleteByProyectoId(Long proyectoId);
 }
