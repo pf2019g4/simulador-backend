@@ -25,22 +25,22 @@ public class SimuladorProduccionService {
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
-                "costo produccion periodo " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null);
+                "costo produccion " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null);
         cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
-
 
         for(ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
             BigDecimal porcentajeGastos = modalidadPago.getPorcentaje().divide(new BigDecimal(100));
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
-            cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
-
+            if(costoPeriodo.compareTo(BigDecimal.ZERO) != 0){
+                cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
+            }
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
 
         estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "costo produccion periodo " + estado.getPeriodo(), costoProduccionPeriodo.negate());
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "costo produccion " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate());
     }
 
     private void aumentarStock(Estado estado) {

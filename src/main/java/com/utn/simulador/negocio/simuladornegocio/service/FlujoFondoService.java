@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +40,9 @@ public class FlujoFondoService {
 
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
 
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas, true);
 
-        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas, true);
 
         List<Cuenta> cuentasGastosNoDesembolsables = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES);
         cuentas.put(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name(), new AgrupadorVo(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.getDescripcion(), cuentasGastosNoDesembolsables, null));
@@ -123,16 +124,48 @@ public class FlujoFondoService {
         return cuentasIngresosNoAfectosAImpuestos;
     }
 
-    private List<Cuenta> agregarCuentasEgresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
+    private List<Cuenta> agregarCuentasEgresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas, Boolean agrupadas) {
         List<Cuenta> cuentasEgresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
+        if(agrupadas)
+            cuentasEgresosAfectosAImpuestos = agruparCuentas(cuentasEgresosAfectosAImpuestos, "costo produccion");
+        
         cuentas.put(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosAfectosAImpuestos, null));
         return cuentasEgresosAfectosAImpuestos;
     }
 
-    private List<Cuenta> agregarCuentasIngresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
+    private List<Cuenta> agregarCuentasIngresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas, Boolean agrupadas) {
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
+        
+        if(agrupadas)
+            cuentasIngresosAfectosAImpuestos = agruparCuentas(cuentasIngresosAfectosAImpuestos, "ventas");
+        
         cuentas.put(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosAfectosAImpuestos, null));
         return cuentasIngresosAfectosAImpuestos;
+    }
+    
+    //TODO: hay que mejorar este agrupador
+    private List<Cuenta> agruparCuentas(List<Cuenta> cuentas, String descripcion) {
+        List<Cuenta> cuentasAgrupadas = new ArrayList<>(cuentas);
+        cuentasAgrupadas.removeIf(c -> c.getDescripcion().contains(descripcion));
+        cuentas.removeIf(c -> !c.getDescripcion().contains(descripcion));
+        
+        if(cuentas.size() > 0){
+            Cuenta cuentaAgrupada = cuentas.get(0);
+            cuentaAgrupada.setDescripcion(descripcion);
+            for(Cuenta cuenta : cuentas.subList(1, cuentas.size())){
+                for(CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
+                    CuentaPeriodo cuentaP = cuentaAgrupada.getCuentasPeriodo().stream().filter(cp -> cp.getPeriodo().equals(cuentaPeriodo.getPeriodo())).findFirst().orElse(null);
+                    if(cuentaP != null) {
+                        cuentaP.getMonto().add(cuentaPeriodo.getMonto());
+                    } else {
+                        cuentaAgrupada.agregarCuenta(cuentaPeriodo);
+                    }
+                }
+            }
+            cuentasAgrupadas.add(cuentaAgrupada);
+        }
+        
+        return cuentasAgrupadas;
     }
 
     private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
@@ -167,10 +200,10 @@ public class FlujoFondoService {
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = agregarCuentasIngresosAfectosAImpuestos(idProyecto, cuentas, false);
         List<Cuenta> cuentasIngresosNoAfectosAImpuestos = agregarCuentasIngresosNoAfectosAImpuestos(idProyecto, cuentas);
 
-        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas);
+        List<Cuenta> cuentasEgresosAfectosAImpuestos = agregarCuentasEgresosAfectosAImpuestos(idProyecto, cuentas, false);
         List<Cuenta> cuentasEgresosNoAfectosAIMpuestos = agregarCuentasEgresosNoAfectosAImpuestos(idProyecto, cuentas);
 
         List<CuentaPeriodo> cuentaMovimientosFinancieros = IntStream.
