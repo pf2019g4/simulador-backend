@@ -56,7 +56,8 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void crearPorBalanceInicial_cuentasProveedores_creaCuentas() {
 
-        Escenario escenario = EscenarioBuilder.base().conBalanceInicial(BalanceBuilder.balanceInicial().build(em)).build(em);
+        Balance b = BalanceBuilder.balanceInicial().build(em);
+        Escenario escenario = EscenarioBuilder.base().conBalanceInicial(b).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
 
         int cantidadCuentasProveedoresAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%proveedores%' and proyecto_id = " + proyecto.getId());
