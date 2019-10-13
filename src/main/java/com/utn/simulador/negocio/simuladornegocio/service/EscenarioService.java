@@ -34,6 +34,7 @@ public class EscenarioService {
         escenarioToUpdate.setNombrePeriodos(escenario.getNombrePeriodos());
     	escenarioToUpdate.setDescripcion(escenario.getDescripcion());
     	escenarioToUpdate.setImpuestoPorcentaje(escenario.getImpuestoPorcentaje());
+    	escenarioToUpdate.setBalanceInicial(escenario.getBalanceInicial());
     	return escenarioRepository.save(escenarioToUpdate);
     }
     
