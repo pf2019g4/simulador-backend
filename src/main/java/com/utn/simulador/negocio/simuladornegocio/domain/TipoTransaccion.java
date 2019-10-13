@@ -5,7 +5,7 @@ import lombok.Getter;
 public enum TipoTransaccion {
 
     COMPRA("costo produccion"),
-    VENTA("venta");
+    VENTA("ventas");
 
     @Getter
     private final String descripcion;

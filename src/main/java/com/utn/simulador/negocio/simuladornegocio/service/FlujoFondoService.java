@@ -170,8 +170,8 @@ public class FlujoFondoService {
     
     private List<Cuenta> agregarCuentasEconomicas(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
         List<Cuenta> cuentasEconomicas = cuentaService.obtenerPorProyectoYTipoCuenta(idProyecto, TipoCuenta.ECONOMICO);
-        cuentasEconomicas = agruparCuentas(cuentasEconomicas, "ventas");
-        cuentasEconomicas = agruparCuentas(cuentasEconomicas, "costo produccion");
+        cuentasEconomicas = agruparCuentas(cuentasEconomicas, TipoTransaccion.VENTA.getDescripcion());
+        cuentasEconomicas = agruparCuentas(cuentasEconomicas, TipoTransaccion.COMPRA.getDescripcion());
         cuentas.put("cuentas", new AgrupadorVo(TipoCuenta.ECONOMICO.name(), cuentasEconomicas, null));
         return cuentasEconomicas;
     }
@@ -239,11 +239,11 @@ public class FlujoFondoService {
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
-        
+
         List<Cuenta> cuentasEconomicas = agregarCuentasEconomicas(idProyecto, cuentas);
 
         List<CuentaPeriodo> cuentaMovimientosEconomicos = IntStream.
-                range(0, periodoActual + 1).
+                range(1, periodoActual + 1).
                 mapToObj(periodo
                         -> new CuentaPeriodo(
                         null,
@@ -254,6 +254,7 @@ public class FlujoFondoService {
                 )
                 ).
                 collect(Collectors.toList());
+
         cuentas.put("TOTAL", new AgrupadorVo("Total", null, cuentaMovimientosEconomicos));
 
         return cuentas;

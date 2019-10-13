@@ -25,7 +25,7 @@ public class SimuladorProduccionService {
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
-                "costo produccion " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null);
+                TipoTransaccion.COMPRA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null);
         cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
 
         for(ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
