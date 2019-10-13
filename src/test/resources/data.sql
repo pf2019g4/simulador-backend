@@ -16,4 +16,6 @@ delete from balance;
 delete from proyecto;
 delete from proveedor;
 delete from financiacion;
+delete from curso;
+delete from curso_escenario;
 delete from escenario;

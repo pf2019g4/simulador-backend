@@ -17,6 +17,8 @@ delete from financiacion;
 delete from proveedor;
 delete from proyecto;
 delete from usuario;
+delete from curso;
+delete from curso_escenario;
 delete from escenario;
 
 insert into producto
@@ -78,7 +80,6 @@ insert into opcion
 (7 , 3          , '$10000 -> CF 20, CV -0.1, P +0'                           , 20                  , -0.1                    , 0                   , 0                ),
 (8 , 3          , '$20000 -> CF 10, CV -0.2, P +10'                          , 10                  , -0.2                    , 10                  , 0                ),
 (9 , 3          , '$30000 -> CF 10, CV -0.3, P +0'                           , 10                  , -0.3                    , 0                   , 0                );
-
 
 insert into consecuencia
 (opcion_id, monto , descripcion             , tipo_cuenta , periodo_inicio  , cantidad_periodos, tipo_flujo_fondo                , tipo_balance) values

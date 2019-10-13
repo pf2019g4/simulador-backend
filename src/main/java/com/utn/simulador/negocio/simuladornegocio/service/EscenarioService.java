@@ -1,10 +1,14 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
+import com.utn.simulador.negocio.simuladornegocio.domain.Usuario;
+import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +18,17 @@ import org.springframework.stereotype.Service;
 public class EscenarioService {
 
     private final EscenarioRepository escenarioRepository;
+    private final CursoEscenarioRepository cursoEscenarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public List<Escenario> getEscenarios() {
         return escenarioRepository.findAll();
+    }
+    
+    public List<Escenario> getEscenariosPorUsuario(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        
+        return cursoEscenarioRepository.findByCursoId(usuario.getCurso().getId()).stream().map(ce -> ce.getEscenario()).collect(Collectors.toList());
     }
     
     public Escenario getEscenarioById(Long id) {
