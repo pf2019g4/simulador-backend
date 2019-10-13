@@ -42,7 +42,7 @@ public class SimuladorVentasService {
         estado.setStock(estado.getStock() - unidadesVendidas);
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), "ventas " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas());
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas());
 
         estado.setDemandaInsatisfecha(precio.multiply(new BigDecimal(unidadesPosiblesParaVender - unidadesVendidas)));
 

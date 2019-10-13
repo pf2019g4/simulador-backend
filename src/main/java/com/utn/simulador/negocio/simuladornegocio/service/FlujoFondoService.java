@@ -127,7 +127,7 @@ public class FlujoFondoService {
     private List<Cuenta> agregarCuentasEgresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas, Boolean agrupadas) {
         List<Cuenta> cuentasEgresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
         if(agrupadas)
-            cuentasEgresosAfectosAImpuestos = agruparCuentas(cuentasEgresosAfectosAImpuestos, "costo produccion");
+            cuentasEgresosAfectosAImpuestos = agruparCuentas(cuentasEgresosAfectosAImpuestos, TipoTransaccion.COMPRA.getDescripcion());
         
         cuentas.put(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosAfectosAImpuestos, null));
         return cuentasEgresosAfectosAImpuestos;
@@ -137,7 +137,7 @@ public class FlujoFondoService {
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
         
         if(agrupadas)
-            cuentasIngresosAfectosAImpuestos = agruparCuentas(cuentasIngresosAfectosAImpuestos, "ventas");
+            cuentasIngresosAfectosAImpuestos = agruparCuentas(cuentasIngresosAfectosAImpuestos, TipoTransaccion.VENTA.getDescripcion());
         
         cuentas.put(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosAfectosAImpuestos, null));
         return cuentasIngresosAfectosAImpuestos;
@@ -156,7 +156,7 @@ public class FlujoFondoService {
                 for(CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
                     CuentaPeriodo cuentaP = cuentaAgrupada.getCuentasPeriodo().stream().filter(cp -> cp.getPeriodo().equals(cuentaPeriodo.getPeriodo())).findFirst().orElse(null);
                     if(cuentaP != null) {
-                        cuentaP.getMonto().add(cuentaPeriodo.getMonto());
+                        cuentaP.setMonto(cuentaP.getMonto().add(cuentaPeriodo.getMonto()));
                     } else {
                         cuentaAgrupada.agregarCuenta(cuentaPeriodo);
                     }
