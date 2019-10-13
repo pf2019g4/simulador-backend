@@ -28,7 +28,7 @@ public class Usuario {
     private Rol rol;
     
     @ManyToOne
-    @JoinColumn(name = "curso_id", nullable = false)
+    @JoinColumn(name = "curso_id", nullable = true)
     @JsonBackReference
     private Curso curso;
 }

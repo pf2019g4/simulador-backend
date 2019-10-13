@@ -44,6 +44,7 @@ public class UsuarioService {
             } else {
                 throw new IllegalArgumentException("Clave de curso incorrecta");
             }
+        } else {
             throw new IllegalArgumentException("Curso inexistente");
         }
     }

@@ -33,8 +33,8 @@ public class EscenariosController {
         return escenarioService.getEscenarios();
     }
     
-    @GetMapping("/escenarios/{usuarioId}")
-    public List<Escenario> getEscenariosPorUsuario(@PathVariable("usuarioId") long usuarioId) {
+    @GetMapping("/escenarios/usuario/{usuarioId}")
+    public List<Escenario> getEscenariosPorUsuario(@PathVariable("usuarioId") Long usuarioId) {
         return escenarioService.getEscenariosPorUsuario(usuarioId);
     }
     
