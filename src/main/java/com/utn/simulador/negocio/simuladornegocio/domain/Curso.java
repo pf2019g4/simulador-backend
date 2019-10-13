@@ -1,5 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,5 +21,6 @@ public class Curso {
     private String clave;
     
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Usuario> usuarios;
 }

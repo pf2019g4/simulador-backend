@@ -29,6 +29,5 @@ public class Usuario {
     
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = true)
-    @JsonBackReference
     private Curso curso;
 }

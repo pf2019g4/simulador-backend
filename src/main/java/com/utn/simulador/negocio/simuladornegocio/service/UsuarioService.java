@@ -42,10 +42,10 @@ public class UsuarioService {
                 usuarioDB.setCurso(cursoDB);
                 usuarioRepository.save(usuarioDB);
             } else {
-                throw new IllegalArgumentException("Clave de curso incorrecta");
+                throw new Exception("Clave de curso incorrecta");
             }
         } else {
-            throw new IllegalArgumentException("Curso inexistente");
+            throw new Exception("Curso inexistente");
         }
     }
 
