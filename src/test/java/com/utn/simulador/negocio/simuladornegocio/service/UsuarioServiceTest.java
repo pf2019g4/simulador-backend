@@ -37,7 +37,7 @@ public class UsuarioServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(usuario.getCurso().getId().equals(curso1.getId()));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = Exception.class)
     public void crearUsuarioYMatricularloConPasswordIncorrecta() throws Exception {
         Curso curso1 = CursoBuilder.base("cursoPrueba", "PRU3B4").build(em);
         Usuario usuario = UsuarioBuilder.jugador("prueba@prueba.com", null).build(em);

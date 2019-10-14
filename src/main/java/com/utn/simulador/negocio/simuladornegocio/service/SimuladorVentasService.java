@@ -44,7 +44,7 @@ public class SimuladorVentasService {
         estado.setVentas(montoEconomicoVendido);
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas());
 
-        estado.setDemandaInsatisfecha(precio.multiply(new BigDecimal(unidadesPosiblesParaVender - unidadesVendidas)));
+        estado.setDemandaPotencial(precio.multiply(new BigDecimal(unidadesPosiblesParaVender)));
 
         return estado;
     }
