@@ -6,6 +6,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.AgrupadorVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,6 +21,7 @@ import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FlujoFondoService {
 
     private final CuentaService cuentaService;
@@ -168,10 +170,22 @@ public class FlujoFondoService {
         return cuentasAgrupadas;
     }
     
-    private List<Cuenta> agregarCuentasEconomicas(Long idProyecto, Map<String, AgrupadorVo> cuentas) {
+    private List<Cuenta> agregarCuentasEconomicas(Long idProyecto, Map<String, AgrupadorVo> cuentas, Integer maxPeriodos) {
         List<Cuenta> cuentasEconomicas = cuentaService.obtenerPorProyectoYTipoCuenta(idProyecto, TipoCuenta.ECONOMICO);
-        cuentasEconomicas = agruparCuentas(cuentasEconomicas, TipoTransaccion.VENTA.getDescripcion());
-        cuentasEconomicas = agruparCuentas(cuentasEconomicas, TipoTransaccion.COMPRA.getDescripcion());
+        cuentas.put(TipoTransaccion.VENTA.toString(), new AgrupadorVo(TipoTransaccion.VENTA.getDescripcion(), agruparCuentas(cuentasEconomicas, TipoTransaccion.VENTA.getDescripcion()), null));
+        cuentas.put(TipoTransaccion.COMPRA.toString(), new AgrupadorVo(TipoTransaccion.COMPRA.getDescripcion(), agruparCuentas(cuentasEconomicas, TipoTransaccion.COMPRA.getDescripcion()), null));
+
+        List<CuentaPeriodo> cuentaCostoMarginal = IntStream.
+                range(1, maxPeriodos + 1).
+                mapToObj(periodo -> new CuentaPeriodo(
+                        null,
+                        null,
+                        sumaMontoPeriodo(cuentas.get(TipoTransaccion.VENTA.toString()).getCuentas(), periodo).
+                                subtract(sumaMontoPeriodo(cuentas.get(TipoTransaccion.COMPRA.toString()).getCuentas(), periodo)),
+                        periodo)).
+                collect(Collectors.toList());
+        cuentas.put("CM", new AgrupadorVo("CM", null, cuentaCostoMarginal));
+
         cuentas.put("cuentas", new AgrupadorVo(TipoCuenta.ECONOMICO.name(), cuentasEconomicas, null));
         return cuentasEconomicas;
     }
@@ -240,7 +254,7 @@ public class FlujoFondoService {
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
-        List<Cuenta> cuentasEconomicas = agregarCuentasEconomicas(idProyecto, cuentas);
+        List<Cuenta> cuentasEconomicas = agregarCuentasEconomicas(idProyecto, cuentas, periodoActual);
 
         List<CuentaPeriodo> cuentaMovimientosEconomicos = IntStream.
                 range(1, periodoActual + 1).

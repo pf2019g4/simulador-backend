@@ -3,6 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
 import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
+import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.AgrupadorVo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
     @Autowired
     private FlujoFondoService flujoFondoService;
 
+    @Autowired
+    private CuentaRepository cuentaRepository;
 
     /*
      *                   P1      P2
@@ -245,4 +248,69 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
 
     //TODO testar impuestos negativos
     //TODO Testear Ingresos No Afectos A Impuestos, Egresos No Afectos A Impuestos, Inversiones
+
+
+
+
+    /*
+     *                   P1      P2
+     * VENTAS            1000    1000
+     * COMPRAS           100     100
+     * CM                900     900
+     * otrasCuentas
+     *  INTERES          100     100
+     * TOTAL             800     800
+     */
+
+    @Test
+    public void obteneEstadoEconomico_conCuentasValidas_devuelveVoConEstadoEconomico() {
+
+        Escenario escenario = EscenarioBuilder.escenarioConImpuesto(0.1).build(em);
+        Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
+        Producto producto = ProductoBuilder.base().build(em);
+        EstadoBuilder.inicialConPeriodoActual(producto, proyecto, 2).build(em);
+
+        Cuenta cuentaECOV1 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.VENTA.getDescripcion() + " 1").build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV1, new BigDecimal(400), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV1, new BigDecimal(600), 2).build(em);
+
+        Cuenta cuentaECOV2 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.VENTA.getDescripcion() + " 2").build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(400), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(600), 2).build(em);
+
+
+        Cuenta cuentaECOC1 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.COMPRA.getDescripcion() + " 1").build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC1, new BigDecimal(50), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC1, new BigDecimal(50), 2).build(em);
+
+        Cuenta cuentaECOC2 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.COMPRA.getDescripcion() + " 2").build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC2, new BigDecimal(50), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC2, new BigDecimal(50), 2).build(em);
+
+        Cuenta cuentaECOOTRO = CuentaBuilder.deProyectoEconomico(proyecto, "interes").build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(100), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(100), 2).build(em);
+
+        em.flush();
+
+        cuentaRepository.findAll();
+
+        Map<String, AgrupadorVo> resultadoVo = flujoFondoService.obtenerFlujoEconomico(proyecto.getId(), true);
+
+        assertThat(resultadoVo.get(TipoTransaccion.VENTA.name()).getMontosPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoTransaccion.VENTA.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("1000"), withinPercentage(0.001));
+        assertThat(resultadoVo.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
+        assertThat(resultadoVo.get("CM").getMontosPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get("CM").getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("900"), withinPercentage(0.001));
+        assertThat(resultadoVo.get("cuentas").getCuentas()).hasSize(1);
+        assertThat(resultadoVo.get("cuentas").getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get("cuentas").getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
+
+
+        assertThat(resultadoVo.get("TOTAL").getMontosPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get("TOTAL").getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("800"), withinPercentage(0.001));
+
+    }
+
 }

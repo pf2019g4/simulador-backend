@@ -36,4 +36,13 @@ public class CuentaBuilder extends AbstractPersistenceBuilder<Cuenta> {
         return cuentaBuilder;
     }
 
+    public static CuentaBuilder deProyectoEconomico(Proyecto proyecto, String descripcion) {
+        CuentaBuilder cuentaBuilder = new CuentaBuilder();
+        cuentaBuilder.instance.setDescripcion(descripcion);
+        cuentaBuilder.instance.setTipoCuenta(TipoCuenta.ECONOMICO);
+        cuentaBuilder.instance.setProyectoId(proyecto.getId());
+        cuentaBuilder.instance.setCuentasPeriodo(new ArrayList<>());
+
+        return cuentaBuilder;
+    }
 }
