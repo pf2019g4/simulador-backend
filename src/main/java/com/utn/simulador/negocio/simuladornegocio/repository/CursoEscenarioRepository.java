@@ -8,4 +8,6 @@ import java.util.List;
 public interface CursoEscenarioRepository extends JpaRepository<CursoEscenario, Long> {
 
     List<CursoEscenario> findByCursoId(Long cursoId);
+    
+    List<CursoEscenario> findByEscenarioId(Long escenarioId);
 }

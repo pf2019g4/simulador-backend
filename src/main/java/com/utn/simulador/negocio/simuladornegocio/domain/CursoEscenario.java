@@ -11,9 +11,20 @@ public class CursoEscenario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long cursoId;
+    
+    @ManyToOne 
+    private Curso curso;
     
     @ManyToOne
     private Escenario escenario;
 
+    public CursoEscenario(Curso curso, Escenario escenario){
+        this.curso = curso;
+        this.escenario = escenario;
+    }
+    
+    public CursoEscenario() {
+        super();
+    }
+    
 }
