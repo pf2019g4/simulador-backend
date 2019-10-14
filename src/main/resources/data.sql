@@ -40,8 +40,8 @@ insert into escenario
 (2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        ,          2);
 
 insert into curso
-(id, nombre , clave  ) values
-(1 , 'curso', 'clave');
+(id, nombre , clave    ) values
+(1 , 'curso', 'Y2xhdmU='); --Base64 de la palabra 'clave'
 
 insert into curso_escenario
 (id, curso_id, escenario_id) values
