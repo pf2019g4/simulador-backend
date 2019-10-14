@@ -5,6 +5,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Usuario;
 import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
+import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,10 @@ public class EscenarioService {
     
     public List<Escenario> getEscenariosPorUsuario(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        
+        if(usuario.getCurso() == null) {
+            return new ArrayList<>();
+        }
         
         return cursoEscenarioRepository.findByCursoId(usuario.getCurso().getId()).stream().map(ce -> ce.getEscenario()).collect(Collectors.toList());
     }

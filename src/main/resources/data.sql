@@ -1,5 +1,4 @@
 delete from consecuencia;
-delete from opcion;
 delete from decision;
 delete from credito;
 delete from cuenta_periodo;
@@ -17,8 +16,8 @@ delete from financiacion;
 delete from proveedor;
 delete from proyecto;
 delete from usuario;
-delete from curso;
 delete from curso_escenario;
+delete from curso;
 delete from escenario;
 
 insert into producto
@@ -39,6 +38,15 @@ insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id, balance_id) values
 (1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        ,          1),
 (2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        ,          2);
+
+insert into curso
+(id, nombre , clave  ) values
+(1 , 'curso', 'clave');
+
+insert into curso_escenario
+(id, curso_id, escenario_id) values
+(1 , 1       , 1           ),
+(2 , 1       , 2           );
 
 insert into proveedor
 (id, escenario_id, nombre  , variacion_costo_variable, variacion_calidad) values
@@ -99,5 +107,3 @@ insert into consecuencia
 (8        , 20000, 'cosas'                  , 'ECONOMICO' , 0               , 1                , null                            , null),
 (9        , 30000, 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null),
 (9        , 30000, 'cosas'                  , 'ECONOMICO' , 0               , 1                , null                            , null);
-
-

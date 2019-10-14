@@ -1,6 +1,4 @@
 delete from consecuencia;
-delete from opcion;
-delete from decision;
 delete from cuenta_periodo;
 delete from opcion_proyecto;
 delete from consecuencia;
@@ -16,6 +14,6 @@ delete from balance;
 delete from proyecto;
 delete from proveedor;
 delete from financiacion;
-delete from curso;
 delete from curso_escenario;
+delete from curso;
 delete from escenario;
