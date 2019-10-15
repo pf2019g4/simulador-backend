@@ -1,12 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.Decision;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
-import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
-import com.utn.simulador.negocio.simuladornegocio.domain.Consecuencia;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.ConsecuenciaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
@@ -130,6 +124,7 @@ public class DecisionService {
     private void crearCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
         List<Cuenta> cuentasACrear = opcionTomada.obtenerCuentasACrear(proyecto);
         for (Cuenta cuenta : cuentasACrear) {
+            cuenta.setTipoTransaccion(TipoTransaccion.OTROS);
             cuentaService.guardar(cuenta);
         }
     }
