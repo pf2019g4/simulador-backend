@@ -6,6 +6,7 @@
 package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
+import com.utn.simulador.negocio.simuladornegocio.domain.Curso;
 import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
 
 import java.util.List;
@@ -33,9 +34,24 @@ public class EscenariosController {
         return escenarioService.getEscenarios();
     }
     
+    @GetMapping("/escenarios/usuario/{usuarioId}")
+    public List<Escenario> getEscenariosPorUsuario(@PathVariable("usuarioId") Long usuarioId) {
+        return escenarioService.getEscenariosPorUsuario(usuarioId);
+    }
+    
     @GetMapping("/escenarios/{id}")
     public Escenario getEscenarioById(@PathVariable("id") Long id) {
         return escenarioService.getEscenarioById(id);
+    }
+    
+    @GetMapping("/escenarios/{id}/cursos")
+    public List<Curso> getCursosEscenario(@PathVariable("id") Long id) {
+        return escenarioService.getCursosEscenario(id);
+    }
+    
+    @PutMapping("/escenarios/{id}/cursos")
+    public void setCursosEscenario(@PathVariable("id") Long id,@RequestBody List<Curso> cursos) {
+        escenarioService.setCursosEscenario(id, cursos);
     }
     
     @PostMapping("/escenarios")

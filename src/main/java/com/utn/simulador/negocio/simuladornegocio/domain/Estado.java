@@ -32,7 +32,7 @@ public class Estado {
     private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
     private Long stock;
     private Long produccionMensual;
-    private BigDecimal demandaInsatisfecha;
+    private BigDecimal demandaPotencial;
     private Boolean activo;
     private Integer periodo; //TODO usar time en vez de contador
     private Boolean esForecast;

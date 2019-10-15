@@ -47,10 +47,29 @@ CREATE TABLE IF NOT EXISTS financiacion (
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
+CREATE TABLE IF NOT EXISTS curso (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(20) NOT NULL,
+  clave VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id)
+);
 
 CREATE TABLE IF NOT EXISTS usuario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  mail VARCHAR(60) NOT NULL
+  mail VARCHAR(60) NOT NULL,
+  rol VARCHAR(20) NOT NULL,
+  curso_id bigint,
+  FOREIGN KEY (curso_id) REFERENCES curso(id)
+
+);
+
+CREATE TABLE IF NOT EXISTS curso_escenario (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  curso_id bigint NOT NULL,
+  escenario_id bigint NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (curso_id) REFERENCES curso(id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
 CREATE TABLE IF NOT EXISTS proyecto (
@@ -65,13 +84,13 @@ CREATE TABLE IF NOT EXISTS proyecto (
 );
 
 CREATE TABLE IF NOT EXISTS credito (
-    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    proyecto_id  bigint UNSIGNED,
-    financiacion_id  bigint UNSIGNED,
-    monto decimal(19,2) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
-    FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id  bigint UNSIGNED,
+  financiacion_id  bigint UNSIGNED,
+  monto decimal(19,2) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
+  FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
 );
 
 CREATE TABLE IF NOT EXISTS producto (
@@ -89,7 +108,7 @@ CREATE TABLE IF NOT EXISTS estado (
   caja decimal(19,2),
   ventas decimal(19,2),
   capital_social decimal(19,2),
-  demanda_insatisfecha decimal(19,2),
+  demanda_potencial decimal(19,2),
   stock bigint,
   produccion_mensual bigint,
   calidad integer,
@@ -102,46 +121,46 @@ CREATE TABLE IF NOT EXISTS estado (
 );
 
 CREATE TABLE IF NOT EXISTS decision (
-    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    escenario_id bigint,
-    descripcion VARCHAR(250) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint,
+  descripcion VARCHAR(250) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
 
 CREATE TABLE IF NOT EXISTS opcion (
-    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    decision_id bigint not null,
-    descripcion VARCHAR(45) NOT NULL,
-    variacion_costo_fijo decimal(19,2) default 0,
-    variacion_costo_variable decimal(19,2) default 0,
-    variacion_produccion bigint default 0,
-    variacion_calidad integer default 0,
-    PRIMARY KEY (id),
-    FOREIGN KEY (decision_id) REFERENCES decision(id)
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  decision_id bigint not null,
+  descripcion VARCHAR(45) NOT NULL,
+  variacion_costo_fijo decimal(19,2) default 0,
+  variacion_costo_variable decimal(19,2) default 0,
+  variacion_produccion bigint default 0,
+  variacion_calidad integer default 0,
+  PRIMARY KEY (id),
+  FOREIGN KEY (decision_id) REFERENCES decision(id)
 );
 
 CREATE TABLE IF NOT EXISTS opcion_proyecto (
-    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    opcion_id bigint,
-    proyecto_id bigint,
-    PRIMARY KEY (id),
-    FOREIGN KEY (opcion_id) REFERENCES opcion(id),
-    FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  opcion_id bigint,
+  proyecto_id bigint,
+  PRIMARY KEY (id),
+  FOREIGN KEY (opcion_id) REFERENCES opcion(id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
 CREATE TABLE IF NOT EXISTS consecuencia (
-    id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    opcion_id bigint,
-    monto decimal(19,2) NOT NULL,
-    descripcion VARCHAR(45) NOT NULL,
-    periodo_inicio int not null,
-    cantidad_periodos int not null,
-    tipo_cuenta varchar(20) NOT NULL,
-    tipo_flujo_fondo varchar(40),
-    tipo_balance varchar(40),
-    PRIMARY KEY (id),
-    FOREIGN KEY (opcion_id) REFERENCES opcion(id)
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  opcion_id bigint,
+  monto decimal(19,2) NOT NULL,
+  descripcion VARCHAR(45) NOT NULL,
+  periodo_inicio int not null,
+  cantidad_periodos int not null,
+  tipo_cuenta varchar(20) NOT NULL,
+  tipo_flujo_fondo varchar(40),
+  tipo_balance varchar(40),
+  PRIMARY KEY (id),
+  FOREIGN KEY (opcion_id) REFERENCES opcion(id)
 );
 
 CREATE TABLE IF NOT EXISTS cuenta (

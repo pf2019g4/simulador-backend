@@ -31,7 +31,7 @@ public class Escenario {
     @JsonBackReference
     private Estado estadoInicial;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "balance_id")
     private Balance balanceInicial;
 }

@@ -49,7 +49,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     }
 
     @Test
-    public void simularPeriodo_escenarioValidoConVentasLimitadasInsuficientes_avanzaElPeriodoYDevuelveDemandaInsatisfecha() {
+    public void simularPeriodo_escenarioValidoConVentasLimitadasInsuficientes_avanzaElPeriodoYDevuelveDemandaPotencialInsatisfecha() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         Producto producto = ProductoBuilder.base().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
@@ -61,7 +61,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
         assertThat(nuevoEstado.getCaja()).isGreaterThan(new BigDecimal("1000"));
         assertThat(nuevoEstado.getActivo()).isTrue();
-        assertThat(nuevoEstado.getDemandaInsatisfecha()).isEqualTo(new BigDecimal("4600.00").multiply(forecast.getPrecio()));
+        assertThat(nuevoEstado.getDemandaPotencial().subtract(nuevoEstado.getVentas())).isEqualTo(new BigDecimal("4600.00").multiply(forecast.getPrecio()));
 
     }
 
