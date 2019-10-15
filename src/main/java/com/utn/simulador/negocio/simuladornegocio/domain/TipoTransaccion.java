@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum TipoTransaccion {
 
-    COMPRA("Costo produccion"),
+    COSTO_PRODUCCION("Costo producción"),
     VENTA("Ventas"),
     OTROS("Otros");
 
