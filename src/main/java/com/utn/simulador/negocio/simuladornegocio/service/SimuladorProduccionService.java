@@ -37,10 +37,11 @@ public class SimuladorProduccionService {
         }
         
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
+        cuentaFinanciera.setTipoTransaccion(TipoTransaccion.COMPRA);
         cuentaService.guardar(cuentaFinanciera);
 
         estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COMPRA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate());
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COMPRA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COMPRA);
     }
 
     private void aumentarStock(Estado estado) {

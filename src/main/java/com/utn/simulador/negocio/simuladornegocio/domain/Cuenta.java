@@ -32,6 +32,9 @@ public class Cuenta {
     @Enumerated(EnumType.STRING)
     private TipoBalance tipoBalance;
 
+    @Enumerated(EnumType.STRING)
+    private TipoTransaccion tipoTransaccion;
+
     @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     private List<CuentaPeriodo> cuentasPeriodo;
 

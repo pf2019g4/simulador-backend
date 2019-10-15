@@ -129,7 +129,7 @@ public class FlujoFondoService {
     private List<Cuenta> agregarCuentasEgresosAfectosAImpuestos(Long idProyecto, Map<String, AgrupadorVo> cuentas, Boolean agrupadas) {
         List<Cuenta> cuentasEgresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS);
         if(agrupadas)
-            cuentasEgresosAfectosAImpuestos = agruparCuentas(cuentasEgresosAfectosAImpuestos, TipoTransaccion.COMPRA.getDescripcion());
+            cuentasEgresosAfectosAImpuestos = agruparCuentas(cuentasEgresosAfectosAImpuestos, TipoTransaccion.COMPRA);
         
         cuentas.put(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasEgresosAfectosAImpuestos, null));
         return cuentasEgresosAfectosAImpuestos;
@@ -139,21 +139,21 @@ public class FlujoFondoService {
         List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(idProyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
         
         if(agrupadas)
-            cuentasIngresosAfectosAImpuestos = agruparCuentas(cuentasIngresosAfectosAImpuestos, TipoTransaccion.VENTA.getDescripcion());
+            cuentasIngresosAfectosAImpuestos = agruparCuentas(cuentasIngresosAfectosAImpuestos, TipoTransaccion.VENTA);
         
         cuentas.put(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name(), new AgrupadorVo(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.getDescripcion(), cuentasIngresosAfectosAImpuestos, null));
         return cuentasIngresosAfectosAImpuestos;
     }
     
     //TODO: hay que mejorar este agrupador
-    private List<Cuenta> agruparCuentas(List<Cuenta> cuentas, String descripcion) {
+    private List<Cuenta> agruparCuentas( List<Cuenta> cuentas, TipoTransaccion tipoTransaccion) {
         List<Cuenta> cuentasAgrupadas = new ArrayList<>(cuentas);
-        cuentasAgrupadas.removeIf(c -> c.getDescripcion().contains(descripcion));
-        cuentas.removeIf(c -> !c.getDescripcion().contains(descripcion));
+        cuentasAgrupadas.removeIf(c -> c.getTipoTransaccion() != null && c.getTipoTransaccion().equals(tipoTransaccion));
+        cuentas.removeIf(c -> c.getTipoTransaccion() == null || !c.getTipoTransaccion().equals(tipoTransaccion));
         
         if(cuentas.size() > 0){
             Cuenta cuentaAgrupada = cuentas.get(0);
-            cuentaAgrupada.setDescripcion(descripcion);
+            cuentaAgrupada.setDescripcion(tipoTransaccion.getDescripcion());
             for(Cuenta cuenta : cuentas.subList(1, cuentas.size())){
                 for(CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
                     CuentaPeriodo cuentaP = cuentaAgrupada.getCuentasPeriodo().stream().filter(cp -> cp.getPeriodo().equals(cuentaPeriodo.getPeriodo())).findFirst().orElse(null);
@@ -168,26 +168,6 @@ public class FlujoFondoService {
         }
         
         return cuentasAgrupadas;
-    }
-    
-    private List<Cuenta> agregarCuentasEconomicas(Long idProyecto, Map<String, AgrupadorVo> cuentas, Integer maxPeriodos) {
-        List<Cuenta> cuentasEconomicas = cuentaService.obtenerPorProyectoYTipoCuenta(idProyecto, TipoCuenta.ECONOMICO);
-        cuentas.put(TipoTransaccion.VENTA.toString(), new AgrupadorVo(TipoTransaccion.VENTA.getDescripcion(), agruparCuentas(cuentasEconomicas, TipoTransaccion.VENTA.getDescripcion()), null));
-        cuentas.put(TipoTransaccion.COMPRA.toString(), new AgrupadorVo(TipoTransaccion.COMPRA.getDescripcion(), agruparCuentas(cuentasEconomicas, TipoTransaccion.COMPRA.getDescripcion()), null));
-
-        List<CuentaPeriodo> cuentaCostoMarginal = IntStream.
-                range(1, maxPeriodos + 1).
-                mapToObj(periodo -> new CuentaPeriodo(
-                        null,
-                        null,
-                        sumaMontoPeriodo(cuentas.get(TipoTransaccion.VENTA.toString()).getCuentas(), periodo).
-                                subtract(sumaMontoPeriodo(cuentas.get(TipoTransaccion.COMPRA.toString()).getCuentas(), periodo)),
-                        periodo)).
-                collect(Collectors.toList());
-        cuentas.put("CM", new AgrupadorVo("CM", null, cuentaCostoMarginal));
-
-        cuentas.put("cuentas", new AgrupadorVo(TipoCuenta.ECONOMICO.name(), cuentasEconomicas, null));
-        return cuentasEconomicas;
     }
 
     private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
@@ -254,7 +234,25 @@ public class FlujoFondoService {
         Estado estado = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(idProyecto, esForecast);
         Integer periodoActual = estado.getPeriodo();
 
-        List<Cuenta> cuentasEconomicas = agregarCuentasEconomicas(idProyecto, cuentas, periodoActual);
+        List<Cuenta> cuentasVentas = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(idProyecto, TipoCuenta.ECONOMICO, TipoTransaccion.VENTA);
+        cuentas.put(TipoTransaccion.VENTA.name(), new AgrupadorVo(TipoTransaccion.VENTA.getDescripcion(), null, agruparCuentas(cuentasVentas, TipoTransaccion.VENTA).get(0).getCuentasPeriodo()));
+
+        List<Cuenta> cuentasCompras = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(idProyecto, TipoCuenta.ECONOMICO, TipoTransaccion.COMPRA);
+        cuentas.put(TipoTransaccion.COMPRA.name(), new AgrupadorVo(TipoTransaccion.COMPRA.getDescripcion(), null, agruparCuentas(cuentasCompras, TipoTransaccion.COMPRA).get(0).getCuentasPeriodo()));
+
+        List<CuentaPeriodo> cuentaCostoMarginal = IntStream.
+                range(1, periodoActual + 1).
+                mapToObj(periodo -> new CuentaPeriodo(
+                        null,
+                        null,
+                        montoPeriodo(cuentas.get(TipoTransaccion.VENTA.toString()).getMontosPeriodo(), periodo).
+                                subtract(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.toString()).getMontosPeriodo(), periodo)),
+                        periodo)).
+                collect(Collectors.toList());
+        cuentas.put("CM", new AgrupadorVo("CM", null, cuentaCostoMarginal));
+
+        List<Cuenta> cuentasOtras = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(idProyecto, TipoCuenta.ECONOMICO, TipoTransaccion.OTROS);
+        cuentas.put(TipoTransaccion.OTROS.name(), new AgrupadorVo(TipoCuenta.ECONOMICO.name(), cuentasOtras, null));
 
         List<CuentaPeriodo> cuentaMovimientosEconomicos = IntStream.
                 range(1, periodoActual + 1).
@@ -263,7 +261,9 @@ public class FlujoFondoService {
                         null,
                         null,
                         new BigDecimal(BigInteger.ZERO)
-                                .add(sumaMontoPeriodo(cuentasEconomicas, periodo)),
+                                .add(montoPeriodo(cuentas.get(TipoTransaccion.VENTA.name()).getMontosPeriodo(), periodo))
+                                .subtract(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo(), periodo))
+                                .add(sumaMontoPeriodo(cuentasOtras, periodo)),
                         periodo
                 )
                 ).

@@ -270,30 +270,25 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         Producto producto = ProductoBuilder.base().build(em);
         EstadoBuilder.inicialConPeriodoActual(producto, proyecto, 2).build(em);
 
-        Cuenta cuentaECOV1 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.VENTA.getDescripcion() + " 1").build(em);
+        Cuenta cuentaECOV1 = CuentaBuilder.deProyectoTipoEconomico(proyecto, "Ventas 1", TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV1, new BigDecimal(400), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV1, new BigDecimal(600), 2).build(em);
 
-        Cuenta cuentaECOV2 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.VENTA.getDescripcion() + " 2").build(em);
-        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(400), 1).build(em);
-        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(600), 2).build(em);
+        Cuenta cuentaECOV2 = CuentaBuilder.deProyectoTipoEconomico(proyecto, "Ventas 2", TipoTransaccion.VENTA).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(600), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV2, new BigDecimal(400), 2).build(em);
 
-
-        Cuenta cuentaECOC1 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.COMPRA.getDescripcion() + " 1").build(em);
+        Cuenta cuentaECOC1 = CuentaBuilder.deProyectoTipoEconomico(proyecto, "Compras 1", TipoTransaccion.COMPRA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC1, new BigDecimal(50), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC1, new BigDecimal(50), 2).build(em);
 
-        Cuenta cuentaECOC2 = CuentaBuilder.deProyectoEconomico(proyecto, TipoTransaccion.COMPRA.getDescripcion() + " 2").build(em);
+        Cuenta cuentaECOC2 = CuentaBuilder.deProyectoTipoEconomico(proyecto, "Compras 2", TipoTransaccion.COMPRA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC2, new BigDecimal(50), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOC2, new BigDecimal(50), 2).build(em);
 
-        Cuenta cuentaECOOTRO = CuentaBuilder.deProyectoEconomico(proyecto, "interes").build(em);
-        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(100), 1).build(em);
-        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(100), 2).build(em);
-
-        em.flush();
-
-        cuentaRepository.findAll();
+        Cuenta cuentaECOOTRO = CuentaBuilder.deProyectoTipoEconomico(proyecto, "interes", TipoTransaccion.OTROS).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(-100), 1).build(em);
+        CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOOTRO, new BigDecimal(-100), 2).build(em);
 
         Map<String, AgrupadorVo> resultadoVo = flujoFondoService.obtenerFlujoEconomico(proyecto.getId(), true);
 
@@ -303,9 +298,9 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(resultadoVo.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
         assertThat(resultadoVo.get("CM").getMontosPeriodo()).hasSize(2);
         assertThat(resultadoVo.get("CM").getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("900"), withinPercentage(0.001));
-        assertThat(resultadoVo.get("cuentas").getCuentas()).hasSize(1);
-        assertThat(resultadoVo.get("cuentas").getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
-        assertThat(resultadoVo.get("cuentas").getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
+        assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas()).hasSize(1);
+        assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
+        assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("-100"), withinPercentage(0.001));
 
 
         assertThat(resultadoVo.get("TOTAL").getMontosPeriodo()).hasSize(2);

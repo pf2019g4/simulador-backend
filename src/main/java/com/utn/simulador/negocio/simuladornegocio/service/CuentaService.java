@@ -42,6 +42,9 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
     }
 
+    public List<Cuenta> obtenerPorProyectoYTipoCuentaYTipoTransaccion(Long idProyecto, TipoCuenta tipoCuenta, TipoTransaccion tipoTransaccion) {
+        return cuentaRepository.findByProyectoIdAndTipoCuentaAndTipoTransaccion(idProyecto, tipoCuenta, tipoTransaccion);
+    }
     public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {
         CuentaPeriodo cuentaPeriodo = CuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
@@ -65,7 +68,7 @@ public class CuentaService {
         return cuentaRepository.save(cuenta);
     }
 
-    public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo) {
+    public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo, TipoTransaccion tipoTransaccion) {
         CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
 
@@ -73,6 +76,7 @@ public class CuentaService {
                 .descripcion(desc)
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .proyectoId(idProyecto)
+                .tipoTransaccion(tipoTransaccion)
                 .build();
 
         cuentasPeriodos.add(cuentaPeriodo.builder()

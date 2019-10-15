@@ -1,10 +1,6 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
-import com.utn.simulador.negocio.simuladornegocio.domain.Financiacion;
-import com.utn.simulador.negocio.simuladornegocio.domain.Credito;
-import com.utn.simulador.negocio.simuladornegocio.domain.Cuenta;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoBalance;
-import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
+import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import com.utn.simulador.negocio.simuladornegocio.repository.CreditoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.FinanciacionRepository;
 import java.math.BigDecimal;
@@ -58,13 +54,13 @@ public class FinanciacionService {
             BigDecimal montoADevolverPorPeriodo = montoADevolver.divide(new BigDecimal(financionTomada.getCantidadCuotas()), RoundingMode.DOWN);
 
             crearCuentasFinancieras(proyectoId, credito, montoADevolverPorPeriodo, financionTomada);
-            crearCuentaEconómica(proyectoId, intereses);
+            crearCuentaEconómica(proyectoId, intereses, TipoTransaccion.OTROS);
         }
     }
 
-    private void crearCuentaEconómica(Long proyectoId, BigDecimal intereses) {
+    private void crearCuentaEconómica(Long proyectoId, BigDecimal intereses, TipoTransaccion tipoTransaccion) {
         //CREAR CUENTA ECONOMICA por interes
-        cuentaService.crearCuentaEconomica(proyectoId, 1, "intereses credito", intereses.negate());
+        cuentaService.crearCuentaEconomica(proyectoId, 1, "intereses credito", intereses.negate(), tipoTransaccion);
     }
 
     private void crearCuentasFinancieras(Long proyectoId, Credito credito, BigDecimal montoADevolverPorPeriodo, Financiacion financionTomada) {

@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS cuenta (
   descripcion VARCHAR(45) NOT NULL,
   tipo_cuenta varchar(20) NOT NULL,
   tipo_flujo_fondo varchar(40),
+  tipo_transaccion varchar(40),
   tipo_balance varchar(40),
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
