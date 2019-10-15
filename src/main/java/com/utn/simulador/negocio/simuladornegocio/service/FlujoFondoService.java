@@ -246,7 +246,7 @@ public class FlujoFondoService {
                         null,
                         null,
                         montoPeriodo(cuentas.get(TipoTransaccion.VENTA.toString()).getMontosPeriodo(), periodo).
-                                subtract(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.toString()).getMontosPeriodo(), periodo)),
+                                add(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.toString()).getMontosPeriodo(), periodo)),
                         periodo)).
                 collect(Collectors.toList());
         cuentas.put("CM", new AgrupadorVo("CM", null, cuentaCostoMarginal));
@@ -262,7 +262,7 @@ public class FlujoFondoService {
                         null,
                         new BigDecimal(BigInteger.ZERO)
                                 .add(montoPeriodo(cuentas.get(TipoTransaccion.VENTA.name()).getMontosPeriodo(), periodo))
-                                .subtract(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo(), periodo))
+                                .add(montoPeriodo(cuentas.get(TipoTransaccion.COMPRA.name()).getMontosPeriodo(), periodo))
                                 .add(sumaMontoPeriodo(cuentasOtras, periodo)),
                         periodo
                 )

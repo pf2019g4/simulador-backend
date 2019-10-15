@@ -1,4 +1,5 @@
 delete from consecuencia;
+delete from opcion;
 delete from decision;
 delete from credito;
 delete from cuenta_periodo;
