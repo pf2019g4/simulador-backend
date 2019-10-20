@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   costo_variable decimal(19,2),
   produccion_mensual bigint,
   stock bigint,
+  calidad integer,
   balance_id bigint NULL,
   PRIMARY KEY (id)
 );

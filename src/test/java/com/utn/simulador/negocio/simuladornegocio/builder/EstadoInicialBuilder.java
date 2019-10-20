@@ -20,6 +20,7 @@ public class EstadoInicialBuilder extends AbstractPersistenceBuilder<EstadoInici
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setStock(200L);
         estadoBuilder.instance.setProduccionMensual(200L);
+        estadoBuilder.instance.setCalidad(5);
         return estadoBuilder;
     }
 }

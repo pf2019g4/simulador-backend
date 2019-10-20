@@ -22,19 +22,23 @@ public class Estado {
     private Long id;
     @ManyToOne
     private Proyecto proyecto;
+
+    //TODO borrar producto y la clase/tabla, no se usa para nada
     @ManyToOne
     private Producto producto;
+
     private BigDecimal costoFijo;
     private BigDecimal costoVariable;
-    private Long stock;
     private Long produccionMensual;
+    private Long stock;
+    private Integer calidad;
+
     private BigDecimal caja;
     private BigDecimal ventas;
-    private Integer calidad;
-    private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
+    private BigDecimal capitalSocial;
     private BigDecimal demandaPotencial;
     private Boolean activo;
-    private Integer periodo; //TODO usar time en vez de contador
+    private Integer periodo;
     private Boolean esForecast;
 
 }

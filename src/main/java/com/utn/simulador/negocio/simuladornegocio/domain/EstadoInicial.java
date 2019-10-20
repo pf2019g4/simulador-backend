@@ -19,5 +19,6 @@ public class EstadoInicial {
     private BigDecimal costoVariable;
     private Long stock;
     private Long produccionMensual;
+    private Integer calidad;
 
 }
