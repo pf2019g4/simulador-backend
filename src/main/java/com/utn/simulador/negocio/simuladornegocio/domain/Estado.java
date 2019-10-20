@@ -26,12 +26,12 @@ public class Estado {
     private Producto producto;
     private BigDecimal costoFijo;
     private BigDecimal costoVariable;
+    private Long stock;
+    private Long produccionMensual;
     private BigDecimal caja;
     private BigDecimal ventas;
     private Integer calidad;
     private BigDecimal capitalSocial;   //TODO moverlo al escenario porque nunca cambia
-    private Long stock;
-    private Long produccionMensual;
     private BigDecimal demandaPotencial;
     private Boolean activo;
     private Integer periodo; //TODO usar time en vez de contador

@@ -4,6 +4,7 @@ import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Balance;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.EstadoInicial;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
@@ -21,7 +22,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
         return escenarioBuilder;
     }
 
-    public static EscenarioBuilder baseConEstado(Estado estado) {
+    public static EscenarioBuilder baseConEstadoInicial(EstadoInicial estado) {
         EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
         escenarioBuilder.instance.setTitulo("escenario de test 1");
         escenarioBuilder.instance.setDescripcion("descripcion de test 1");

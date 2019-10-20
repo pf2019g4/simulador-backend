@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.List;
 import javax.persistence.*;
 
@@ -22,14 +23,12 @@ public class Escenario {
     private Integer maximosPeriodos;
     private String nombrePeriodos;
     private Double impuestoPorcentaje;  //Es un valor entre 0 y 1
-    
+
     @OneToMany(mappedBy = "escenarioId", cascade = CascadeType.ALL)
     private List<Proveedor> proveedores;
-    
-    @OneToOne
-    @JoinColumn(name = "estado_id")
-    @JsonBackReference
-    private Estado estadoInicial;
+
+    @Embedded
+    private EstadoInicial estadoInicial;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "balance_id")

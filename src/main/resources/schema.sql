@@ -5,7 +5,10 @@ CREATE TABLE IF NOT EXISTS escenario (
   impuesto_porcentaje decimal(19,2) NOT NULL,
   maximos_periodos integer NOT NULL,
   nombre_periodos VARCHAR(45),
-  estado_id bigint NULL,
+  costo_fijo decimal(19,2),
+  costo_variable decimal(19,2),
+  produccion_mensual bigint,
+  stock bigint,
   balance_id bigint NULL,
   PRIMARY KEY (id)
 );
