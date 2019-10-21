@@ -3,11 +3,9 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
 import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ModalidadPagoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
 import com.utn.simulador.negocio.simuladornegocio.builder.ProveedorBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
@@ -27,8 +25,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
     @Test
     public void simular_produccionValida_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 
@@ -51,7 +48,6 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
     @Test
     public void simular_produccionValida_Diferido_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.base().build(em);
         
         List<ModalidadPago> modalidadesPago = new ArrayList<>();
         modalidadesPago.add(ModalidadPagoBuilder.base(60L, 0).build(em)); //60% contado
@@ -62,7 +58,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         proveedor.setModalidadPago(modalidadesPago);
         
         proyecto.setProveedorSeleccionado(proveedor);
-        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 

@@ -9,7 +9,6 @@ delete from opcion;
 delete from decision;
 delete from cuenta;
 delete from estado;
-delete from producto;
 delete from forecast;
 delete from modalidad_cobro;
 delete from modalidad_pago;
@@ -21,24 +20,20 @@ delete from curso_escenario;
 delete from curso;
 delete from escenario;
 
-insert into producto
-(id, nombre) values
-(1 , 'Lentes');
-
 insert into estado
-(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, demanda_potencial, producto_id, stock, es_forecast) values
-(1 , NULL       , false , 0.0 , 0     , 1500.0        , 200.0     , 3.5           , 0      , 150               , 5      , 0.0              ,1          , 200  , false      ),
-(2 , NULL       , false , 0.0 , 0     , 1000.0        , 100.0     , 1.0           , 0      , 100               , 2      , 0.0              ,1          , 400  , false      );
+(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, demanda_potencial, stock, es_forecast) values
+(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0              , 0    , false      ),
+(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0              , 0    , false      );
 
 insert into balance
 (id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
-(1 , 9500.0, 10000             , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 200           , 0                      ),
-(2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 200           , 0                      );
+(1 , 9500.0, 10000             , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1500           , 0                      ),
+(2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1000           , 0                      );
 
 insert into escenario
-(id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, estado_id, balance_id) values
-(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 1        ,          1),
-(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 2        ,          2);
+(id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad, balance_id) values
+(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 200.0     , 3.5           , 150               , 200  ,  5      ,          1),
+(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,          2);
 
 insert into curso
 (id, nombre , clave    ) values

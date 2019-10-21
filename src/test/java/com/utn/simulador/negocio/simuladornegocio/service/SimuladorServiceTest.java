@@ -1,19 +1,12 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.SimuladorNegocioApplicationTests;
-import com.utn.simulador.negocio.simuladornegocio.builder.CuentaBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.CuentaPeriodoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.EscenarioBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.EstadoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.ForecastBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.ProductoBuilder;
-import com.utn.simulador.negocio.simuladornegocio.builder.ProyectoBuilder;
+import com.utn.simulador.negocio.simuladornegocio.builder.*;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.utn.simulador.negocio.simuladornegocio.repository.CuentaPeriodoRepository;
-import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import java.math.BigDecimal;
 import org.junit.Test;
@@ -33,8 +26,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void simularPeriodo_escenarioValido_avanzaElPeriodo() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
         Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodoBuilder.deCuenta(cuenta, 1).build(em);
         
@@ -51,8 +43,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void simularPeriodo_escenarioValidoConVentasLimitadasInsuficientes_avanzaElPeriodoYDevuelveDemandaPotencialInsatisfecha() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        Estado estadoInicial = EstadoBuilder.inicial(producto, proyecto).build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
 
         Forecast forecast = ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()+1).build(em);
 
@@ -67,8 +58,8 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
     @Test
     public void simularPeriodos_escenarioValido_avanzaElPeriodoHastaElMaximo() {
-        Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
-        Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
+        EstadoInicial estadoInicial = EstadoInicialBuilder.baseParaEscenario().build();
+        Escenario escenario = EscenarioBuilder.baseConEstadoInicial(estadoInicial).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
         
         for(int i = 0; i < escenario.getMaximosPeriodos(); i++ ){
@@ -77,19 +68,18 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
         simuladorService.simularPeriodos(proyecto.getId(), true);
 
-        assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true).getPeriodo()).isEqualTo(estadoInicialEscenario.getPeriodo() + escenario.getMaximosPeriodos());
+        assertThat(estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true).getPeriodo()).isEqualTo(escenario.getMaximosPeriodos());
 
     }
 
     @Test
     public void deshacerSimulacionPrevia_conEscenarioPrevioCreado_eliminaCuentasAsociadosAlForecast(){
 
-        Producto producto = ProductoBuilder.base().build(em);
-        Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
-        Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
+        EstadoInicial estadoInicial = EstadoInicialBuilder.baseParaEscenario().build();
+        Escenario escenario = EscenarioBuilder.baseConEstadoInicial(estadoInicial).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
-        Estado estadoInicial = EstadoBuilder.inicialConPeriodoYEstado(producto,proyecto,0,true).build(em);
+        Estado estado = EstadoBuilder.inicialConPeriodoYEstado(proyecto,0,true).build(em);
 
         Cuenta cuenta = CuentaBuilder.deProyecto(proyecto, TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodo cuentaPeriodo1 = CuentaPeriodoBuilder.deCuentaYEsForecast(cuenta,1).build(em);

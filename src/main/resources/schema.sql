@@ -5,7 +5,11 @@ CREATE TABLE IF NOT EXISTS escenario (
   impuesto_porcentaje decimal(19,2) NOT NULL,
   maximos_periodos integer NOT NULL,
   nombre_periodos VARCHAR(45),
-  estado_id bigint NULL,
+  costo_fijo decimal(19,2),
+  costo_variable decimal(19,2),
+  produccion_mensual bigint,
+  stock bigint,
+  calidad integer,
   balance_id bigint NULL,
   PRIMARY KEY (id)
 );
@@ -93,16 +97,10 @@ CREATE TABLE IF NOT EXISTS credito (
   FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
 );
 
-CREATE TABLE IF NOT EXISTS producto (
-  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(45) NOT NULL,
-  PRIMARY KEY (id)
-);
 
 CREATE TABLE IF NOT EXISTS estado (
   id bigint UNSIGNED AUTO_INCREMENT,
   proyecto_id bigint NULL,
-  producto_id bigint NULL,
   costo_fijo decimal(19,2),
   costo_variable decimal(19,2),
   caja decimal(19,2),
@@ -116,8 +114,7 @@ CREATE TABLE IF NOT EXISTS estado (
   activo boolean NOT NULL DEFAULT FALSE,
   periodo integer,
   PRIMARY KEY (id),
-  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
-  FOREIGN KEY (producto_id) REFERENCES producto(id)
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
 CREATE TABLE IF NOT EXISTS decision (

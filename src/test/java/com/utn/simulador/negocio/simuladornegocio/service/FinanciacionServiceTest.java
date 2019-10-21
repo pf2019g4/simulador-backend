@@ -19,8 +19,8 @@ public class FinanciacionServiceTest extends SimuladorNegocioApplicationTests {
     @Test
     public void acreditar_proyectoConFinanciacionTomada_creaCuentaEconomicaYFinanciera() {
 
-        Estado estadoInicialEscenario = EstadoBuilder.baseParaEscenario().build(em);
-        Escenario escenario = EscenarioBuilder.baseConEstado(estadoInicialEscenario).build(em);
+        EstadoInicial estadoInicial = EstadoInicialBuilder.baseParaEscenario().build();
+        Escenario escenario = EscenarioBuilder.baseConEstadoInicial(estadoInicial).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
         Financiacion financiacion = FinanciacionBuilder.doceCuotas(escenario).build(em);
