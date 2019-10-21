@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS estado (
 CREATE TABLE IF NOT EXISTS decision (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
-  descripcion VARCHAR(250) NOT NULL,
+  descripcion VARCHAR(450) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS decision (
 CREATE TABLE IF NOT EXISTS opcion (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   decision_id bigint not null,
-  descripcion VARCHAR(45) NOT NULL,
+  descripcion VARCHAR(200) NOT NULL,
   variacion_costo_fijo decimal(19,2) default 0,
   variacion_costo_variable decimal(19,2) default 0,
   variacion_produccion bigint default 0,
