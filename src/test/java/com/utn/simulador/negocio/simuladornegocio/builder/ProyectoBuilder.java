@@ -2,7 +2,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
@@ -61,8 +60,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         Proyecto proyecto = super.build(em);
 
         if (this.conEstadoInicial) {
-            Producto producto = ProductoBuilder.base().build(em);
-            EstadoBuilder.inicial(producto, proyecto).build(em);
+            EstadoBuilder.inicial(proyecto).build(em);
         }
         
         List<ModalidadCobro> modalidadesCobro = new ArrayList<>();

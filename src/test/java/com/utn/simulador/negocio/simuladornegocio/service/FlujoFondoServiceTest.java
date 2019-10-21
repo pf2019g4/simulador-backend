@@ -46,8 +46,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
     public void calcularCuentas_conCuentasValidasYSinCalcularImpuestos_devuelveVoConFlujoDeFondosSinImpuestos() {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        EstadoBuilder.inicialConPeriodoActual(producto, proyecto, 2).build(em);
+        EstadoBuilder.inicialConPeriodoActual(proyecto, 2).build(em);
 
         Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 1).build(em);
@@ -139,8 +138,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
 
         Escenario escenario = EscenarioBuilder.escenarioConImpuesto(0.1).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        EstadoBuilder.inicialConPeriodoActual(producto, proyecto, 2).build(em);
+        EstadoBuilder.inicialConPeriodoActual(proyecto, 2).build(em);
 
         Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 1).build(em);
@@ -267,8 +265,7 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
 
         Escenario escenario = EscenarioBuilder.escenarioConImpuesto(0.1).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
-        Producto producto = ProductoBuilder.base().build(em);
-        EstadoBuilder.inicialConPeriodoActual(producto, proyecto, 2).build(em);
+        EstadoBuilder.inicialConPeriodoActual(proyecto, 2).build(em);
 
         Cuenta cuentaECOV1 = CuentaBuilder.deProyectoTipoEconomico(proyecto, "Ventas 1", TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaECOV1, new BigDecimal(400), 1).build(em);

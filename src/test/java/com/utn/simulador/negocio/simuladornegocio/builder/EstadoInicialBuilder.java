@@ -1,10 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.EstadoInicial;
-import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
-import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 
 import java.math.BigDecimal;
 

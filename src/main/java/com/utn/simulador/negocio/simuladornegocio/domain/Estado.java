@@ -20,9 +20,6 @@ public class Estado extends EstadoInicial {
     @ManyToOne
     private Proyecto proyecto;
 
-    //TODO borrar producto y la clase/tabla, no se usa para nada
-    @ManyToOne
-    private Producto producto;
 
     private BigDecimal caja;
     private BigDecimal ventas;

@@ -2,7 +2,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
-import com.utn.simulador.negocio.simuladornegocio.domain.Producto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 
 import java.math.BigDecimal;
@@ -13,9 +12,8 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         instance = new Estado();
     }
 
-    public static EstadoBuilder inicial(Producto producto, Proyecto proyecto) {
+    public static EstadoBuilder inicial(Proyecto proyecto) {
         EstadoBuilder estadoBuilder = new EstadoBuilder();
-        estadoBuilder.instance.setProducto(producto);
         estadoBuilder.instance.setProyecto(proyecto);
         estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
@@ -29,10 +27,9 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         return estadoBuilder;
     }
 
-    public static EstadoBuilder inicialConPeriodoActual(Producto producto, Proyecto proyecto, Integer periodoActual) {
+    public static EstadoBuilder inicialConPeriodoActual(Proyecto proyecto, Integer periodoActual) {
         EstadoBuilder estadoBuilder = new EstadoBuilder();
         estadoBuilder.instance.setProyecto(proyecto);
-        estadoBuilder.instance.setProducto(producto);
         estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setCaja(new BigDecimal(11000));
@@ -45,10 +42,9 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         return estadoBuilder;
     }
 
-    public static EstadoBuilder inicialConPeriodoYEstado(Producto producto, Proyecto proyecto, Integer periodoActual, Boolean activo) {
+    public static EstadoBuilder inicialConPeriodoYEstado(Proyecto proyecto, Integer periodoActual, Boolean activo) {
         EstadoBuilder estadoBuilder = new EstadoBuilder();
         estadoBuilder.instance.setProyecto(proyecto);
-        estadoBuilder.instance.setProducto(producto);
         estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setCaja(new BigDecimal(11000));
