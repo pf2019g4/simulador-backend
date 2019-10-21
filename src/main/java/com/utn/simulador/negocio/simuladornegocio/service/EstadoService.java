@@ -29,6 +29,7 @@ public class EstadoService {
                 .stock(proyecto.getEscenario().getEstadoInicial().getStock())
                 .calidad(proyecto.getEscenario().getEstadoInicial().getCalidad())
                 .periodo(0)
+                .capitalSocial(proyecto.getEscenario().getBalanceInicial().getPatrimonioNeto().getCapitalSocial())
                 .activo(Boolean.TRUE)
                 .esForecast(esForecast).build();
         estadoRepository.save(nuevoEstado);
