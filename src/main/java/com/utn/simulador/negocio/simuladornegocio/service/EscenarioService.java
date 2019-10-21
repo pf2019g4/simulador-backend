@@ -61,10 +61,11 @@ public class EscenarioService {
     public Escenario modifyEscenario(Escenario escenario) {
     	Escenario escenarioToUpdate = escenarioRepository.getOne(escenario.getId());
     	escenarioToUpdate.setTitulo(escenario.getTitulo());
+        escenarioToUpdate.setDescripcion(escenario.getDescripcion());
     	escenarioToUpdate.setMaximosPeriodos(escenario.getMaximosPeriodos());
         escenarioToUpdate.setNombrePeriodos(escenario.getNombrePeriodos());
-    	escenarioToUpdate.setDescripcion(escenario.getDescripcion());
     	escenarioToUpdate.setImpuestoPorcentaje(escenario.getImpuestoPorcentaje());
+        escenarioToUpdate.setEstadoInicial(escenario.getEstadoInicial());
     	escenarioToUpdate.setBalanceInicial(escenario.getBalanceInicial());
     	return escenarioRepository.save(escenarioToUpdate);
     }
