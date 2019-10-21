@@ -28,6 +28,7 @@ public class EstadoService {
                 .produccionMensual(proyecto.getEscenario().getEstadoInicial().getProduccionMensual())
                 .stock(proyecto.getEscenario().getEstadoInicial().getStock())
                 .calidad(proyecto.getEscenario().getEstadoInicial().getCalidad())
+                .periodo(0)
                 .activo(Boolean.TRUE)
                 .esForecast(esForecast).build();
         estadoRepository.save(nuevoEstado);
