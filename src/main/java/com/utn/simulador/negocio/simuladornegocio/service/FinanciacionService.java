@@ -66,7 +66,7 @@ public class FinanciacionService {
                 BigDecimal amortizacionCuota = cuotaAnual.subtract(intereses).setScale(2,RoundingMode.HALF_UP);
                 cuentaService.crearCuentaFinancieraPeriodo(i, intereses, cuentaFinancieraInteresCredito);
                 cuentaService.crearCuentaFinancieraPeriodo(i, amortizacionCuota, cuentaFinancieraAmortCuotaCredito);
-                cuentaService.crearCuentaEconomica(proyectoId, 1, "Interés deuda", intereses.negate(), TipoTransaccion.OTROS);
+                cuentaService.crearCuentaEconomica(proyectoId, i, "Interés deuda", intereses.negate(), TipoTransaccion.OTROS);
 
                 montoDeuda = montoDeuda.subtract(amortizacionCuota);
             }
