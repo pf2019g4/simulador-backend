@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS financiacion (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   descripcion VARCHAR(45) NOT NULL,
   escenario_id bigint UNSIGNED,
-  tna decimal(5,2) NOT NULL,
+  tea decimal(5,2) NOT NULL,
   cantidad_cuotas integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)

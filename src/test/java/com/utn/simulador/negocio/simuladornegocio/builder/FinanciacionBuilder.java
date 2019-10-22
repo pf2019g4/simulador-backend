@@ -11,11 +11,11 @@ public class FinanciacionBuilder extends AbstractPersistenceBuilder<Financiacion
         instance = new Financiacion();
     }
 
-    public static FinanciacionBuilder doceCuotas(Escenario escenario) {
+    public static FinanciacionBuilder tresCuotas(Escenario escenario) {
         FinanciacionBuilder financiacionBuilder = new FinanciacionBuilder();
         financiacionBuilder.instance.setDescripcion("Santander");
-        financiacionBuilder.instance.setCantidadCuotas(12);
-        financiacionBuilder.instance.setTna(BigDecimal.ONE);
+        financiacionBuilder.instance.setCantidadCuotas(3);
+        financiacionBuilder.instance.setTea(BigDecimal.valueOf(30d));
         financiacionBuilder.instance.setEscenarioId(escenario.getId());
 
         return financiacionBuilder;

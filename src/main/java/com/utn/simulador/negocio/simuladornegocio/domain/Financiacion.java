@@ -22,6 +22,6 @@ public class Financiacion {
     private Long id;
     private Long escenarioId;
     private String descripcion;
-    private BigDecimal tna;
+    private BigDecimal tea;
     private Integer cantidadCuotas;
 }

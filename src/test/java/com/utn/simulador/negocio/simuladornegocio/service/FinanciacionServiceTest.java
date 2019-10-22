@@ -23,24 +23,24 @@ public class FinanciacionServiceTest extends SimuladorNegocioApplicationTests {
         Escenario escenario = EscenarioBuilder.baseConEstadoInicial(estadoInicial).build(em);
         Proyecto proyecto = ProyectoBuilder.proyectoConProductoYEstadoInicial(escenario).build(em);
 
-        Financiacion financiacion = FinanciacionBuilder.doceCuotas(escenario).build(em);
+        Financiacion financiacion = FinanciacionBuilder.tresCuotas(escenario).build(em);
 
         BigDecimal monto = new BigDecimal(10000);
         financiacionService.tomar(Credito.builder().monto(monto).financiacionId(financiacion.getId()).proyectoId(proyecto.getId()).build());
 
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
-        int cantidadCuentasCreditosAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%credito%' and proyecto_id = " + proyecto.getId());
+        int cantidadCuentasCreditosAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "(descripcion like '%Crédito%' or descripcion like '%Interés%' or descripcion like '%cuota%') and proyecto_id = " + proyecto.getId());
 
         financiacionService.acreditar(proyecto.getId());
 
-        int cantidadCuentasCreditosDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%credito%' and proyecto_id = " + proyecto.getId());
+        int cantidadCuentasCreditosDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "(descripcion like '%Crédito%' or descripcion like '%Interés%' or descripcion like '%cuota%') and proyecto_id = " + proyecto.getId());
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        //una por la economica y otra por la financiera
-        assertThat(cantidadCuentasCreditosDespues).isEqualTo(cantidadCuentasCreditosAntes + 3);
+        //economicas y financieras ( interes, credito y amort. cuota)
+        assertThat(cantidadCuentasCreditosDespues).isEqualTo(cantidadCuentasCreditosAntes + 6);
         
-        //12cuotas + 1 del ingreso del crédito + 1 economica
-        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 14);
+        //3 cuotas ( 3 cuentas para intereses y 3 para amortización crédito ) + 1 del ingreso del crédito + 3 economica
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 10);
 
     }
 }
