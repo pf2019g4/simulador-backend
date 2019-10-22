@@ -31,9 +31,9 @@ insert into balance
 (2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1000           , 0                      );
 
 insert into escenario
-(id, titulo       , maximos_periodos, nombre_periodos, descripcion                  , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad, balance_id) values
-(1 , 'escenario 1', 5               , 'Mes'          , 'El Grupo Macri es uno de...', 0.1                , 200.0     , 3.5           , 150               , 200  ,  5      ,          1),
-(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...', 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,          2);
+(id, titulo       , maximos_periodos, nombre_periodos, descripcion                                                                                                                                                                                                , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad, balance_id) values
+(1 , 'escenario 1', 5               , 'Mes'          , 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra mas del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', 0.35               , 200.0     , 3.5           , 150               , 200  ,  5      ,          1),
+(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,          2);
 
 insert into curso
 (id, nombre , clave    ) values
