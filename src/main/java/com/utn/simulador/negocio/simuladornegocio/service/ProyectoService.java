@@ -36,12 +36,24 @@ public class ProyectoService {
                 .usuarioId(usuarioId)
                 .nombre(escenario.getTitulo())
                 .escenario(escenario)
+                .entregado(Boolean.FALSE)
                 .build();
 
         proyectoRepository.save(proyecto);
 
         Estado estado = estadoService.crearEstadoBaseParaProyecto(proyecto, false);
         return estado;
+    }
+    
+    public Proyecto obtenerProyecto(long proyectoId) {
+        return proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
+    }
+    
+    public Proyecto entregar(long proyectoId) {
+        Proyecto proyecto =  proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
+        proyecto.setEntregado(Boolean.TRUE);
+        
+        return proyectoRepository.save(proyecto);
     }
 
 }

@@ -8,6 +8,7 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Curso;
 import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
+import com.utn.simulador.negocio.simuladornegocio.dto.EscenarioUsuarioDto;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,11 @@ public class EscenariosController {
     @DeleteMapping("/escenarios/{id}")
     public void deleteEscenario(@PathVariable("id") Long id) {
         escenarioService.deleteEscenarioById(id);
+    }
+    
+    @GetMapping("/escenarios/{id}/cursos/{cursoId}")
+    public List<EscenarioUsuarioDto> getEscenarioUsuariosPorCurso (@PathVariable("id") Long id, @PathVariable("cursoId") Long cursoId){
+        return escenarioService.getDetalleEscenarioUsuariosPorCurso(id, cursoId);
     }
 
 }

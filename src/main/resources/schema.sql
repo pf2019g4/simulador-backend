@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   usuario_id bigint,
   proveedor_id bigint NULL,
   nombre VARCHAR(45) NOT NULL,
+  entregado boolean default false,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)

@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.CursoEscenario;
 import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
+import com.utn.simulador.negocio.simuladornegocio.dto.EscenarioUsuarioDto;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -72,6 +73,10 @@ public class EscenarioService {
     
     public void deleteEscenarioById(Long id) {
     	escenarioRepository.deleteById(id);
+    }
+    
+    public List<EscenarioUsuarioDto> getDetalleEscenarioUsuariosPorCurso(Long id, Long cursoId) {
+        return escenarioRepository.getDetalleEscenarioUsuariosPorCurso(id, cursoId);
     }
 
 }
