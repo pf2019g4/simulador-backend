@@ -31,6 +31,22 @@ public class UsuarioService {
         return usuario;
     }
     
+    public Usuario obtenerUsuario(Usuario nuevoUsuario) {
+
+        Usuario usuario = usuarioRepository.findByMail(nuevoUsuario.getMail());
+
+        if (usuario == null) {
+            usuario = new Usuario();
+            usuario.setMail(nuevoUsuario.getMail());
+            usuario.setNombreCompleto(nuevoUsuario.getNombreCompleto());
+            usuario.setFotoUrl(nuevoUsuario.getFotoUrl());
+            usuario.setRol(Rol.JUGADOR);
+            usuario = usuarioRepository.save(usuario);
+        }
+
+        return usuario;
+    }
+    
     public void matricularseACurso(Long usuarioId, Curso curso) throws Exception {
         
         Usuario usuarioDB = usuarioRepository.findById(usuarioId).orElseThrow();

@@ -176,11 +176,11 @@ public class FlujoFondoService {
 
     private BigDecimal calcularMontoImpuestos(BigDecimal montoSinImpuesto, BigDecimal impuesto) {
 
-        if (montoSinImpuesto.signum() < 0) {
-            return BigDecimal.ZERO;
-        } else {
+        //if (montoSinImpuesto.signum() < 0) {
+        //    return BigDecimal.ZERO;
+        //} else {
             return montoSinImpuesto.multiply(impuesto).setScale(2, RoundingMode.FLOOR);
-        }
+        //}
 
     }
 

@@ -21,4 +21,5 @@ public class Credito {
     private Long financiacionId;
     private Long proyectoId;
     private BigDecimal monto;
+    private Integer periodoInicial;
 }

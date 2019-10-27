@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS curso (
 CREATE TABLE IF NOT EXISTS usuario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   mail VARCHAR(60) NOT NULL,
+  foto_url VARCHAR(1000),
+  nombre_completo VARCHAR(60) NOT NULL,
   rol VARCHAR(20) NOT NULL,
   curso_id bigint,
   FOREIGN KEY (curso_id) REFERENCES curso(id)
@@ -81,7 +83,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   escenario_id bigint,
   usuario_id bigint,
   proveedor_id bigint NULL,
-  nombre VARCHAR(45) NOT NULL,
   entregado boolean default false,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
@@ -93,6 +94,7 @@ CREATE TABLE IF NOT EXISTS credito (
   proyecto_id  bigint UNSIGNED,
   financiacion_id  bigint UNSIGNED,
   monto decimal(19,2) NOT NULL,
+  periodo_inicial integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
   FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)

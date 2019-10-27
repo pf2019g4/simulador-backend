@@ -34,7 +34,6 @@ public class ProyectoService {
 
         Proyecto proyecto = Proyecto.builder()
                 .usuarioId(usuarioId)
-                .nombre(escenario.getTitulo())
                 .escenario(escenario)
                 .entregado(Boolean.FALSE)
                 .build();

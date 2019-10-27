@@ -23,6 +23,8 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mail;
+    private String fotoUrl;
+    private String nombreCompleto;
     
     @Enumerated(EnumType.STRING)
     private Rol rol;
