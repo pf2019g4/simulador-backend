@@ -21,7 +21,6 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
     public static ProyectoBuilder proyectoAbierto() {
         ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
-        proyectoBuilder.instance.setNombre("Proyecto Abierto");
 
         return proyectoBuilder;
     }
@@ -36,7 +35,6 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
     public static ProyectoBuilder proyectoConEscenario(Escenario escenario) {
         ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
-        proyectoBuilder.instance.setNombre("Proyecto Abierto");
         proyectoBuilder.instance.setEscenario(escenario);
 
         return proyectoBuilder;

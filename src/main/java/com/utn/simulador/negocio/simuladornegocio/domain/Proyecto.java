@@ -19,7 +19,6 @@ public class Proyecto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
 
     @OneToMany(mappedBy = "proyectoId", cascade = CascadeType.ALL)
     private List<ModalidadCobro> modalidadCobro;
