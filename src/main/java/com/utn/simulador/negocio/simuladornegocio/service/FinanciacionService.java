@@ -54,14 +54,15 @@ public class FinanciacionService {
             Financiacion financionTomada = financiacionRepository.findById(credito.getFinanciacionId()).orElseThrow();
             BigDecimal cuotaAnual = calcularCuotaAmortizacionFrances(credito, financionTomada);
             BigDecimal montoDeuda = credito.getMonto();
+            Integer periodoInicial = credito.getPeriodoInicial();
 
             Cuenta cuentaFinancieraIngresoCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Crédito", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS, null);
-            cuentaService.crearCuentaFinancieraPeriodo(0, credito.getMonto(), cuentaFinancieraIngresoCredito);
+            cuentaService.crearCuentaFinancieraPeriodo(periodoInicial, credito.getMonto(), cuentaFinancieraIngresoCredito);
 
             Cuenta cuentaFinancieraInteresCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Interés deuda", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA);
             Cuenta cuentaFinancieraAmortCuotaCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Amortización cuota", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA);
 
-            for( int i = 1 ; i <= financionTomada.getCantidadCuotas(); i++){
+            for( int i = ++periodoInicial ; i <= financionTomada.getCantidadCuotas(); i++){
                 BigDecimal intereses = calcularInteresesAmortizacionFrances(montoDeuda, financionTomada).setScale(2,RoundingMode.HALF_UP);
                 BigDecimal amortizacionCuota = cuotaAnual.subtract(intereses).setScale(2,RoundingMode.HALF_UP);
                 cuentaService.crearCuentaFinancieraPeriodo(i, intereses, cuentaFinancieraInteresCredito);
