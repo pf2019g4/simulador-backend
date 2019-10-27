@@ -26,15 +26,11 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
     }
 
-    public List<Cuenta> obtenerPorProyectoYOpcion(Long idProyecto, Long idOpcion) {
-        return cuentaRepository.findByProyectoIdAndOpcionId(idProyecto, idOpcion);
-    }
-
     public List<Cuenta> obtenerPorProyectoYTipoFlujoFondoYTipoBalance(Long idProyecto, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance) {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondoAndTipoBalance(idProyecto, tipoFlujoFondo, tipoBalance);
     }
 
-    public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance) {
+    public List<Cuenta> obtenerPorProyectoYTipoBalance( Long idProyecto, TipoBalance tipoBalance) {
         return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
     }
     
