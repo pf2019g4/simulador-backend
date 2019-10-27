@@ -22,6 +22,7 @@ public class Cuenta {
     private String descripcion;
     private Long proyectoId;
     private Long opcionId;
+    private Boolean esForecast;
 
     @Enumerated(EnumType.STRING)
     private TipoCuenta tipoCuenta; // financiero , economico , etc

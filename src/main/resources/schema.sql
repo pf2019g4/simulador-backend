@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS cuenta (
   tipo_flujo_fondo varchar(40),
   tipo_transaccion varchar(40),
   tipo_balance varchar(40),
-  es_forecast boolean NOT NULL DEFAULT FALSE,
+  es_forecast boolean DEFAULT FALSE,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
   FOREIGN KEY (opcion_id) REFERENCES opcion(id)
