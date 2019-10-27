@@ -20,9 +20,9 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @GetMapping("/usuario/{mail}")
-    public Usuario obtenerPorMail(@PathVariable("mail") String mail) {
-        return usuarioService.obtenerPorEmail(mail);
+    @PostMapping("/usuario")
+    public Usuario obtenerUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.obtenerUsuario(usuario);
     }
     
     @PostMapping("/usuario/{usuarioId}/matricular")

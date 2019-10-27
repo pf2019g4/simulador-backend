@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS curso (
 CREATE TABLE IF NOT EXISTS usuario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   mail VARCHAR(60) NOT NULL,
+  foto_url VARCHAR(1000),
+  nombre_completo VARCHAR(60) NOT NULL,
   rol VARCHAR(20) NOT NULL,
   curso_id bigint,
   FOREIGN KEY (curso_id) REFERENCES curso(id)
