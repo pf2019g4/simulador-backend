@@ -10,7 +10,9 @@ public class EscenarioUsuarioDto implements Serializable{
 
     private String escenario;
     private String curso;
-    private String usuario;
+    private String usuarioMail;
+    private String usuarioNombre;
+    private String usuarioFotoUrl;
     private Boolean entregado;
     
     public EscenarioUsuarioDto() {

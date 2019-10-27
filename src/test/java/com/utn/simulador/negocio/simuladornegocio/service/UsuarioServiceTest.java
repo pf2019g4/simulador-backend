@@ -15,35 +15,34 @@ public class UsuarioServiceTest extends SimuladorNegocioApplicationTests {
 
     @Autowired
     private UsuarioService usuarioService;
-    
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Test
     public void crearUsuarioYMatricularlo() {
         Curso curso1 = CursoBuilder.base("cursoPrueba", "PRU3B4").build(em);
-        Usuario usuario = UsuarioBuilder.jugador("prueba@prueba.com", null).build(em);
-        
+        Usuario usuario = UsuarioBuilder.jugador("prueba@prueba.com", "Prueba", null).build(em);
+
         Curso cursoAMatricular = CursoBuilder.base("cursoPrueba", "PRU3B4").build();
-        
+
         try {
             usuarioService.matricularseACurso(usuario.getId(), cursoAMatricular);
             usuario = usuarioRepository.findById(usuario.getId()).orElseThrow();
-        } 
-        catch(Exception e) {
-            
+        } catch (Exception e) {
+
         }
-        
+
         assertThat(usuario.getCurso().getId().equals(curso1.getId()));
     }
-    
+
     @Test(expected = Exception.class)
     public void crearUsuarioYMatricularloConPasswordIncorrecta() throws Exception {
         Curso curso1 = CursoBuilder.base("cursoPrueba", "PRU3B4").build(em);
-        Usuario usuario = UsuarioBuilder.jugador("prueba@prueba.com", null).build(em);
-        
+        Usuario usuario = UsuarioBuilder.jugador("prueba@prueba.com", "Prueba", null).build(em);
+
         Curso cursoAMatricular = CursoBuilder.base("cursoPrueba", "Pass").build();
-        
+
         usuarioService.matricularseACurso(usuario.getId(), cursoAMatricular);
     }
 
