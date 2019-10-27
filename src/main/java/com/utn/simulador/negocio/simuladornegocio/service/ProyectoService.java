@@ -37,11 +37,9 @@ public class ProyectoService {
                 .escenario(escenario)
                 .entregado(Boolean.FALSE)
                 .build();
-
         proyectoRepository.save(proyecto);
 
-        Estado estado = estadoService.crearEstadoBaseParaProyecto(proyecto, false);
-        return estado;
+        return estadoService.crearEstadoBaseParaProyecto(proyecto, false);
     }
     
     public Proyecto obtenerProyecto(long proyectoId) {
