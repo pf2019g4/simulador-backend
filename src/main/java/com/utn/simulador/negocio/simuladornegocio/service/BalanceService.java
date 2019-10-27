@@ -19,18 +19,18 @@ public class BalanceService {
         Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
         Activo activo = new Activo(
                 estado.getCaja(),
-                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES), estado.getPeriodo()),
+                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES, esForecast), estado.getPeriodo()),
                 null,
                 calcularInventario(estado),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
-                        proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS)),
+                        proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS, esForecast)),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
-                        proyectoId, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES, TipoBalance.AMORTIZACION_MAQUINARIAS)).negate()
+                        proyectoId, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES, TipoBalance.AMORTIZACION_MAQUINARIAS, esForecast)).negate()
         );
         Pasivo pasivo = new Pasivo(
-                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES), estado.getPeriodo()),
+                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES, esForecast), estado.getPeriodo()),
                 null,
-                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA), estado.getPeriodo()),
+                sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA, esForecast), estado.getPeriodo()),
                 null
         );
         PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), null);
@@ -42,9 +42,9 @@ public class BalanceService {
         return cuentas
                 .stream()
                 .map(cuenta -> cuenta.getCuentasPeriodo()
-                        .stream()
-                        .map(CuentaPeriodo::getMonto)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .stream()
+                .map(CuentaPeriodo::getMonto)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -55,7 +55,6 @@ public class BalanceService {
                 .map(cuenta -> montoProximosPeriodo(cuenta.getCuentasPeriodo(), periodo))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
 
     private BigDecimal montoProximosPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {
         return cuentaPeriodos
@@ -124,6 +123,5 @@ public class BalanceService {
         }
         return sum;
     }
-
 
 }

@@ -21,10 +21,13 @@ public class SimuladorVentasService {
         Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
         long unidadesPosiblesParaVender = forecast.getCantidadUnidades();
         long unidadesVendidas = Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
+       
         BigDecimal precio = forecast.getPrecio();
+        
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(),
-                TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES);
+                TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES, estado.getEsForecast());
+        
         for (ModalidadCobro modalidadCobro : estado.getProyecto().getModalidadCobro()) {
             BigDecimal porcentajeVentas = modalidadCobro.getPorcentaje().divide(new BigDecimal(100));
             BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
@@ -43,7 +46,7 @@ public class SimuladorVentasService {
         estado.setStock(estado.getStock() - unidadesVendidas);
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas(), TipoTransaccion.VENTA);
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas(), TipoTransaccion.VENTA, estado.getEsForecast());
 
         estado.setDemandaPotencial(precio.multiply(new BigDecimal(unidadesPosiblesParaVender)));
 
@@ -51,7 +54,7 @@ public class SimuladorVentasService {
     }
 
     private BigDecimal calcularIngresosCaja(Estado estado) {
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(estado.getProyecto().getId(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS);
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(estado.getProyecto().getId(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, estado.getEsForecast());
 
         return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
     }

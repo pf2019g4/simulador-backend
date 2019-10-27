@@ -51,16 +51,18 @@ public class SimuladorController {
     public void simularForecast(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
         Proyecto proyecto = proyectoService.obtenerProyecto(proyectoId);
-        
-        if(!proyecto.getEntregado()) {
+
+        boolean esForecast = true;
+
+        if (!proyecto.getEntregado()) {
             simuladorService.deshacerSimulacionPrevia(proyectoId);
-            simuladorService.crearPrimerEstadoSimulacion(proyectoId, true);
+            simuladorService.crearPrimerEstadoSimulacion(proyectoId, esForecast);
             for (Opcion opcion : opciones) {
-                decisionService.tomaDecision(proyectoId, opcion.getId());
+                decisionService.tomaDecision(proyectoId, opcion.getId(), esForecast);
             }
 
-            cuentaService.crearPorBalanceInicial(proyectoId);
-            financiacionService.acreditar(proyectoId);
+            cuentaService.crearPorBalanceInicial(proyectoId, esForecast);
+            financiacionService.acreditar(proyectoId, esForecast);
             simuladorService.simularPeriodos(proyectoId, true);
         }
     }

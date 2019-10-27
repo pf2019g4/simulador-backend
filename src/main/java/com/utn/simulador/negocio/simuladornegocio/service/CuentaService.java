@@ -22,25 +22,26 @@ public class CuentaService {
     private final EstadoRepository estadoRepository;
     private final ProyectoRepository proyectoRepository;
 
-    public List<Cuenta> obtenerPorProyectoYTipoFlujoFondo(Long idProyecto, TipoFlujoFondo tipoFlujoFondo) {
-        return cuentaRepository.findByProyectoIdAndTipoFlujoFondo(idProyecto, tipoFlujoFondo);
+    public List<Cuenta> obtenerPorProyectoYTipoFlujoFondo(Long idProyecto, TipoFlujoFondo tipoFlujoFondo, boolean esForecast) {
+        return cuentaRepository.findByProyectoIdAndTipoFlujoFondoAndEsForecast(idProyecto, tipoFlujoFondo, esForecast);
     }
 
-    public List<Cuenta> obtenerPorProyectoYTipoFlujoFondoYTipoBalance(Long idProyecto, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance) {
-        return cuentaRepository.findByProyectoIdAndTipoFlujoFondoAndTipoBalance(idProyecto, tipoFlujoFondo, tipoBalance);
+    public List<Cuenta> obtenerPorProyectoYTipoFlujoFondoYTipoBalance(Long idProyecto, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance, boolean esForecast) {
+        return cuentaRepository.findByProyectoIdAndTipoFlujoFondoAndTipoBalanceAndEsForecast(idProyecto, tipoFlujoFondo, tipoBalance, esForecast);
     }
 
-    public List<Cuenta> obtenerPorProyectoYTipoBalance( Long idProyecto, TipoBalance tipoBalance) {
-        return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
-    }
-    
-    public List<Cuenta> obtenerPorProyectoYTipoCuenta(Long idProyecto, TipoCuenta tipoCuenta) {
-        return cuentaRepository.findByProyectoIdAndTipoCuenta(idProyecto, tipoCuenta);
+    public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance, boolean esForecast) {
+        return cuentaRepository.findByProyectoIdAndTipoBalanceAndEsForecast(idProyecto, tipoBalance, esForecast);
     }
 
-    public List<Cuenta> obtenerPorProyectoYTipoCuentaYTipoTransaccion(Long idProyecto, TipoCuenta tipoCuenta, TipoTransaccion tipoTransaccion) {
-        return cuentaRepository.findByProyectoIdAndTipoCuentaAndTipoTransaccion(idProyecto, tipoCuenta, tipoTransaccion);
+    public List<Cuenta> obtenerPorProyectoYTipoCuenta(Long idProyecto, TipoCuenta tipoCuenta, boolean esForecast) {
+        return cuentaRepository.findByProyectoIdAndTipoCuentaAndEsForecast(idProyecto, tipoCuenta, esForecast);
     }
+
+    public List<Cuenta> obtenerPorProyectoYTipoCuentaYTipoTransaccion(Long idProyecto, TipoCuenta tipoCuenta, TipoTransaccion tipoTransaccion, boolean esForecast) {
+        return cuentaRepository.findByProyectoIdAndTipoCuentaAndTipoTransaccionAndEsForecast(idProyecto, tipoCuenta, tipoTransaccion, esForecast);
+    }
+
     public CuentaPeriodo crearCuentaFinancieraPeriodo(Integer periodo, BigDecimal montoPeriodo, Cuenta cuentaFinanciera) {
         CuentaPeriodo cuentaPeriodo = CuentaPeriodo.builder()
                 .cuenta(cuentaFinanciera)
@@ -53,18 +54,19 @@ public class CuentaService {
         return cuentaPeriodo;
     }
 
-    public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance) {
+    public Cuenta crearCuentaFinanciera(Long idProyecto, String desc, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance, boolean esForecast) {
         Cuenta cuenta = Cuenta.builder()
                 .descripcion(desc)
                 .tipoCuenta(TipoCuenta.FINANCIERO)
                 .tipoBalance(tipoBalance)
                 .tipoFlujoFondo(tipoFlujoFondo)
                 .proyectoId(idProyecto)
+                .esForecast(esForecast)
                 .build();
         return cuentaRepository.save(cuenta);
     }
 
-    public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo, TipoTransaccion tipoTransaccion) {
+    public void crearCuentaEconomica(Long idProyecto, Integer periodo, String desc, BigDecimal montoPeriodo, TipoTransaccion tipoTransaccion, boolean esForecast) {
         CuentaPeriodo cuentaPeriodo = new CuentaPeriodo();
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
 
@@ -73,6 +75,7 @@ public class CuentaService {
                 .tipoCuenta(TipoCuenta.ECONOMICO)
                 .proyectoId(idProyecto)
                 .tipoTransaccion(tipoTransaccion)
+                .esForecast(esForecast)
                 .build();
 
         cuentasPeriodos.add(cuentaPeriodo.builder()
@@ -100,7 +103,7 @@ public class CuentaService {
     }
 
     public Estado inputarCuetasNuevoPeriodo(Estado estado) {
-        List<CuentaPeriodo> cuentasPeriodo = cuentaPeriodoRepository.findByProyectoAndPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
+        List<CuentaPeriodo> cuentasPeriodo = cuentaPeriodoRepository.findByProyectoAndPeriodoAndEsForecast(estado.getProyecto().getId(), estado.getPeriodo(), estado.getEsForecast());
 
         for (CuentaPeriodo cuentaPeriodo : cuentasPeriodo) {
             estado = afectarEstadoSiCorresponde(cuentaPeriodo.getCuenta(), cuentaPeriodo, estado);
@@ -128,24 +131,24 @@ public class CuentaService {
         return estado;
     }
 
-    public void crearPorBalanceInicial(Long proyectoId) {
+    public void crearPorBalanceInicial(Long proyectoId, boolean esForecast) {
 
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
 
         Balance balanceInicial = proyecto.getEscenario().getBalanceInicial();
 
-        crearCuentasFinancierasCobroClientes(balanceInicial, proyectoId);
-        crearCuentasFinancierasPagoProveedores(balanceInicial, proyectoId);
-        crearCuentasFinancierasPagoBancos(balanceInicial, proyectoId);
+        crearCuentasFinancierasCobroClientes(balanceInicial, proyectoId, esForecast);
+        crearCuentasFinancierasPagoProveedores(balanceInicial, proyectoId, esForecast);
+        crearCuentasFinancierasPagoBancos(balanceInicial, proyectoId, esForecast);
 
     }
 
-    private void crearCuentasFinancierasCobroClientes(Balance balanceInicial, Long proyectoId) {
+    private void crearCuentasFinancierasCobroClientes(Balance balanceInicial, Long proyectoId, boolean esForecast) {
         if (balanceInicial.getActivo().getCuentasPorCobrarPeriodos() > 0) {
             BigDecimal cuentasPorCobrarPorPeriodo = balanceInicial.getActivo().getCuentasPorCobrar()
                     .divide(new BigDecimal(balanceInicial.getActivo().getCuentasPorCobrarPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES);
+            Cuenta cuentaFinancieraCobroClientes = crearCuentaFinanciera(proyectoId, "clientes", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES, esForecast);
 
             for (int i = 1; i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
@@ -153,13 +156,13 @@ public class CuentaService {
         }
     }
 
-    private void crearCuentasFinancierasPagoProveedores(Balance balanceInicial, Long proyectoId) {
+    private void crearCuentasFinancierasPagoProveedores(Balance balanceInicial, Long proyectoId, boolean esForecast) {
         if (balanceInicial.getPasivo().getProveedoresPeriodos() > 0) {
             BigDecimal proveedoresPorPorPeriodo = balanceInicial.getPasivo().getProveedores()
                     .divide(new BigDecimal(balanceInicial.getPasivo().getProveedoresPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_PROVEEDORES);
-           
+            Cuenta cuentaFinancieraPagoProveedores = crearCuentaFinanciera(proyectoId, "proveedores", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_PROVEEDORES, esForecast);
+
             for (int i = 1; i <= balanceInicial.getPasivo().getProveedoresPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
             }
@@ -167,12 +170,12 @@ public class CuentaService {
 
     }
 
-    private void crearCuentasFinancierasPagoBancos(Balance balanceInicial, Long proyectoId) {
+    private void crearCuentasFinancierasPagoBancos(Balance balanceInicial, Long proyectoId, boolean esForecast) {
         if (balanceInicial.getPasivo().getDeudasBancariasPeriodos() > 0) {
             BigDecimal deudaBancariaPorPeriodo = balanceInicial.getPasivo().getDeudasBancarias()
                     .divide(new BigDecimal(balanceInicial.getPasivo().getDeudasBancariasPeriodos()), RoundingMode.HALF_DOWN);
 
-            Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_BANCARIA);
+            Cuenta cuentaFinancieraPagoDeudasBancarias = crearCuentaFinanciera(proyectoId, "deudas bancarias", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.DEUDA_BANCARIA, esForecast);
 
             for (int i = 1; i <= balanceInicial.getPasivo().getDeudasBancariasPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, deudaBancariaPorPeriodo, cuentaFinancieraPagoDeudasBancarias);
