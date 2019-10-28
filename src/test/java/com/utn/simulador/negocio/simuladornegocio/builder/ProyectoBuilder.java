@@ -21,7 +21,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
     public static ProyectoBuilder proyectoAbierto() {
         ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
-
+        proyectoBuilder.instance.setCursoId(1L);
         return proyectoBuilder;
     }
 
@@ -34,7 +34,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
     }
 
     public static ProyectoBuilder proyectoConEscenario(Escenario escenario) {
-        ProyectoBuilder proyectoBuilder = new ProyectoBuilder();
+        ProyectoBuilder proyectoBuilder = proyectoAbierto();
         proyectoBuilder.instance.setEscenario(escenario);
 
         return proyectoBuilder;
@@ -46,7 +46,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
 
             this.instance.setEscenario(escenario);
         }
-        
+
         List<ModalidadPago> modalidadesPago = new ArrayList<>();
         modalidadesPago.add(ModalidadPagoBuilder.base(100L, 0).build(em)); //Crea modalidad de  basica (Contado)
 
@@ -60,7 +60,7 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         if (this.conEstadoInicial) {
             EstadoBuilder.inicial(proyecto).build(em);
         }
-        
+
         List<ModalidadCobro> modalidadesCobro = new ArrayList<>();
         ModalidadCobro modalidadCobro = ModalidadCobroBuilder.base(proyecto, 100L, 0).build(em); //Crea modalidad de cobro basica (Contado)
         modalidadesCobro.add(modalidadCobro);

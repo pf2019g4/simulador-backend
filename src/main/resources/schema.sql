@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint,
   usuario_id bigint,
+  curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
   PRIMARY KEY (id),
