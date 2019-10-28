@@ -26,7 +26,7 @@ public class FinanciacionServiceTest extends SimuladorNegocioApplicationTests {
         Financiacion financiacion = FinanciacionBuilder.tresCuotas(escenario).build(em);
 
         BigDecimal monto = new BigDecimal(10000);
-        financiacionService.tomar(Credito.builder().monto(monto).financiacionId(financiacion.getId()).proyectoId(proyecto.getId()).build());
+        financiacionService.tomar(Credito.builder().monto(monto).financiacionId(financiacion.getId()).proyectoId(proyecto.getId()).periodoInicial(0).build());
 
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
         int cantidadCuentasCreditosAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "(descripcion like '%Crédito%' or descripcion like '%Interés%' or descripcion like '%cuota%') and proyecto_id = " + proyecto.getId());

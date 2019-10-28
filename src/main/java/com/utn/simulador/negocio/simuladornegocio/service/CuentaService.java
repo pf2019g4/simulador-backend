@@ -30,7 +30,7 @@ public class CuentaService {
         return cuentaRepository.findByProyectoIdAndTipoFlujoFondoAndTipoBalance(idProyecto, tipoFlujoFondo, tipoBalance);
     }
 
-    public List<Cuenta> obtenerPorProyectoYTipoBalance(Long idProyecto, TipoBalance tipoBalance) {
+    public List<Cuenta> obtenerPorProyectoYTipoBalance( Long idProyecto, TipoBalance tipoBalance) {
         return cuentaRepository.findByProyectoIdAndTipoBalance(idProyecto, tipoBalance);
     }
     

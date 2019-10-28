@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS credito (
   proyecto_id  bigint UNSIGNED,
   financiacion_id  bigint UNSIGNED,
   monto decimal(19,2) NOT NULL,
+  periodo_inicial integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
   FOREIGN KEY (financiacion_id) REFERENCES financiacion(id)
