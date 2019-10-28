@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.MercadoPeriodoRepos
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.RestriccionPrecioRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.MercadoEscenarioVo;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,10 @@ public class ConfiguracionMercadoService {
             mercadoEscenarioVo.setEmpresasCompetidoras(empresasCompetidorasRepository.findByEscenarioId(escenarioId));
             mercadoEscenarioVo.setMercadosPeriodo(mercadoPeriodoRepository.findByEscenarioId(escenarioId));
             mercadoEscenarioVo.setPonderacionesMercado(ponderacionMercadoRepository.findByEscenarioId(escenarioId));
-            mercadoEscenarioVo.setRestriccionPrecio(restriccionPrecioRepository.findByEscenarioId(escenarioId).get(0));
+            List<RestriccionPrecio> restriccionPrecio = restriccionPrecioRepository.findByEscenarioId(escenarioId);
+            if(restriccionPrecio.size() > 0){
+                mercadoEscenarioVo.setRestriccionPrecio(restriccionPrecio.get(0));
+            }
         }
         
         return mercadoEscenarioVo;
