@@ -98,7 +98,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
         long cuentasAntes = cuentaRepository.count();
 
-        decisionService.tomaDecision(proyecto.getId(), opcion.getId());
+        decisionService.tomaDecision(proyecto.getId(), opcion.getId(), estadoAntes.getEsForecast());
 
         Estado estadoDespues = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true);
         long cuentasDespues = cuentaRepository.count();
@@ -130,7 +130,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
         long cuentasAntes = cuentaRepository.count();
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId()));
+                .isThrownBy(() -> decisionService.tomaDecision(proyecto.getId(), opcion.getId(), true));
 
         long cuentasDespues = cuentaRepository.count();
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
@@ -239,7 +239,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
     public void tomarDecision_decisionYaTomada() {
 
         Escenario escenario = EscenarioBuilder.base().build(em);
-
+        boolean esForecast = true;
         Decision decision = DecisionBuilder.deEscenario(escenario).build(em);
 
         Opcion opcion = OpcionBuilder.deDecisionMaquinaria(decision)
@@ -257,7 +257,7 @@ public class DecisionServiceTest extends SimuladorNegocioApplicationTests {
 
         long cantidadDecisionesTomadasAntes = opcionProyectoRepository.count();
 
-        decisionService.tomaDecision(proyecto.getId(), opcion2.getId());
+        decisionService.tomaDecision(proyecto.getId(), opcion2.getId(), esForecast);
 
         long cantidadDecisionesTomadasDespues = opcionProyectoRepository.count();
 

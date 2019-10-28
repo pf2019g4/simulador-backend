@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
-    List<Cuenta> findByProyectoIdAndTipoFlujoFondo(Long id, TipoFlujoFondo tipo);
+    List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndEsForecast(Long id, TipoFlujoFondo tipo, boolean esForecast);
 
-    List<Cuenta> findByProyectoIdAndTipoBalance(Long proyectoId, TipoBalance tipo);
+    List<Cuenta> findByProyectoIdAndTipoBalanceAndEsForecast(Long proyectoId, TipoBalance tipo, boolean esForecast);
 
-    List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndTipoBalance(Long proyectoId, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance);
+    List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndTipoBalanceAndEsForecast(Long proyectoId, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance, boolean esForecast);
 
-    List<Cuenta> findByProyectoIdAndTipoCuenta(Long proyectoId, TipoCuenta tipo);
+    List<Cuenta> findByProyectoIdAndTipoCuentaAndEsForecast(Long proyectoId, TipoCuenta tipo, boolean esForecast);
 
-    List<Cuenta> findByProyectoIdAndTipoCuentaAndTipoTransaccion(Long proyectoId, TipoCuenta tipo, TipoTransaccion tipoTransaccion);
+    List<Cuenta> findByProyectoIdAndTipoCuentaAndTipoTransaccionAndEsForecast(Long proyectoId, TipoCuenta tipo, TipoTransaccion tipoTransaccion, boolean esForecast);
 
     void deleteByProyectoId(Long proyectoId);
 }

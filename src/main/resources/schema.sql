@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   escenario_id bigint UNSIGNED NOT NULL,
   usuario_id bigint,
+  curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
   PRIMARY KEY (id),
@@ -171,6 +172,7 @@ CREATE TABLE IF NOT EXISTS cuenta (
   tipo_flujo_fondo varchar(40),
   tipo_transaccion varchar(40),
   tipo_balance varchar(40),
+  es_forecast boolean DEFAULT TRUE,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );

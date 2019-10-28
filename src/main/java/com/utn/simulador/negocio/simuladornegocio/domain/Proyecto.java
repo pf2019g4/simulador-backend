@@ -32,6 +32,8 @@ public class Proyecto {
     @ManyToOne
     @JoinColumn(name = "escenario_id", nullable = false)
     private Escenario escenario;
-    
+
+    private Long cursoId;
+
     private Boolean entregado;
 }
