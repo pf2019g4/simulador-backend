@@ -19,6 +19,10 @@ delete from usuario;
 delete from curso_escenario;
 delete from curso;
 delete from escenario;
+delete from ponderacion_mercado;
+delete from mercado_periodo;
+delete from restriccion_precio;
+delete from empresa_competidora;
 
 insert into estado
 (id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, demanda_potencial, stock, es_forecast) values

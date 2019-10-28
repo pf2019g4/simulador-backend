@@ -10,11 +10,12 @@ public class ProveedorBuilder extends AbstractPersistenceBuilder<Proveedor> {
         instance = new Proveedor();
     }
 
-    public static ProveedorBuilder base(Double costoVariable, Integer calidad) {
+    public static ProveedorBuilder base(Double costoVariable, Integer calidad, Long escenarioId) {
         ProveedorBuilder proveedorBuilder = new ProveedorBuilder();
         proveedorBuilder.instance.setNombre("Proveedor Base");
         proveedorBuilder.instance.setVariacionCostoVariable(BigDecimal.valueOf(costoVariable));
         proveedorBuilder.instance.setVariacionCalidad(calidad);
+        proveedorBuilder.instance.setEscenarioId(escenarioId);
 
         return proveedorBuilder;
     }
