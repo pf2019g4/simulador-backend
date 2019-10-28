@@ -6,9 +6,11 @@
 package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
+import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.service.CuentaService;
 import com.utn.simulador.negocio.simuladornegocio.service.DecisionService;
 import com.utn.simulador.negocio.simuladornegocio.service.FinanciacionService;
@@ -17,6 +19,7 @@ import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import java.util.List;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin
+@Transactional
 public class SimuladorController {
 
     private final DecisionService decisionService;
@@ -36,6 +40,7 @@ public class SimuladorController {
     private final FinanciacionService financiacionService;
     private final CuentaService cuentaService;
     private final ProyectoService proyectoService;
+    private final OpcionProyectoRepository opcionProyectoRepository;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -63,8 +68,38 @@ public class SimuladorController {
 
             cuentaService.crearPorBalanceInicial(proyectoId, esForecast);
             financiacionService.acreditar(proyectoId, esForecast);
-            simuladorService.simularPeriodos(proyectoId, true);
+            simuladorService.simularPeriodos(proyectoId, esForecast);
         }
+    }
+
+    @PostMapping("/escenario/{escenarioId}/curso/{cursoId}/simular-mercado")
+    public void simularMercado(@PathVariable("escenarioId") Long escenarioId,
+            @PathVariable("cursoId") Long cursoId) {
+//        TODO: testear
+//        proyectoService.cerrarProyectos(cursoId, escenarioId);
+        correrSimulacionProyectos(cursoId, escenarioId);
+
+    }
+
+    private void correrSimulacionProyectos(Long cursoId, Long escenarioId) {
+
+        List<Proyecto> proyectosASimular = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
+
+        boolean esForecast = false;
+        for (Proyecto proyecto : proyectosASimular) {
+            simuladorService.crearPrimerEstadoSimulacion(proyecto.getId(), esForecast);
+
+            List<OpcionProyecto> findByProyectoId = opcionProyectoRepository.findByProyectoId(proyecto.getId());
+
+            for (OpcionProyecto opcionProyecto : findByProyectoId) {
+                decisionService.tomaDecision(proyecto.getId(), opcionProyecto.getOpcion().getId(), esForecast);
+            }
+            cuentaService.crearPorBalanceInicial(proyecto.getId(), esForecast);
+            financiacionService.acreditar(proyecto.getId(), esForecast);
+            simuladorService.simularPeriodos(proyecto.getId(), esForecast);
+
+        }
+
     }
 
 }
