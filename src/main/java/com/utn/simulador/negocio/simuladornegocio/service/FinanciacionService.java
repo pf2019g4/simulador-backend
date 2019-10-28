@@ -55,11 +55,11 @@ public class FinanciacionService {
             BigDecimal cuotaAnual = calcularCuotaAmortizacionFrances(credito, financionTomada);
             BigDecimal montoDeuda = credito.getMonto();
 
-            Cuenta cuentaFinancieraIngresoCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Crédito", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS, null);
+            Cuenta cuentaFinancieraIngresoCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Crédito", TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS, null, TipoTransaccion.OTROS);
             cuentaService.crearCuentaFinancieraPeriodo(0, credito.getMonto(), cuentaFinancieraIngresoCredito);
 
-            Cuenta cuentaFinancieraInteresCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Interés deuda", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA);
-            Cuenta cuentaFinancieraAmortCuotaCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Amortización cuota", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA);
+            Cuenta cuentaFinancieraInteresCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Interés deuda", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA, TipoTransaccion.OTROS);
+            Cuenta cuentaFinancieraAmortCuotaCredito = cuentaService.crearCuentaFinanciera(proyectoId, "Amortización cuota", TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS,TipoBalance.DEUDA_BANCARIA, TipoTransaccion.OTROS);
 
             for( int i = 1 ; i <= financionTomada.getCantidadCuotas(); i++){
                 BigDecimal intereses = calcularInteresesAmortizacionFrances(montoDeuda, financionTomada).setScale(2,RoundingMode.HALF_UP);

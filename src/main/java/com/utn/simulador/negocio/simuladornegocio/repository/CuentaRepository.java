@@ -9,8 +9,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
     List<Cuenta> findByProyectoIdAndTipoFlujoFondo(Long id, TipoFlujoFondo tipo);
 
-    List<Cuenta> findByProyectoIdAndOpcionId(Long proyectoId, Long opcionId);
-
     List<Cuenta> findByProyectoIdAndTipoBalance(Long proyectoId, TipoBalance tipo);
 
     List<Cuenta> findByProyectoIdAndTipoFlujoFondoAndTipoBalance(Long proyectoId, TipoFlujoFondo tipoFlujoFondo, TipoBalance tipoBalance);
