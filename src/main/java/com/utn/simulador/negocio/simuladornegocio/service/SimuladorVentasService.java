@@ -26,8 +26,8 @@ public class SimuladorVentasService {
         
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(),
-                TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES, estado.getEsForecast());
-        
+                TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), 
+                TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoBalance.CREDITO_CLIENTES, TipoTransaccion.VENTA, estado.getEsForecast());
         for (ModalidadCobro modalidadCobro : estado.getProyecto().getModalidadCobro()) {
             BigDecimal porcentajeVentas = modalidadCobro.getPorcentaje().divide(new BigDecimal(100));
             BigDecimal montoVendido = precio.multiply(new BigDecimal(unidadesVendidas)).multiply(porcentajeVentas);
@@ -37,7 +37,6 @@ public class SimuladorVentasService {
         }
 
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
-        cuentaFinanciera.setTipoTransaccion(TipoTransaccion.VENTA);
         cuentaService.guardar(cuentaFinanciera);
 
         BigDecimal ingresosCaja = calcularIngresosCaja(estado);

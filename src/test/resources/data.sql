@@ -19,3 +19,7 @@ delete from usuario;
 delete from curso_escenario;
 delete from curso;
 delete from escenario;
+delete from ponderacion_mercado;
+delete from mercado_periodo;
+delete from restriccion_precio;
+delete from empresa_competidora;

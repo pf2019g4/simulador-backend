@@ -24,8 +24,9 @@ public class SimuladorProduccionService {
     private void imputarGastosProduccion(Estado estado) {
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
-        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(),
-                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null, estado.getEsForecast());
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
+                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), 
+                TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null, TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
         cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
 
         for (ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
@@ -37,7 +38,6 @@ public class SimuladorProduccionService {
         }
 
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
-        cuentaFinanciera.setTipoTransaccion(TipoTransaccion.COSTO_PRODUCCION);
         cuentaService.guardar(cuentaFinanciera);
 
         estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
