@@ -87,7 +87,6 @@ public class SimuladorController {
 
         boolean esForecast = false;
         for (Proyecto proyecto : proyectosASimular) {
-            simuladorService.crearPrimerEstadoSimulacion(proyecto.getId(), esForecast);
 
             List<OpcionProyecto> findByProyectoId = opcionProyectoRepository.findByProyectoId(proyecto.getId());
 
