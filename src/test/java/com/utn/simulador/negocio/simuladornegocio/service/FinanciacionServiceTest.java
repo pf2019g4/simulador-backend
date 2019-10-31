@@ -31,14 +31,14 @@ public class FinanciacionServiceTest extends SimuladorNegocioApplicationTests {
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
         int cantidadCuentasCreditosAntes = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "(descripcion like '%Crédito%' or descripcion like '%Interés%' or descripcion like '%cuota%') and proyecto_id = " + proyecto.getId());
 
-        financiacionService.acreditar(proyecto.getId());
+        financiacionService.acreditar(proyecto.getId(), true);
 
         int cantidadCuentasCreditosDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "(descripcion like '%Crédito%' or descripcion like '%Interés%' or descripcion like '%cuota%') and proyecto_id = " + proyecto.getId());
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         //economicas y financieras ( interes, credito y amort. cuota)
         assertThat(cantidadCuentasCreditosDespues).isEqualTo(cantidadCuentasCreditosAntes + 6);
-        
+
         //3 cuotas ( 3 cuentas para intereses y 3 para amortización crédito ) + 1 del ingreso del crédito + 3 economica
         assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 10);
 

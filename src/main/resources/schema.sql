@@ -18,25 +18,25 @@ CREATE TABLE IF NOT EXISTS escenario (
 
 CREATE TABLE IF NOT EXISTS balance (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  caja decimal(19,2) not null DEFAULT 0,
-  cuentas_por_cobrar decimal(19,2) not null DEFAULT 0,
-  cuentas_por_cobrar_periodos integer not null DEFAULT 0,
-  inventario decimal(19,2) not null DEFAULT 0,
-  maquinaria decimal(19,2) not null DEFAULT 0,
-  amortizacion_acumulada decimal(19,2) not null DEFAULT 0,
-  proveedores decimal(19,2) not null DEFAULT 0,
-  proveedores_periodos integer not null DEFAULT 0,
-  deudas_bancarias decimal(19,2)  not null DEFAULT 0,
-  deudas_bancarias_periodos integer  not null DEFAULT 0,
-  capital_social decimal(19,2) not null DEFAULT 0,
-  resultado_del_ejercicio decimal(19,2) not null DEFAULT 0,
+  caja decimal(19,2) NOT NULL DEFAULT 0,
+  cuentas_por_cobrar decimal(19,2) NOT NULL DEFAULT 0,
+  cuentas_por_cobrar_periodos integer NOT NULL DEFAULT 0,
+  inventario decimal(19,2) NOT NULL DEFAULT 0,
+  maquinaria decimal(19,2) NOT NULL DEFAULT 0,
+  amortizacion_acumulada decimal(19,2) NOT NULL DEFAULT 0,
+  proveedores decimal(19,2) NOT NULL DEFAULT 0,
+  proveedores_periodos integer NOT NULL DEFAULT 0,
+  deudas_bancarias decimal(19,2) NOT NULL DEFAULT 0,
+  deudas_bancarias_periodos integer NOT NULL DEFAULT 0,
+  capital_social decimal(19,2) NOT NULL DEFAULT 0,
+  resultado_del_ejercicio decimal(19,2) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
 );
 
 CREATE TABLE IF NOT EXISTS proveedor (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
-  escenario_id bigint UNSIGNED,
+  escenario_id bigint UNSIGNED NOT NULL,
   variacion_costo_variable decimal(19,2) NOT NULL,
   variacion_calidad integer NOT NULL,
   PRIMARY KEY (id),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 CREATE TABLE IF NOT EXISTS curso_escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   curso_id bigint NOT NULL,
-  escenario_id bigint NOT NULL,
+  escenario_id bigint UNSIGNED NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (curso_id) REFERENCES curso(id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
@@ -82,8 +82,9 @@ CREATE TABLE IF NOT EXISTS curso_escenario (
 
 CREATE TABLE IF NOT EXISTS proyecto (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  escenario_id bigint,
+  escenario_id bigint UNSIGNED NOT NULL,
   usuario_id bigint,
+  curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
   PRIMARY KEY (id),
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS estado (
 
 CREATE TABLE IF NOT EXISTS decision (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  escenario_id bigint,
+  escenario_id bigint UNSIGNED NOT NULL,
   descripcion VARCHAR(450) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS decision (
 
 CREATE TABLE IF NOT EXISTS opcion (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  decision_id bigint not null,
+  decision_id bigint NOT NULL,
   descripcion VARCHAR(200) NOT NULL,
   variacion_costo_fijo decimal(19,2) default 0,
   variacion_costo_variable decimal(19,2) default 0,
@@ -160,8 +161,8 @@ CREATE TABLE IF NOT EXISTS consecuencia (
   opcion_id bigint,
   monto decimal(19,2) NOT NULL,
   descripcion VARCHAR(45) NOT NULL,
-  periodo_inicio int not null,
-  cantidad_periodos int not null,
+  periodo_inicio integer NOT NULL,
+  cantidad_periodos integer NOT NULL,
   tipo_cuenta varchar(20) NOT NULL,
   tipo_flujo_fondo varchar(40),
   tipo_balance varchar(40),
@@ -172,22 +173,21 @@ CREATE TABLE IF NOT EXISTS consecuencia (
 CREATE TABLE IF NOT EXISTS cuenta (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
-  opcion_id bigint NULL,
   descripcion VARCHAR(45) NOT NULL,
   tipo_cuenta varchar(20) NOT NULL,
   tipo_flujo_fondo varchar(40),
   tipo_transaccion varchar(40),
   tipo_balance varchar(40),
+  es_forecast boolean DEFAULT TRUE,
   PRIMARY KEY (id),
-  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id),
-  FOREIGN KEY (opcion_id) REFERENCES opcion(id)
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
 
 CREATE TABLE IF NOT EXISTS cuenta_periodo (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  cuenta_id bigint UNSIGNED not null,
-  monto decimal(19,2) not null,
-  periodo int not null,
+  cuenta_id bigint UNSIGNED NOT NULL,
+  monto decimal(19,2) NOT NULL,
+  periodo integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
 );
@@ -195,9 +195,9 @@ CREATE TABLE IF NOT EXISTS cuenta_periodo (
 CREATE TABLE IF NOT EXISTS forecast (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
-  periodo integer not null,
-  cantidad_unidades bigint not null,
-  precio decimal(19,2) not null,
+  periodo integer NOT NULL,
+  cantidad_unidades bigint NOT NULL,
+  precio decimal(19,2) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
@@ -205,8 +205,8 @@ CREATE TABLE IF NOT EXISTS forecast (
 CREATE TABLE IF NOT EXISTS modalidad_cobro (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proyecto_id bigint,
-  porcentaje decimal(19,2) not null,
-  offset_periodo int not null,
+  porcentaje decimal(19,2) NOT NULL,
+  offset_periodo integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
 );
@@ -214,10 +214,51 @@ CREATE TABLE IF NOT EXISTS modalidad_cobro (
 CREATE TABLE IF NOT EXISTS modalidad_pago (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   proveedor_id bigint,
-  porcentaje decimal(19,2) not null,
-  offset_periodo int not null,
+  porcentaje decimal(19,2) NOT NULL,
+  offset_periodo integer NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
 );
 
---ALTER TABLE escenario ADD FOREIGN KEY (estado_id) REFERENCES estado(id);
+CREATE TABLE IF NOT EXISTS ponderacion_mercado (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  concepto VARCHAR(45) NOT NULL,
+  valor decimal(19,2) NOT NULL,
+  bajo integer NOT NULL,
+  medio integer NOT NULL,
+  alto integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS mercado_periodo (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  periodo integer,
+  bajo integer NOT NULL,
+  medio integer NOT NULL,
+  alto integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS restriccion_precio(
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  precio_min decimal(19,2) NOT NULL,
+  precio_max decimal(19,2) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS empresa_competidora  (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  nombre VARCHAR(45) NOT NULL,
+  bajo integer NOT NULL,
+  medio integer NOT NULL,
+  alto integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);

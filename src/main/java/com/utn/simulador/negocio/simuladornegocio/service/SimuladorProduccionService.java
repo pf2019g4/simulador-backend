@@ -25,33 +25,33 @@ public class SimuladorProduccionService {
         BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
-                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null);
+                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), 
+                TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null, TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
         cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
 
-        for(ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
+        for (ModalidadPago modalidadPago : estado.getProyecto().getProveedorSeleccionado().getModalidadPago()) {
             BigDecimal porcentajeGastos = modalidadPago.getPorcentaje().divide(new BigDecimal(100));
             BigDecimal costoPeriodo = costoProduccionPeriodo.multiply(porcentajeGastos);
-            if(costoPeriodo.compareTo(BigDecimal.ZERO) != 0){
+            if (costoPeriodo.compareTo(BigDecimal.ZERO) != 0) {
                 cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
             }
         }
-        
+
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
-        cuentaFinanciera.setTipoTransaccion(TipoTransaccion.COSTO_PRODUCCION);
         cuentaService.guardar(cuentaFinanciera);
 
         estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COSTO_PRODUCCION);
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
     }
 
     private void aumentarStock(Estado estado) {
         estado.setStock(estado.getStock() + estado.getProduccionMensual());
     }
-    
+
     private BigDecimal calcularCostoProduccionPeriodo(Estado estado) {
         return estado.getCostoVariable()
-            .add(estado.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable())
-            .multiply(new BigDecimal(estado.getProduccionMensual()))
-            .add(estado.getCostoFijo());
+                .add(estado.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable())
+                .multiply(new BigDecimal(estado.getProduccionMensual()))
+                .add(estado.getCostoFijo());
     }
 }

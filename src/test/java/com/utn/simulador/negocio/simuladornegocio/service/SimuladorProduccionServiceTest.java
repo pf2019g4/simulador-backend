@@ -54,7 +54,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         modalidadesPago.add(ModalidadPagoBuilder.base(0L, 1).build(em)); //0% a 30 dias
         modalidadesPago.add(ModalidadPagoBuilder.base(40L, 2).build(em)); //40% a 60 dias
         
-        Proveedor proveedor = ProveedorBuilder.base(3.5D, 5).build(em);
+        Proveedor proveedor = ProveedorBuilder.base(3.5D, 5, proyecto.getEscenario().getId()).build(em);
         proveedor.setModalidadPago(modalidadesPago);
         
         proyecto.setProveedorSeleccionado(proveedor);

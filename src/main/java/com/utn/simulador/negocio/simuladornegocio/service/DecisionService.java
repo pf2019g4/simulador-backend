@@ -61,16 +61,16 @@ public class DecisionService {
         return decisionesVo;
     }
 
-    public void tomaDecision(Long proyectoId, Long opcionId) {
+    public void tomaDecision(Long proyectoId, Long opcionId, boolean esForecast) {
         final Opcion opcionTomada = opcionRepository.findById(opcionId).orElseThrow(() -> new IllegalArgumentException("Opcion inexistente"));
         Proyecto proyecto = proyectoRepository.findById(proyectoId).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
 
         Assert.isTrue(decisionRepository.findById(opcionTomada.getDecision().getId()).get().getEscenarioId()
                 .equals(proyecto.getEscenario().getId()), "La opcion no pertenece al escenario del proyecto.");
-        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), true);
+        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyecto.getId(), esForecast);
 
         marcarOpcionComoTomada(proyecto, opcionTomada);
-        crearCuentasPorConsecuencia(opcionTomada, proyecto);
+        crearCuentasPorConsecuencia(opcionTomada, proyecto, esForecast);
         aplicarCambiosAtributos(opcionTomada, estadoActual);
     }
 
@@ -121,10 +121,11 @@ public class DecisionService {
         decisionRepository.deleteById(decisionId);
     }
 
-    private void crearCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto) {
+    private void crearCuentasPorConsecuencia(final Opcion opcionTomada, Proyecto proyecto, boolean esForecast) {
         List<Cuenta> cuentasACrear = opcionTomada.obtenerCuentasACrear(proyecto);
         for (Cuenta cuenta : cuentasACrear) {
             cuenta.setTipoTransaccion(TipoTransaccion.OTROS);
+            cuenta.setEsForecast(esForecast);
             cuentaService.guardar(cuenta);
         }
     }
@@ -160,4 +161,4 @@ public class DecisionService {
         this.estadoRepository.save(estadoActual);
     }
 
-        }
+}
