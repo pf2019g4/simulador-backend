@@ -26,9 +26,9 @@ delete from empresa_competidora;
 delete from ponderacion_puntaje;
 
 insert into estado
-(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, publicidad, cantidad_vendedores   , demanda_potencial, stock, es_forecast) values
-(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      ,  1        , 1                     , 0.0              , 0    , false      ),
-(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      ,  1        , 1                     , 0.0              , 0    , false      );
+(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, publicidad, cantidad_vendedores, demanda_potencial, stock, es_forecast) values
+(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0       , 1                  , 0.0              , 0    , false      ),
+(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0       , 1                  , 0.0              , 0    , false      );
 
 insert into balance
 (id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values

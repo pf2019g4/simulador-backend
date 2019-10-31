@@ -33,7 +33,7 @@ public class Opcion {
     private Long variacionProduccion;
     private Integer variacionCalidad;
     private Integer variacionCantidadVendedores;
-    private Integer variacionPublicidad;
+    private BigDecimal variacionPublicidad;
 
     @OneToMany(mappedBy = "opcion", cascade = CascadeType.ALL)
     private List<Consecuencia> consecuencias;

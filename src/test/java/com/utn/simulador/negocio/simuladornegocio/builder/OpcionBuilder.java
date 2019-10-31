@@ -25,7 +25,7 @@ public class OpcionBuilder extends AbstractPersistenceBuilder<Opcion> {
         opcionBuilder.instance.setVariacionProduccion(10L);
         opcionBuilder.instance.setVariacionCalidad(0);
         opcionBuilder.instance.setVariacionCantidadVendedores(0);
-        opcionBuilder.instance.setVariacionPublicidad(0);
+        opcionBuilder.instance.setVariacionPublicidad(BigDecimal.TEN);
 
         return opcionBuilder;
     }

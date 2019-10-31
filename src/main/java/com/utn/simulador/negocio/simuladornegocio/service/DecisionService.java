@@ -156,7 +156,7 @@ public class DecisionService {
         estadoActual.setProduccionMensual(estadoActual.getProduccionMensual() + opcionTomada.getVariacionProduccion());
         estadoActual.setCalidad(estadoActual.getCalidad() + opcionTomada.getVariacionCalidad());
         estadoActual.setCantidadVendedores(estadoActual.getCantidadVendedores() + opcionTomada.getVariacionCantidadVendedores());
-        estadoActual.setPublicidad(estadoActual.getPublicidad() + opcionTomada.getVariacionPublicidad());
+        estadoActual.setPublicidad(estadoActual.getPublicidad().add(opcionTomada.getVariacionPublicidad()));
 
         this.estadoRepository.save(estadoActual);
     }

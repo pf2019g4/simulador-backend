@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS estado (
   produccion_mensual bigint,
   calidad integer,
   cantidad_vendedores integer,
-  publicidad integer,
+  publicidad decimal(19,2),
   es_forecast boolean NOT NULL DEFAULT FALSE,
   activo boolean NOT NULL DEFAULT FALSE,
   periodo integer,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS opcion (
   variacion_costo_variable decimal(19,2) default 0,
   variacion_produccion bigint default 0,
   variacion_calidad integer default 0,
-  variacion_publicidad integer default 0,
+  variacion_publicidad decimal(19,2) default 0,
   variacion_cantidad_vendedores integer default 0,
   PRIMARY KEY (id),
   FOREIGN KEY (decision_id) REFERENCES decision(id)
