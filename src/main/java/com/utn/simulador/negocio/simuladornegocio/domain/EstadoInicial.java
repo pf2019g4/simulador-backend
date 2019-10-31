@@ -20,5 +20,7 @@ public class EstadoInicial {
     private Long stock;
     private Long produccionMensual;
     private Integer calidad;
+    private Integer publicidad;
+    private Integer cantidadVendedores;
 
 }

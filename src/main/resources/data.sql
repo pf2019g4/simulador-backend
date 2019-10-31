@@ -26,9 +26,9 @@ delete from empresa_competidora;
 delete from ponderacion_puntaje;
 
 insert into estado
-(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, demanda_potencial, stock, es_forecast) values
-(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0              , 0    , false      ),
-(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0              , 0    , false      );
+(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, publicidad, cantidad_vendedores   , demanda_potencial, stock, es_forecast) values
+(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      ,  1        , 1                     , 0.0              , 0    , false      ),
+(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      ,  1        , 1                     , 0.0              , 0    , false      );
 
 insert into balance
 (id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
@@ -36,9 +36,9 @@ insert into balance
 (2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1000           , 0                      );
 
 insert into escenario
-(id, titulo       , maximos_periodos, nombre_periodos, descripcion                                                                                                                                                                                                , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad, balance_id) values
-(1 , 'escenario 1', 5               , 'Mes'          , 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra mas del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', 0.35               , 200.0     , 3.5           , 150               , 200  ,  5      ,          1),
-(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,          2);
+(id, titulo       , maximos_periodos, nombre_periodos, descripcion                                                                                                                                                                                                , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad,  cantidad_vendedores,  publicidad, balance_id) values
+(1 , 'escenario 1', 5               , 'Mes'          , 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra mas del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', 0.35               , 200.0     , 3.5           , 150               , 200  ,  5      ,                    1,           1,          1),
+(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,                    1,           1,          2);
 
 insert into curso
 (id, nombre , clave    ) values
@@ -79,16 +79,16 @@ insert into decision
 (3 , 1           , 'Cuanto quiere invertir en otras cosas?'             );
 
 insert into opcion
-(id, decision_id, descripcion                                                , variacion_costo_fijo, variacion_costo_variable, variacion_produccion, variacion_calidad) values
-(1 , 1          , '$0'                                                       , 0                   , 0                       , 0                   , 0                ),
-(2 , 1          , '$5000'                                                    , 0                   , 0                       , 0                   , 1                ),
-(3 , 1          , '$10000'                                                   , 0                   , 0                       , 0                   , 1                ),
-(4 , 2          , '$0'                                                       , 0                   , 0                       , 0                   , 1                ),
-(5 , 2          , '$20000 -> CF -50, CV +0, P +5'                            , -50                 , 0                       , 5                   , 0                ),
-(6 , 2          , '$50000 -> CF -40, CV -0.1, P +10'                         , -40                 , -0.1                    , 10                  , 0                ),
-(7 , 3          , '$10000 -> CF 20, CV -0.1, P +0'                           , 20                  , -0.1                    , 0                   , 0                ),
-(8 , 3          , '$20000 -> CF 10, CV -0.2, P +10'                          , 10                  , -0.2                    , 10                  , 0                ),
-(9 , 3          , '$30000 -> CF 10, CV -0.3, P +0'                           , 10                  , -0.3                    , 0                   , 0                );
+(id, decision_id, descripcion                                                , variacion_costo_fijo, variacion_costo_variable, variacion_produccion, variacion_calidad, variacion_publicidad, variacion_cantidad_vendedores) values
+(1 , 1          , '$0'                                                       , 0                   , 0                       , 0                   , 0                , 0                   , 0                ),
+(2 , 1          , '$5000'                                                    , 0                   , 0                       , 0                   , 1                , 0                   , 0                ),
+(3 , 1          , '$10000'                                                   , 0                   , 0                       , 0                   , 1                , 0                   , 0                ),
+(4 , 2          , '$0'                                                       , 0                   , 0                       , 0                   , 1                , 0                   , 0                ),
+(5 , 2          , '$20000 -> CF -50, CV +0, P +5'                            , -50                 , 0                       , 5                   , 0                , 0                   , 0                ),
+(6 , 2          , '$50000 -> CF -40, CV -0.1, P +10'                         , -40                 , -0.1                    , 10                  , 0                , 0                   , 0                ),
+(7 , 3          , '$10000 -> CF 20, CV -0.1, P +0'                           , 20                  , -0.1                    , 0                   , 0                , 0                   , 0                ),
+(8 , 3          , '$20000 -> CF 10, CV -0.2, P +10'                          , 10                  , -0.2                    , 10                  , 0                , 0                   , 0                ),
+(9 , 3          , '$30000 -> CF 10, CV -0.3, P +0'                           , 10                  , -0.3                    , 0                   , 0                , 0                   , 0                );
 
 insert into consecuencia
 (id, opcion_id, monto , descripcion              , tipo_cuenta , periodo_inicio  , cantidad_periodos, tipo_flujo_fondo                , tipo_balance              ) values
