@@ -23,6 +23,7 @@ delete from ponderacion_mercado;
 delete from mercado_periodo;
 delete from restriccion_precio;
 delete from empresa_competidora;
+delete from ponderacion_puntaje;
 
 insert into estado
 (id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, demanda_potencial, stock, es_forecast) values
@@ -90,20 +91,20 @@ insert into opcion
 (9 , 3          , '$30000 -> CF 10, CV -0.3, P +0'                           , 10                  , -0.3                    , 0                   , 0                );
 
 insert into consecuencia
-(opcion_id, monto , descripcion             , tipo_cuenta , periodo_inicio  , cantidad_periodos, tipo_flujo_fondo                , tipo_balance) values
-(2        , 5000 , 'publicidad'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', null),
-(2        , -5000 , 'publicidad'             , 'ECONOMICO' , 1               , 1                , null                            , null),
-(3        , 10000, 'publicidad'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', null),
-(3        , -10000, 'publicidad'             , 'ECONOMICO' , 1               , 1                , null                            , null),
-(5        , 20000, 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'),
-(5        , 2000 , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
-(5        , -20000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'),
-(6        , 50000, 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'),
-(6        , 5000 , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
-(6        , -50000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'),
-(7        , 10000, 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null),
-(7        , -10000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null),
-(8        , 20000, 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null),
-(8        , -20000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null),
-(9        , 30000, 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null),
-(9        , -30000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null);
+(id, opcion_id, monto , descripcion              , tipo_cuenta , periodo_inicio  , cantidad_periodos, tipo_flujo_fondo                , tipo_balance              ) values
+(1 , 2        , 5000  , 'publicidad'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', null                      ),
+(2 , 2        , -5000 , 'publicidad'             , 'ECONOMICO' , 1               , 1                , null                            , null                      ),
+(3 , 3        , 10000 , 'publicidad'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', null                      ),
+(4 , 3        , -10000, 'publicidad'             , 'ECONOMICO' , 1               , 1                , null                            , null                      ),
+(5 , 5        , 20000 , 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'             ),
+(6 , 5        , 2000  , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
+(7 , 5        , -20000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'             ),
+(8 , 6        , 50000 , 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'             ),
+(9 , 6        , 5000  , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
+(10, 6        , -50000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'             ),
+(11, 7        , 10000 , 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null                      ),
+(12, 7        , -10000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null                      ),
+(13, 8        , 20000 , 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null                      ),
+(14, 8        , -20000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null                      ),
+(15, 9        , 30000 , 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null                      ),
+(16, 9        , -30000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null                      );

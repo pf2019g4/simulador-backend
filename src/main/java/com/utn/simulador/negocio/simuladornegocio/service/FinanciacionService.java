@@ -50,7 +50,7 @@ public class FinanciacionService {
     public void acreditar(Long proyectoId, boolean esForecast) {
         Credito credito = creditoRepository.findByProyectoId(proyectoId);
 
-        if (credito.getMonto().compareTo(BigDecimal.ZERO) > 0) {
+        if (credito != null && credito.getMonto() != null && credito.getMonto().compareTo(BigDecimal.ZERO) > 0) {
             Financiacion financionTomada = financiacionRepository.findById(credito.getFinanciacionId()).orElseThrow();
             BigDecimal cuotaAnual = calcularCuotaAmortizacionFrances(credito, financionTomada);
             BigDecimal montoDeuda = credito.getMonto();

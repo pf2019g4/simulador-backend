@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -14,15 +13,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmpresaCompetidora {
+public class PonderacionPuntaje {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long escenarioId;
-    private String nombre;
-    private Integer bajo;
-    private Integer medio;
-    private Integer alto;
+    private String concepto;
+    private BigDecimal quintil1;
+    private BigDecimal quintil2;
+    private BigDecimal quintil3;
+    private BigDecimal quintil4;
+    private BigDecimal quintil5;
     
 }

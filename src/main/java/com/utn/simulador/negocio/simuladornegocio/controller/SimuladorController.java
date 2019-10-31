@@ -7,6 +7,7 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionPuntaje;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
@@ -15,6 +16,7 @@ import com.utn.simulador.negocio.simuladornegocio.service.CuentaService;
 import com.utn.simulador.negocio.simuladornegocio.service.DecisionService;
 import com.utn.simulador.negocio.simuladornegocio.service.FinanciacionService;
 import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
+import com.utn.simulador.negocio.simuladornegocio.service.PuntajeService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import java.util.List;
 import java.util.Arrays;
@@ -41,6 +43,7 @@ public class SimuladorController {
     private final CuentaService cuentaService;
     private final ProyectoService proyectoService;
     private final OpcionProyectoRepository opcionProyectoRepository;
+    private final PuntajeService puntajeService;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -78,6 +81,7 @@ public class SimuladorController {
 //        TODO: testear
 //        proyectoService.cerrarProyectos(cursoId, escenarioId);
         correrSimulacionProyectos(cursoId, escenarioId);
+//        escenarioService.cerrarEscenarioCurso(escenarioId, cursoId);
 
     }
 

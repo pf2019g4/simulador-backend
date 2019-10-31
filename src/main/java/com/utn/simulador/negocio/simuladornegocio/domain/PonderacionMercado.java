@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,8 @@ public class PonderacionMercado {
     private Long escenarioId;
     private String concepto;
     private BigDecimal valor;
-    private BigDecimal bajo;
-    private BigDecimal medio;
-    private BigDecimal alto;
+    private Integer bajo;
+    private Integer medio;
+    private Integer alto;
     
 }

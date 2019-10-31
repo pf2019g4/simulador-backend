@@ -256,3 +256,16 @@ CREATE TABLE IF NOT EXISTS empresa_competidora  (
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
+
+CREATE TABLE IF NOT EXISTS ponderacion_puntaje (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  concepto VARCHAR(45) NOT NULL,
+  quintil1 decimal(19,2) NOT NULL,
+  quintil2 decimal(19,2) NOT NULL,
+  quintil3 decimal(19,2) NOT NULL,
+  quintil4 decimal(19,2) NOT NULL,
+  quintil5 decimal(19,2) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);

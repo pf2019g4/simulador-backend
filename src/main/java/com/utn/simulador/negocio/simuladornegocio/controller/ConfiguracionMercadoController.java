@@ -25,12 +25,12 @@ public class ConfiguracionMercadoController {
     private final ConfiguracionMercadoService configuracionMercadoService;
 
     @GetMapping("/escenario/{escenarioId}/configuracionMercado")
-    public MercadoEscenarioVo decisionesPorProyecto(@PathVariable("escenarioId") Long escenarioId) {
+    public MercadoEscenarioVo obtenerMercadoEscenario(@PathVariable("escenarioId") Long escenarioId) {
         return configuracionMercadoService.obtenerMercadoEscenario(escenarioId);
     }
 
     @PostMapping("/escenario/{escenarioId}/configuracionMercado")
-    public MercadoEscenarioVo crearDecision(@PathVariable("escenarioId") Long escenarioId, @RequestBody MercadoEscenarioVo mercadoEscenarioVo) {
+    public MercadoEscenarioVo cargarMercadoEscenario(@PathVariable("escenarioId") Long escenarioId, @RequestBody MercadoEscenarioVo mercadoEscenarioVo) {
         return configuracionMercadoService.cargarMercadoEscenario(escenarioId, mercadoEscenarioVo);
     }
 

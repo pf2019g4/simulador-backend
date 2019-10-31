@@ -21,8 +21,8 @@ public class MercadoPeriodo {
     private Long id;
     private Long escenarioId;
     private Integer periodo;
-    private BigDecimal bajo;
-    private BigDecimal medio;
-    private BigDecimal alto;
+    private Integer bajo;
+    private Integer medio;
+    private Integer alto;
     
 }
