@@ -81,7 +81,7 @@ public class SimuladorController {
 //        TODO: testear
 //        proyectoService.cerrarProyectos(cursoId, escenarioId);
         correrSimulacionProyectos(cursoId, escenarioId);
-//        escenarioService.cerrarEscenarioCurso(escenarioId, cursoId);
+//        escenarioService.cerrarEscenarioCurso(cursoId, escenarioId);
 
     }
 

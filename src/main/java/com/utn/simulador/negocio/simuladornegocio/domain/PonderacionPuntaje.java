@@ -19,11 +19,9 @@ public class PonderacionPuntaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long escenarioId;
-    private String concepto;
-    private BigDecimal quintil1;
-    private BigDecimal quintil2;
-    private BigDecimal quintil3;
-    private BigDecimal quintil4;
-    private BigDecimal quintil5;
+    private BigDecimal porcentajeCaja;
+    private BigDecimal porcentajeVentas;
+    private BigDecimal porcentajeRenta;
+    private BigDecimal porcentajeEscenario;
     
 }

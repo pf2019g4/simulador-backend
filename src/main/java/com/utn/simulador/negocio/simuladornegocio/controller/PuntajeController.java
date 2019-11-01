@@ -7,7 +7,6 @@ package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionPuntaje;
 import com.utn.simulador.negocio.simuladornegocio.service.PuntajeService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,13 +27,13 @@ public class PuntajeController {
     private final PuntajeService puntajeService;
     
     @GetMapping("/escenario/{escenarioId}/puntajeEscenario")
-    public List<PonderacionPuntaje> obtenerMercadoEscenario(@PathVariable("escenarioId") Long escenarioId) {
+    public PonderacionPuntaje obtenerMercadoEscenario(@PathVariable("escenarioId") Long escenarioId) {
         return puntajeService.obtenerPuntajeEscenario(escenarioId);
     }
     
     @PostMapping("/escenario/{escenarioId}/puntajeEscenario")
-    public List<PonderacionPuntaje> cargarPuntajeJuego(@PathVariable("escenarioId") Long escenarioId, @RequestBody List<PonderacionPuntaje> puntajes) {
-        return puntajeService.cargarPuntajeEscenario(escenarioId, puntajes);
+    public PonderacionPuntaje cargarPuntajeJuego(@PathVariable("escenarioId") Long escenarioId, @RequestBody PonderacionPuntaje puntaje) {
+        return puntajeService.cargarPuntajeEscenario(escenarioId, puntaje);
     }
 
 }

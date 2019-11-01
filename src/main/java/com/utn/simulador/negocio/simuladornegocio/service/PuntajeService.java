@@ -5,8 +5,6 @@ import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionPuntaje;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionPuntajeRepository;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,7 @@ public class PuntajeService {
     private final EscenarioRepository escenarioRepository;
     private final PonderacionPuntajeRepository ponderacionPuntajeRepository;
 
-    public List<PonderacionPuntaje> obtenerPuntajeEscenario(Long escenarioId) {
+    public PonderacionPuntaje obtenerPuntajeEscenario(Long escenarioId) {
         
         Escenario escenario = escenarioRepository.findById(escenarioId).orElseThrow(() -> new IllegalArgumentException("Escenario inexistente"));
 
@@ -27,12 +25,12 @@ public class PuntajeService {
         return null;
     }
     
-    public List<PonderacionPuntaje> cargarPuntajeEscenario(Long escenarioId, List<PonderacionPuntaje> ponderacionPuntajes) {
+    public PonderacionPuntaje cargarPuntajeEscenario(Long escenarioId, PonderacionPuntaje ponderacionPuntaje) {
 
         Escenario escenario = escenarioRepository.findById(escenarioId).orElseThrow(() -> new IllegalArgumentException("Escenario inexistente"));
 
         if(escenario != null) {
-            return ponderacionPuntajeRepository.saveAll(ponderacionPuntajes);
+            return ponderacionPuntajeRepository.save(ponderacionPuntaje);
         }
         return null;
     }
