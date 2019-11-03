@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
+import com.utn.simulador.negocio.simuladornegocio.domain.Forecast;
 
 import java.util.stream.IntStream;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import java.math.BigDecimal;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -20,6 +22,7 @@ public class SimuladorService {
     private final EstadoService estadoService;
     private final SimuladorVentasService simuladorVentasService;
     private final SimuladorProduccionService simuladorProduccionService;
+    private final ForecastService forecastService;
 
     private final EstadoRepository estadoRepository;
     private final ProyectoRepository proyectoRepository;
@@ -28,9 +31,21 @@ public class SimuladorService {
 
     public Estado simularPeriodo(long proyectoId, boolean esForecast) {
         Estado estadoInicial = estadoService.obtenerActual(proyectoId, esForecast);
-        Estado nuevoEstado = avanzarTiempo(estadoInicial, esForecast);
-        simuladorProduccionService.simular(nuevoEstado);
-        simuladorVentasService.simular(nuevoEstado);
+        Estado nuevoEstado = estadoService.avanzarTiempo(estadoInicial);
+        
+        if(estadoInicial.getCaja().compareTo(BigDecimal.ZERO) <= 0){
+            nuevoEstado = imputarCuentas(nuevoEstado);
+            simuladorProduccionService.simular(nuevoEstado);
+            simuladorVentasService.simular(nuevoEstado);
+        } else {
+            nuevoEstado.setVentas(BigDecimal.ZERO);
+            if(esForecast) {
+                Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(nuevoEstado.getProyecto().getId(), nuevoEstado.getPeriodo());
+                nuevoEstado.setDemandaPotencial(forecast.getPrecio().multiply(new BigDecimal(forecast.getCantidadUnidades())));
+            }
+            nuevoEstado.setDemandaPotencial(BigDecimal.ZERO);
+        }
+        
         estadoService.guardar(nuevoEstado);
         return nuevoEstado;
     }
@@ -39,13 +54,12 @@ public class SimuladorService {
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
         estadoService.crearEstadoBaseParaProyecto(proyecto, esForecast);
     }
+    
+    private Estado imputarCuentas(Estado estado) {
+        cuentaService.inputarCuetasNuevoPeriodo(estado);
 
-    private Estado avanzarTiempo(Estado estado, boolean esForecast) {
-        Estado nuevoEstado = estadoService.avanzarTiempo(estado);
-        cuentaService.inputarCuetasNuevoPeriodo(nuevoEstado);
-
-        estadoRepository.save(nuevoEstado);
-        return nuevoEstado;
+        estadoRepository.save(estado);
+        return estado;
     }
 
     public void simularPeriodos(Long proyectoId, boolean esForecast) {
