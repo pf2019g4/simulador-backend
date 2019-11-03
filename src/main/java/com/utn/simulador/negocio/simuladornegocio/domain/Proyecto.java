@@ -37,5 +37,4 @@ public class Proyecto {
     private Long cursoId;
 
     private Boolean entregado;
-    private BigInteger puntaje;
 }

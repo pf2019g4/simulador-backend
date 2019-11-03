@@ -88,7 +88,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
-  puntaje decimal(19,2) DEFAULT 0,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)

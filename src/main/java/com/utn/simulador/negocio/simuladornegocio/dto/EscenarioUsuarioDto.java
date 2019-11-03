@@ -15,8 +15,8 @@ public class EscenarioUsuarioDto implements Serializable{
     private String usuarioNombre;
     private String usuarioFotoUrl;
     private Boolean entregado;
-    private BigDecimal caja;
-    private BigDecimal ventas;
+    private BigDecimal cajaFinal;
+    private BigDecimal ventasTotales;
     private BigDecimal renta;
     private BigDecimal puntaje;
     
