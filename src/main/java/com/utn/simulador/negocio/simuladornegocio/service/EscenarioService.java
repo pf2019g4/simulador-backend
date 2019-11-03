@@ -78,5 +78,11 @@ public class EscenarioService {
     public List<EscenarioUsuarioDto> getDetalleEscenarioUsuariosPorCurso(Long id, Long cursoId) {
         return escenarioRepository.getDetalleEscenarioUsuariosPorCurso(id, cursoId);
     }
+    
+    public void cerrarCursoEscenario(Long cursoId, Long id) {
+        CursoEscenario cursoEscenario = cursoEscenarioRepository.findByCursoIdAndEscenarioId(cursoId, id);
+        cursoEscenario.setAbierto(Boolean.FALSE);
+        cursoEscenarioRepository.save(cursoEscenario);
+    }
 
 }

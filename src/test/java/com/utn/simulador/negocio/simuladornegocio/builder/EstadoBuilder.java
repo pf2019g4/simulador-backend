@@ -21,6 +21,8 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setStock(200L);
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setCalidad(0);
+        estadoBuilder.instance.setPublicidad(new BigDecimal(500));
+        estadoBuilder.instance.setCantidadVendedores(0);
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(0);
         estadoBuilder.instance.setEsForecast(true);
@@ -36,6 +38,8 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setStock(200L);
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setCalidad(0);
+        estadoBuilder.instance.setPublicidad(new BigDecimal(500));
+        estadoBuilder.instance.setCantidadVendedores(0);
         estadoBuilder.instance.setActivo(true);
         estadoBuilder.instance.setPeriodo(periodoActual);
         estadoBuilder.instance.setEsForecast(true);
@@ -51,6 +55,8 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setStock(200L);
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setCalidad(0);
+        estadoBuilder.instance.setPublicidad(new BigDecimal(500));
+        estadoBuilder.instance.setCantidadVendedores(0);
         estadoBuilder.instance.setActivo(activo);
         estadoBuilder.instance.setPeriodo(periodoActual);
         estadoBuilder.instance.setEsForecast(true);

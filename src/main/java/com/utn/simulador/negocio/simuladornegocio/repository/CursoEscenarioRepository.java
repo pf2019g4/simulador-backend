@@ -10,4 +10,6 @@ public interface CursoEscenarioRepository extends JpaRepository<CursoEscenario, 
     List<CursoEscenario> findByCursoId(Long cursoId);
     
     List<CursoEscenario> findByEscenarioId(Long escenarioId);
+    
+    CursoEscenario findByCursoIdAndEscenarioId(Long cursoId, Long escenarioId);
 }

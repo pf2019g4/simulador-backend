@@ -17,6 +17,8 @@ public class CursoEscenario {
     
     @ManyToOne
     private Escenario escenario;
+    
+    private Boolean abierto;
 
     public CursoEscenario(Curso curso, Escenario escenario){
         this.curso = curso;

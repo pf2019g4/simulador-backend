@@ -28,6 +28,8 @@ public class EstadoService {
                 .produccionMensual(proyecto.getEscenario().getEstadoInicial().getProduccionMensual())
                 .stock(proyecto.getEscenario().getEstadoInicial().getStock())
                 .calidad(proyecto.getEscenario().getEstadoInicial().getCalidad())
+                .publicidad(proyecto.getEscenario().getEstadoInicial().getPublicidad())
+                .cantidadVendedores(proyecto.getEscenario().getEstadoInicial().getCantidadVendedores())
                 .periodo(0)
                 .capitalSocial(proyecto.getEscenario().getBalanceInicial().getPatrimonioNeto().getCapitalSocial())
                 .activo(Boolean.TRUE)

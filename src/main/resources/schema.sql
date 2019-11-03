@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS escenario (
   produccion_mensual bigint,
   stock bigint,
   calidad integer,
+  cantidad_vendedores integer,
+  publicidad integer,
   balance_id bigint NULL,
   PRIMARY KEY (id)
 );
@@ -73,6 +75,7 @@ CREATE TABLE IF NOT EXISTS curso_escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   curso_id bigint NOT NULL,
   escenario_id bigint UNSIGNED NOT NULL,
+  abierto boolean default true,
   PRIMARY KEY (id),
   FOREIGN KEY (curso_id) REFERENCES curso(id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
@@ -85,6 +88,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
+  puntaje decimal(19,2) DEFAULT 0,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
@@ -114,6 +118,8 @@ CREATE TABLE IF NOT EXISTS estado (
   stock bigint,
   produccion_mensual bigint,
   calidad integer,
+  cantidad_vendedores integer,
+  publicidad decimal(19,2),
   es_forecast boolean NOT NULL DEFAULT FALSE,
   activo boolean NOT NULL DEFAULT FALSE,
   periodo integer,
@@ -137,6 +143,8 @@ CREATE TABLE IF NOT EXISTS opcion (
   variacion_costo_variable decimal(19,2) default 0,
   variacion_produccion bigint default 0,
   variacion_calidad integer default 0,
+  variacion_publicidad decimal(19,2) default 0,
+  variacion_cantidad_vendedores integer default 0,
   PRIMARY KEY (id),
   FOREIGN KEY (decision_id) REFERENCES decision(id)
 );
@@ -253,6 +261,17 @@ CREATE TABLE IF NOT EXISTS empresa_competidora  (
   bajo integer NOT NULL,
   medio integer NOT NULL,
   alto integer NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (escenario_id) REFERENCES escenario(id)
+);
+
+CREATE TABLE IF NOT EXISTS ponderacion_puntaje (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  escenario_id bigint UNSIGNED NOT NULL,
+  porcentaje_caja decimal(19,2) NOT NULL,
+  porcentaje_ventas decimal(19,2) NOT NULL,
+  porcentaje_renta decimal(19,2) NOT NULL,
+  porcentaje_escenario decimal(19,2) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );

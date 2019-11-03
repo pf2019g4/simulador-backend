@@ -50,7 +50,7 @@ public class SimuladorProduccionService {
 
     private BigDecimal calcularCostoProduccionPeriodo(Estado estado) {
         return estado.getCostoVariable()
-                .add(estado.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable())
+                .add(estado.getProyecto().getProveedorSeleccionado() != null ? estado.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable() : BigDecimal.ZERO)
                 .multiply(new BigDecimal(estado.getProduccionMensual()))
                 .add(estado.getCostoFijo());
     }

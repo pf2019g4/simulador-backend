@@ -1,6 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.*;
 
@@ -36,4 +37,5 @@ public class Proyecto {
     private Long cursoId;
 
     private Boolean entregado;
+    private BigInteger puntaje;
 }

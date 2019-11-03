@@ -155,6 +155,8 @@ public class DecisionService {
         estadoActual.setCostoVariable(estadoActual.getCostoVariable().add(opcionTomada.getVariacionCostoVariable()));
         estadoActual.setProduccionMensual(estadoActual.getProduccionMensual() + opcionTomada.getVariacionProduccion());
         estadoActual.setCalidad(estadoActual.getCalidad() + opcionTomada.getVariacionCalidad());
+        estadoActual.setCantidadVendedores(estadoActual.getCantidadVendedores() + opcionTomada.getVariacionCantidadVendedores());
+        estadoActual.setPublicidad(estadoActual.getPublicidad().add(opcionTomada.getVariacionPublicidad()));
 
         this.estadoRepository.save(estadoActual);
     }
