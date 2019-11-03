@@ -18,6 +18,7 @@ import com.utn.simulador.negocio.simuladornegocio.service.FinanciacionService;
 import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
 import com.utn.simulador.negocio.simuladornegocio.service.PuntajeService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
+import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
 import java.util.List;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,7 @@ public class SimuladorController {
     private final ProyectoService proyectoService;
     private final OpcionProyectoRepository opcionProyectoRepository;
     private final PuntajeService puntajeService;
+    private final EscenarioService escenarioService;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -78,11 +80,10 @@ public class SimuladorController {
     @PostMapping("/escenario/{escenarioId}/curso/{cursoId}/simular-mercado")
     public void simularMercado(@PathVariable("escenarioId") Long escenarioId,
             @PathVariable("cursoId") Long cursoId) {
-//        TODO: testear
-//        proyectoService.cerrarProyectos(cursoId, escenarioId);
+        proyectoService.cerrarProyectos(cursoId, escenarioId);
         correrSimulacionProyectos(cursoId, escenarioId);
-//        escenarioService.cerrarEscenarioCurso(cursoId, escenarioId);
-
+        escenarioService.cerrarCursoEscenario(cursoId, escenarioId);
+        //TODO: puntajeService.calcularPuntajes(cursoId, escenarioId);
     }
 
     private void correrSimulacionProyectos(Long cursoId, Long escenarioId) {

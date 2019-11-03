@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS curso_escenario (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   curso_id bigint NOT NULL,
   escenario_id bigint UNSIGNED NOT NULL,
+  abierto boolean default true,
   PRIMARY KEY (id),
   FOREIGN KEY (curso_id) REFERENCES curso(id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
@@ -87,6 +88,7 @@ CREATE TABLE IF NOT EXISTS proyecto (
   curso_id bigint not null,
   proveedor_id bigint NULL,
   entregado boolean default false,
+  puntaje decimal(19,2) DEFAULT 0,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
