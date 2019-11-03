@@ -65,6 +65,10 @@ public class ProyectoService {
     public List<Proyecto> obtenerPorCursoYEscenario(Long cursoId, Long escenarioId) {
         return proyectoRepository.findByCursoIdAndEscenarioId(cursoId, escenarioId);
     }
+    
+    public List<Proyecto> obtenerEntregadosPorCursoYEscenario(Long cursoId, Long escenarioId) {
+        return proyectoRepository.findByCursoIdAndEscenarioIdAndEntregado(cursoId, escenarioId, true);
+    }
 
     public void cerrarProyectos(Long cursoId, Long escenarioId) {
         proyectoRepository.marcarProyectosComoEntregado(cursoId, escenarioId);

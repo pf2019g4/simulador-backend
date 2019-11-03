@@ -15,4 +15,6 @@ public interface ProyectoRepository extends JpaRepository<Proyecto, Long> {
     void marcarProyectosComoEntregado(Long cursoId, Long escenarioId);
 
     List<Proyecto> findByCursoIdAndEscenarioId(Long cursoId, Long escenarioId);
+    
+    List<Proyecto> findByCursoIdAndEscenarioIdAndEntregado(Long cursoId, Long escenarioId, Boolean entregado);
 }

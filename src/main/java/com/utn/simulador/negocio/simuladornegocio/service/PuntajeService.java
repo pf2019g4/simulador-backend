@@ -65,9 +65,9 @@ public class PuntajeService {
     public void calcularPuntajesTotales(Long cursoId, Long escenarioId) {
         
         PonderacionPuntaje ponderacionPuntaje = ponderacionPuntajeRepository.findByEscenarioId(escenarioId);
-        List<Proyecto> proyectos = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
+        List<Proyecto> proyectosEntregados = proyectoService.obtenerEntregadosPorCursoYEscenario(cursoId, escenarioId);
         
-        List<PuntajeProyecto> puntajesProyecto = proyectos.stream().map(p -> puntajeProyectoRepository.findByProyectoId(p.getId())).collect(Collectors.toList());
+        List<PuntajeProyecto> puntajesProyecto = proyectosEntregados.stream().map(p -> puntajeProyectoRepository.findByProyectoId(p.getId())).collect(Collectors.toList());
                 
         BigDecimal cajaMax = puntajesProyecto.stream().map(p -> p.getCajaFinal()).max(BigDecimal::compareTo).get();
         BigDecimal ventasMax = puntajesProyecto.stream().map(p -> p.getVentasTotales()).max(BigDecimal::compareTo).get();
@@ -80,7 +80,9 @@ public class PuntajeService {
             porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getVentasTotales().multiply(ponderacionPuntaje.getPorcentajeVentas()).divide(ventasMax));
             porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getRenta().multiply(ponderacionPuntaje.getPorcentajeRenta()).divide(rentaMax));
             
-            puntajeProyecto.setPuntaje(porcentajeTotal.add(ponderacionPuntaje.getPorcentajeEscenario()).multiply(PUNTAJE_ESCENARIO_BASE));
+            BigDecimal puntajePonderado = PUNTAJE_ESCENARIO_BASE.add((PUNTAJE_ESCENARIO_BASE.divide(BigDecimal.valueOf(2)).multiply(ponderacionPuntaje.getPorcentajeEscenario())).divide(BigDecimal.valueOf(100)));
+            
+            puntajeProyecto.setPuntaje(porcentajeTotal.multiply(puntajePonderado).divide(BigDecimal.valueOf(100)));
             
             puntajeProyectoRepository.save(puntajeProyecto);
         }

@@ -88,7 +88,7 @@ public class SimuladorController {
 
     private void correrSimulacionProyectos(Long cursoId, Long escenarioId) {
 
-        List<Proyecto> proyectosASimular = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
+        List<Proyecto> proyectosASimular = proyectoService.obtenerEntregadosPorCursoYEscenario(cursoId, escenarioId);
 
         boolean esForecast = false;
         for (Proyecto proyecto : proyectosASimular) {
