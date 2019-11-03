@@ -53,7 +53,7 @@ public class SimuladorVentasService {
     }
 
     private BigDecimal calcularIngresosCaja(Estado estado) {
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoFlujoFondo(estado.getProyecto().getId(), TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, estado.getEsForecast());
+        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(estado.getProyecto().getId(), TipoCuenta.FINANCIERO, TipoTransaccion.VENTA,estado.getEsForecast());
 
         return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
     }
