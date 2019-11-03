@@ -34,7 +34,7 @@ public class EstadoServiceTest extends SimuladorNegocioApplicationTests {
         EstadoBuilder.inicialConPeriodoYEstado(proyecto, 1, false).build(em);
         EstadoBuilder.inicialConPeriodoYEstado(proyecto, 2, true).build(em);
 
-        List<Estado> estados = estadoService.obtenerPorProyecto(proyecto.getId());
+        List<Estado> estados = estadoService.obtenerPorProyecto(proyecto.getId(), true);
         assertThat(estados.size()).isEqualTo(3);
     }
 }

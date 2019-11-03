@@ -12,7 +12,7 @@ public interface EstadoRepository extends JpaRepository<Estado, Long> {
 
     Estado findByProyectoIdAndActivoTrueAndEsForecast(Long idProyecto, boolean esForecast);
 
-    Optional<List<Estado>> findByProyectoId(Long idProyecto);
+    Optional<List<Estado>> findByProyectoIdAndEsForecast(Long idProyecto, boolean esForecast);
 
     void deleteByProyectoIdAndEsForecast(Long idProyecto, boolean esForecast);
 

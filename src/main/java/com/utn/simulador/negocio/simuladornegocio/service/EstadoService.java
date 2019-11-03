@@ -38,8 +38,8 @@ public class EstadoService {
         return nuevoEstado;
     }
 
-    public List<Estado> obtenerPorProyecto(Long idProyecto) {
-        return estadoRepository.findByProyectoId(idProyecto).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
+    public List<Estado> obtenerPorProyecto(Long idProyecto, Boolean esForecast) {
+        return estadoRepository.findByProyectoIdAndEsForecast(idProyecto, esForecast).orElseThrow(() -> new IllegalArgumentException("Proyecto inexistente"));
     }
 
     public Estado avanzarTiempo(Estado estado) {

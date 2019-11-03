@@ -24,6 +24,7 @@ delete from mercado_periodo;
 delete from restriccion_precio;
 delete from empresa_competidora;
 delete from ponderacion_puntaje;
+delete from puntaje_proyecto;
 
 insert into estado
 (id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, publicidad, cantidad_vendedores, demanda_potencial, stock, es_forecast) values

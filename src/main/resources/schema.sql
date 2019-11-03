@@ -275,3 +275,14 @@ CREATE TABLE IF NOT EXISTS ponderacion_puntaje (
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id)
 );
+
+CREATE TABLE IF NOT EXISTS puntaje_proyecto (
+  id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  proyecto_id bigint UNSIGNED NOT NULL,
+  caja_final decimal(19,2) NOT NULL,
+  ventas_totales decimal(19,2) NOT NULL,
+  renta decimal(19,2) NOT NULL,
+  puntaje decimal(19,2),
+  PRIMARY KEY (id),
+  FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
+);

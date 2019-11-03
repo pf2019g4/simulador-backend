@@ -83,7 +83,7 @@ public class SimuladorController {
         proyectoService.cerrarProyectos(cursoId, escenarioId);
         correrSimulacionProyectos(cursoId, escenarioId);
         escenarioService.cerrarCursoEscenario(cursoId, escenarioId);
-        //TODO: puntajeService.calcularPuntajes(cursoId, escenarioId);
+        puntajeService.calcularPuntajesTotales(cursoId, escenarioId);
     }
 
     private void correrSimulacionProyectos(Long cursoId, Long escenarioId) {
@@ -101,7 +101,8 @@ public class SimuladorController {
             cuentaService.crearPorBalanceInicial(proyecto.getId(), esForecast);
             financiacionService.acreditar(proyecto.getId(), esForecast);
             simuladorService.simularPeriodos(proyecto.getId(), esForecast);
-
+            
+            puntajeService.calcularPuntajesProyecto(proyecto.getId());
         }
 
     }

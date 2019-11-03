@@ -30,9 +30,9 @@ public class EstadoController {
         return estadoService.obtenerActual(idProyecto, false);
     }
 
-    @GetMapping("/proyecto/{id}/estado")
+    @GetMapping("/proyecto/{id}/estado-forecast")
     public List<Estado> obtenerPorProyecto(@PathVariable("id") Long idProyecto) {
-        return estadoService.obtenerPorProyecto(idProyecto);
+        return estadoService.obtenerPorProyecto(idProyecto, true);
     }
 
 }

@@ -24,3 +24,4 @@ delete from mercado_periodo;
 delete from restriccion_precio;
 delete from empresa_competidora;
 delete from ponderacion_puntaje;
+delete from puntaje_proyecto;
