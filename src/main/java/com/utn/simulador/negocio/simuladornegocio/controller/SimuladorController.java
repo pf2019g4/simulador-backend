@@ -57,7 +57,7 @@ public class SimuladorController {
         return Arrays.asList(TipoCuenta.values());
     }
 
-    @PostMapping("/proyecto/{proyectoId}/simularOpciones")
+    @PostMapping("/proyecto/{proyectoId}/simular-forecast")
     public void simularForecast(@PathVariable("proyectoId") Long proyectoId,
             @RequestBody List<Opcion> opciones) {
         Proyecto proyecto = proyectoService.obtenerProyecto(proyectoId);
