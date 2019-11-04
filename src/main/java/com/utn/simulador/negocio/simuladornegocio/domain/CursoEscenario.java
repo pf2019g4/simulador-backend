@@ -20,9 +20,10 @@ public class CursoEscenario {
     
     private Boolean abierto;
 
-    public CursoEscenario(Curso curso, Escenario escenario){
+    public CursoEscenario(Curso curso, Escenario escenario, Boolean abierto){
         this.curso = curso;
         this.escenario = escenario;
+        this.abierto = abierto;
     }
     
     public CursoEscenario() {

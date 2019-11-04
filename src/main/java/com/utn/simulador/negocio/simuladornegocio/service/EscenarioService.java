@@ -45,9 +45,15 @@ public class EscenarioService {
     public void setCursosEscenario(Long escenarioId, List<Curso> cursos) {
         Escenario escenario = escenarioRepository.findById(escenarioId).orElseThrow(() -> new IllegalArgumentException("Escenario inexistente"));
         
-        cursoEscenarioRepository.findByEscenarioId(escenarioId).stream().forEach(ce -> cursoEscenarioRepository.delete(ce));
-        for(Curso curso : cursos) {
-            cursoEscenarioRepository.save(new CursoEscenario(curso, escenario));
+        List<Long> idCursos = cursos.stream().map(c -> c.getId()).collect(Collectors.toList());
+        List<CursoEscenario> cursosEscenarioBase = cursoEscenarioRepository.findByEscenarioId(escenarioId);
+        List<Long> idCursosBase = cursosEscenarioBase.stream().map(c -> c.getCurso().getId()).collect(Collectors.toList());
+        
+        for(CursoEscenario cursoEscenario : cursosEscenarioBase.stream().filter(c -> !idCursos.contains(c.getCurso().getId())).collect(Collectors.toList())) {
+            cursoEscenarioRepository.delete(cursoEscenario);
+        }
+        for(Curso curso : cursos.stream().filter(c -> !idCursosBase.contains(c.getId())).collect(Collectors.toList())) {
+            cursoEscenarioRepository.save(new CursoEscenario(curso, escenario, true));
         }
     }
     
