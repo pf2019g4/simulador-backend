@@ -16,11 +16,11 @@ public class SimuladorVentasService {
 
     private final ForecastService forecastService;
 
-    Estado simular(Estado estado) {
+    Estado simular(Estado estado, Boolean quiebreDeCaja) {
 
         Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
         long unidadesPosiblesParaVender = forecast.getCantidadUnidades();
-        long unidadesVendidas = Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
+        long unidadesVendidas = quiebreDeCaja ? 0 : Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
        
         BigDecimal precio = forecast.getPrecio();
         

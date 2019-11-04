@@ -103,7 +103,7 @@ public class CuentaService {
         }
     }
 
-    public Estado inputarCuetasNuevoPeriodo(Estado estado) {
+    public Estado imputarCuentasNuevoPeriodo(Estado estado) {
         List<CuentaPeriodo> cuentasPeriodo = cuentaPeriodoRepository.findByProyectoAndPeriodoAndEsForecast(estado.getProyecto().getId(), estado.getPeriodo(), estado.getEsForecast());
 
         for (CuentaPeriodo cuentaPeriodo : cuentasPeriodo) {

@@ -32,9 +32,9 @@ insert into estado
 (2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0       , 1                  , 0.0              , 0    , false      );
 
 insert into balance
-(id, caja  , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
-(1 , 9500.0, 10000             , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1500           , 0                      ),
-(2 , 9500.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1000           , 0                      );
+(id, caja   , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
+(1 , 50000.0, 2000              , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1500           , 0                      ),
+(2 , 50000.0, 0                 , 0                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1000           , 0                      );
 
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                                                                                                                                                                                                , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad,  cantidad_vendedores,  publicidad, balance_id) values

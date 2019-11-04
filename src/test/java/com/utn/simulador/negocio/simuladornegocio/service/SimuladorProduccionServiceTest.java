@@ -32,7 +32,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        Estado estado = produccionService.simular(estadoInicial);
+        Estado estado = produccionService.simular(estadoInicial, false);
 
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
@@ -66,20 +66,20 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         int cantidadCuentasPeriodosAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
         estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
-        Estado estadoContado = produccionService.simular(estadoInicial);
+        Estado estadoContado = produccionService.simular(estadoInicial, false);
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial).abs();
         
         estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
         
-        Estado estado30D = produccionService.simular(estadoInicial);
+        Estado estado30D = produccionService.simular(estadoInicial, false);
         Long stock30D = estado30D.getStock();
         BigDecimal caja30D = estado30D.getCaja();
         BigDecimal variacionCaja30D = caja30D.subtract(cajaContado).abs();
 
         estado30D.setPeriodo(estado30D.getPeriodo() + 1);
-        Estado estado60D = produccionService.simular(estado30D);
+        Estado estado60D = produccionService.simular(estado30D, false);
 
         assertThat(estadoContado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(stockContado).isGreaterThan(stockInicial);
