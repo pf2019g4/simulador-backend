@@ -1,7 +1,7 @@
 package com.utn.simulador.negocio.simuladornegocio.repository;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.dto.EscenarioUsuarioDto;
+import com.utn.simulador.negocio.simuladornegocio.bo.JugadorProyectoBo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,13 +16,11 @@ public interface EscenarioRepository extends JpaRepository<Escenario, Long> {
     
     public Escenario save(Escenario escenario);
     
-    @Query("SELECT new com.utn.simulador.negocio.simuladornegocio.dto.EscenarioUsuarioDto(E.titulo, C.nombre, U.mail, U.nombreCompleto, U.fotoUrl, P.entregado, PP.cajaFinal, PP.ventasTotales, PP.renta, PP.puntaje) " +
-            "FROM Escenario E " +
-            "INNER JOIN Proyecto P ON P.escenario.id = E.id " +
+    @Query("SELECT new com.utn.simulador.negocio.simuladornegocio.bo.JugadorProyectoBo(U.mail, U.nombreCompleto, U.fotoUrl, P.entregado, PP.cajaFinal, PP.ventasTotales, PP.renta, PP.puntaje) " +
+            "FROM Proyecto P " +
             "LEFT JOIN PuntajeProyecto PP ON PP.proyectoId = P.id " +
             "INNER JOIN Usuario U ON U.id = P.usuarioId " +
-            "INNER JOIN Curso C ON C.id = U.curso.id " +
-            "WHERE E.id = ?1 AND C.id = ?2 ")
-    public List<EscenarioUsuarioDto> getDetalleEscenarioUsuariosPorCurso(Long escenarioId, Long cursoId);
+            "WHERE P.escenario.id = ?1 AND U.curso.id = ?2 ")
+    public List<JugadorProyectoBo> getDetalleEscenarioJugadoresPorCurso(Long escenarioId, Long cursoId);
     
 }

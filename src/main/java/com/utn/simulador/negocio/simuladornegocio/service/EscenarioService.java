@@ -7,7 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.CursoEscenario;
 import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
-import com.utn.simulador.negocio.simuladornegocio.dto.EscenarioUsuarioDto;
+import com.utn.simulador.negocio.simuladornegocio.bo.CursoEscenarioBo;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -75,8 +75,10 @@ public class EscenarioService {
     	escenarioRepository.deleteById(id);
     }
     
-    public List<EscenarioUsuarioDto> getDetalleEscenarioUsuariosPorCurso(Long id, Long cursoId) {
-        return escenarioRepository.getDetalleEscenarioUsuariosPorCurso(id, cursoId);
+    public CursoEscenarioBo getDetalleEscenarioJugadoresPorCurso(Long id, Long cursoId) {
+        CursoEscenarioBo cursoEscenarioBo = new CursoEscenarioBo(cursoEscenarioRepository.findByCursoIdAndEscenarioId(cursoId, id));
+        cursoEscenarioBo.setJugadores(escenarioRepository.getDetalleEscenarioJugadoresPorCurso(id, cursoId));
+        return cursoEscenarioBo;
     }
     
     public void cerrarCursoEscenario(Long cursoId, Long id) {

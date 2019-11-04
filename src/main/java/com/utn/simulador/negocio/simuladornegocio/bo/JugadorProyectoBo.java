@@ -1,4 +1,4 @@
-package com.utn.simulador.negocio.simuladornegocio.dto;
+package com.utn.simulador.negocio.simuladornegocio.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,10 +7,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class EscenarioUsuarioDto implements Serializable{
-
-    private String escenario;
-    private String curso;
+public class JugadorProyectoBo implements Serializable{
+    
     private String usuarioMail;
     private String usuarioNombre;
     private String usuarioFotoUrl;
@@ -20,7 +18,6 @@ public class EscenarioUsuarioDto implements Serializable{
     private BigDecimal renta;
     private BigDecimal puntaje;
     
-    public EscenarioUsuarioDto() {
+    public JugadorProyectoBo() {
     }
-    
 }
