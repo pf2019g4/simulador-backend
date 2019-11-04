@@ -59,6 +59,9 @@ public class PuntajeService {
         puntajeProyecto.setVentasTotales(estados.stream().map(estado -> estado.getVentas() != null ? estado.getVentas() : BigDecimal.ZERO).reduce(BigDecimal.ZERO,BigDecimal::add));
         puntajeProyecto.setRenta(balanceService.obtenerPorProyecto(proyectoId, false).getPatrimonioNeto().getResultadoDelEjercicio());
         
+        if(puntajeProyecto.getCajaFinal().compareTo(BigDecimal.ZERO) < 0) puntajeProyecto.setCajaFinal(BigDecimal.ZERO);
+        if(puntajeProyecto.getRenta().compareTo(BigDecimal.ZERO) < 0) puntajeProyecto.setRenta(BigDecimal.ZERO);
+        
         puntajeProyectoRepository.save(puntajeProyecto);
     }
     
