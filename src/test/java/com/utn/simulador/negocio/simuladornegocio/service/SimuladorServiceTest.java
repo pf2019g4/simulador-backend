@@ -39,7 +39,22 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(nuevoEstado.getActivo()).isTrue();
 
     }
+    
+     @Test
+    public void simularPeriodo_escenarioValidoConVentasLimitadasInsuficientes_avanzaElPeriodoYDevuelveDemandaPotencialInsatisfecha() {
+        Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
+        Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
 
+        Forecast forecast = ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo() + 1).build(em);
+
+        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), true);
+
+        assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
+        assertThat(nuevoEstado.getCaja()).isGreaterThan(new BigDecimal("1000"));
+        assertThat(nuevoEstado.getActivo()).isTrue();
+        assertThat(nuevoEstado.getDemandaPotencial().subtract(nuevoEstado.getVentas())).isEqualTo(new BigDecimal("4600.00").multiply(forecast.getPrecio()));
+
+    }
  
     @Test
     public void simularPeriodos_escenarioValido_avanzaElPeriodoHastaElMaximo() {
