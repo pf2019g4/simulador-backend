@@ -14,15 +14,17 @@ public class SimuladorProduccionService {
 
     private final CuentaService cuentaService;
 
-    Estado simular(Estado estado) {
-        aumentarStock(estado);
-        imputarGastosProduccion(estado);
+    Estado simular(Estado estado, Boolean quiebreDeCaja) {
+        if(!quiebreDeCaja) {
+            aumentarStock(estado);
+        }
+        imputarGastosProduccion(estado, quiebreDeCaja);
         //TODO aca habria que amortizar la maquinaria para el periodo
         return estado;
     }
 
-    private void imputarGastosProduccion(Estado estado) {
-        BigDecimal costoProduccionPeriodo = calcularCostoProduccionPeriodo(estado);
+    private void imputarGastosProduccion(Estado estado, Boolean quiebreDeCaja) {
+        BigDecimal costoProduccionPeriodo = quiebreDeCaja ? BigDecimal.ZERO : calcularCostoProduccionPeriodo(estado);
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
         Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
                 TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), 

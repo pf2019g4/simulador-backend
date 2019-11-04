@@ -33,7 +33,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
 
         estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
-        Estado nuevoEstado = simuladorVentasService.simular(estadoInicial);
+        Estado nuevoEstado = simuladorVentasService.simular(estadoInicial, false);
 
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
@@ -63,21 +63,21 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
 
         estadoInicial.setPeriodo(estadoInicial.getPeriodo() + 1);
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
-        Estado estadoContado = simuladorVentasService.simular(estadoInicial);
+        Estado estadoContado = simuladorVentasService.simular(estadoInicial, false);
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial);
         
         estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
-        Estado estado30D = simuladorVentasService.simular(estadoContado);
+        Estado estado30D = simuladorVentasService.simular(estadoContado, false);
         Long stock30D = estado30D.getStock();
         BigDecimal caja30D = estado30D.getCaja();
         BigDecimal variacionCaja30D = caja30D.subtract(cajaContado);
 
         estado30D.setPeriodo(estado30D.getPeriodo() + 1);
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
-        Estado estado60D = simuladorVentasService.simular(estado30D);
+        Estado estado60D = simuladorVentasService.simular(estado30D, false);
 
         assertThat(estadoContado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(stockContado).isLessThan(stockInicial);
