@@ -9,6 +9,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionPuntajeRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.PuntajeProyectoRepository;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,15 +93,15 @@ public class PuntajeService {
             BigDecimal porcentajeTotal = BigDecimal.ZERO;
             
             if (!cajaMax.equals(0)) {
-                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getCajaFinal().multiply(ponderacionPuntaje.getPorcentajeCaja()).divide(cajaMax));
+                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getCajaFinal().multiply(ponderacionPuntaje.getPorcentajeCaja()).divide(cajaMax,2, RoundingMode.HALF_UP));
             }
             
             if (!ventasMax.equals(0)) {
-                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getVentasTotales().multiply(ponderacionPuntaje.getPorcentajeVentas()).divide(ventasMax));
+                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getVentasTotales().multiply(ponderacionPuntaje.getPorcentajeVentas()).divide(ventasMax,2, RoundingMode.HALF_UP));
             }
 
             if (!rentaMax.equals(0)) {
-                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getRenta().multiply(ponderacionPuntaje.getPorcentajeRenta()).divide(rentaMax));
+                porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getRenta().multiply(ponderacionPuntaje.getPorcentajeRenta()).divide(rentaMax,2, RoundingMode.HALF_UP));
             }
             
             BigDecimal puntajePonderado = PUNTAJE_ESCENARIO_BASE.add((PUNTAJE_ESCENARIO_BASE.divide(BigDecimal.valueOf(2)).multiply(ponderacionPuntaje.getPorcentajeEscenario())).divide(BigDecimal.valueOf(100)));
