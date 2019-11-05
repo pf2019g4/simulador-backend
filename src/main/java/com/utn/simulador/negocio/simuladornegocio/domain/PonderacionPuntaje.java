@@ -23,21 +23,5 @@ public class PonderacionPuntaje {
     private BigDecimal porcentajeVentas;
     private BigDecimal porcentajeRenta;
     private BigDecimal porcentajeEscenario;
-
-    public BigDecimal getPorcentajeVentas() {
-       return this.porcentajeVentas;
-    }
-
-    public BigDecimal getPorcentajeCaja() {
-      return this.porcentajeCaja;
-    }
-
-    public BigDecimal getPorcentajeRenta() {
-     return this.porcentajeRenta;
-    }
-
-    public BigDecimal getPorcentajeEscenario() {
-    return this.porcentajeEscenario;
-    }
     
 }

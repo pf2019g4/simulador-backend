@@ -104,9 +104,9 @@ public class PuntajeService {
                 porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getRenta().multiply(ponderacionPuntaje.getPorcentajeRenta()).divide(rentaMax,2, RoundingMode.HALF_UP));
             }
             
-            BigDecimal puntajePonderado = PUNTAJE_ESCENARIO_BASE.add((PUNTAJE_ESCENARIO_BASE.divide(BigDecimal.valueOf(2)).multiply(ponderacionPuntaje.getPorcentajeEscenario())).divide(BigDecimal.valueOf(100)));
+            BigDecimal puntajePonderado = PUNTAJE_ESCENARIO_BASE.add((PUNTAJE_ESCENARIO_BASE.divide(BigDecimal.valueOf(2),2, RoundingMode.HALF_UP).multiply(ponderacionPuntaje.getPorcentajeEscenario())).divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP));
 
-            puntajeProyecto.setPuntaje(porcentajeTotal.multiply(puntajePonderado).divide(BigDecimal.valueOf(100)));
+            puntajeProyecto.setPuntaje(porcentajeTotal.multiply(puntajePonderado).divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP));
 
             puntajeProyectoRepository.save(puntajeProyecto);
         }
