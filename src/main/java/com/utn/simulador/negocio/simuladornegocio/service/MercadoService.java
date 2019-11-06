@@ -7,6 +7,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionMercado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoPonderacionMercado;
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,9 @@ public class MercadoService {
     private final EstadoService estadoService;
     private final PonderacionMercadoRepository ponderacionMercadoRepository;
     private final ForecastService forecastService;
+    private final ProyectoRepository proyectoRepository;
 
-    public void calcularPonderaciones(Proyecto proyecto) {
+    public void establecerPonderaciones(Proyecto proyecto) {
 
         Estado estado = estadoService.obtenerActual(proyecto.getId(), true);
 
@@ -33,6 +35,8 @@ public class MercadoService {
         definirPonderacionMercadoPorPublicidad(proyecto, estado);
 
         definirPonderacionMercadoPorModalidadCobro(proyecto);
+
+        proyectoRepository.save(proyecto);
 
     }
 
@@ -118,6 +122,10 @@ public class MercadoService {
                 break;
             }
         }
+    }
+
+    long obtenerCuotaMercado(Estado estado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

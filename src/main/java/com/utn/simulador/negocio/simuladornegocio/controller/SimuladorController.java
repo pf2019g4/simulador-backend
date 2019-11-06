@@ -122,7 +122,7 @@ public class SimuladorController {
             cuentaService.crearPorBalanceInicial(proyecto.getId(), esForecast);
             financiacionService.acreditar(proyecto.getId(), esForecast);
             
-            mercadoService.calcularPonderaciones(proyecto);
+            mercadoService.establecerPonderaciones(proyecto);
 
         }
     }
