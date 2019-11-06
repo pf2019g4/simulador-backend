@@ -44,7 +44,7 @@ public class ProyectoService {
                 .usuarioId(usuarioId)
                 .escenario(escenario)
                 .cursoId(usuario.getCurso().getId())
-                .entregado(Boolean.FALSE)
+                .entregado(false)
                 .build();
         proyectoRepository.save(proyecto);
 
@@ -64,10 +64,6 @@ public class ProyectoService {
 
     public List<Proyecto> obtenerPorCursoYEscenario(Long cursoId, Long escenarioId) {
         return proyectoRepository.findByCursoIdAndEscenarioId(cursoId, escenarioId);
-    }
-    
-    public List<Proyecto> obtenerEntregadosPorCursoYEscenario(Long cursoId, Long escenarioId) {
-        return proyectoRepository.findByCursoIdAndEscenarioIdAndEntregado(cursoId, escenarioId, true);
     }
 
     public void cerrarProyectos(Long cursoId, Long escenarioId) {

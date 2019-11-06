@@ -22,16 +22,21 @@ public class EstadoController {
 
     @GetMapping("/proyecto/{id}/estado/actual")
     public Estado obtenerEstadoActual(@PathVariable("id") Long idProyecto) {
-        return estadoService.obtenerActual(idProyecto, true);
-    }
-
-    @GetMapping("/proyecto/{id}/estado/base")
-    public Estado obtenerEstadoBase(@PathVariable("id") Long idProyecto) {
         return estadoService.obtenerActual(idProyecto, false);
     }
 
-    @GetMapping("/proyecto/{id}/estado-forecast")
-    public List<Estado> obtenerPorProyecto(@PathVariable("id") Long idProyecto) {
+    @GetMapping("/proyecto/{id}/estado/actual-forecast")
+    public Estado obtenerEstadoActualForecast(@PathVariable("id") Long idProyecto) {
+        return estadoService.obtenerActual(idProyecto, true);
+    }
+
+    @GetMapping("/proyecto/{id}/estados")
+    public List<Estado> obtenerEstadosPorProyecto(@PathVariable("id") Long idProyecto) {
+        return estadoService.obtenerPorProyecto(idProyecto, false);
+    }
+
+    @GetMapping("/proyecto/{id}/estados-forecast")
+    public List<Estado> obtenerEstadosForecastPorProyecto(@PathVariable("id") Long idProyecto) {
         return estadoService.obtenerPorProyecto(idProyecto, true);
     }
 

@@ -65,7 +65,8 @@ public class BalanceService {
     }
 
     private BigDecimal calcularInventario(Estado estado) {
-        return forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo()).getPrecio().multiply(new BigDecimal(estado.getStock()));
+        Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
+        return forecast != null ? forecast.getPrecio().multiply(new BigDecimal(estado.getStock())) : BigDecimal.ZERO;
     }
 
     private BigDecimal calcularResultadoDelEjercicio(Activo activo, Pasivo pasivo, PatrimonioNeto pn) {

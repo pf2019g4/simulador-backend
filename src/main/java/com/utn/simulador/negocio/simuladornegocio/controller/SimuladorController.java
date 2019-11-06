@@ -19,6 +19,7 @@ import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
 import com.utn.simulador.negocio.simuladornegocio.service.PuntajeService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
+import com.utn.simulador.negocio.simuladornegocio.service.ProveedorService;
 import java.util.List;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class SimuladorController {
     private final OpcionProyectoRepository opcionProyectoRepository;
     private final PuntajeService puntajeService;
     private final EscenarioService escenarioService;
+    private final ProveedorService proveedorService;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -88,10 +90,14 @@ public class SimuladorController {
 
     private void correrSimulacionProyectos(Long cursoId, Long escenarioId) {
 
-        List<Proyecto> proyectosASimular = proyectoService.obtenerEntregadosPorCursoYEscenario(cursoId, escenarioId);
+        List<Proyecto> proyectosASimular = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
 
         boolean esForecast = false;
         for (Proyecto proyecto : proyectosASimular) {
+            
+            if(proyecto.getProveedorSeleccionado() == null) {
+                proyecto.setProveedorSeleccionado(proveedorService.obtenerProveedorPorDefecto());
+            }
 
             List<OpcionProyecto> findByProyectoId = opcionProyectoRepository.findByProyectoId(proyecto.getId());
 

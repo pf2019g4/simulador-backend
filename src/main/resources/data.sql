@@ -42,20 +42,21 @@ insert into escenario
 (2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,                    1,           1,          2);
 
 insert into curso
-(id, nombre , clave    ) values
+(id, nombre , clave     ) values
 (1 , 'curso', 'Y2xhdmU='); --Base64 de la palabra 'clave'
 
 insert into curso_escenario
-(id, curso_id, escenario_id) values
-(1 , 1       , 1           ),
-(2 , 1       , 2           );
+(id, curso_id, escenario_id, abierto) values
+(1 , 1       , 1           , true   ),
+(2 , 1       , 2           , true   );
 
 insert into proveedor
-(id, escenario_id, nombre  , variacion_costo_variable, variacion_calidad) values
-(1 , 1           , 'Prov 1', 2                       , 5                ),
-(2 , 1           , 'Prov 1', 3.5                     , 5                ),
-(3 , 1           , 'Prov 2', 1.5                     , 2                ),
-(4 , 2           , 'Unico' , 0                       , 0                );
+(id, escenario_id, nombre   , variacion_costo_variable, variacion_calidad) values
+(1 , NULL        , 'Default', 0                       , 0                ),
+(2 , 1           , 'Prov 1' , 2                       , 5                ),
+(3 , 1           , 'Prov 1' , 3.5                     , 5                ),
+(4 , 1           , 'Prov 2' , 1.5                     , 2                ),
+(5 , 2           , 'Unico'  , 0                       , 0                );
 
 insert into financiacion
 (id, escenario_id, descripcion, tea , cantidad_cuotas) values
@@ -67,11 +68,12 @@ insert into financiacion
 insert into modalidad_pago
 (id, proveedor_id, porcentaje, offset_periodo) values
 (1 , 1           , 100.00    , 0            ),
-(2 , 2           , 20.00     , 0            ),
-(3 , 2           , 30.00     , 1            ),
-(4 , 2           , 50.00     , 2            ),
-(5 , 3           , 100.00    , 1            ),
-(6 , 4           , 100.00    , 0            );
+(2 , 2           , 100.00    , 0            ),
+(3 , 3           , 20.00     , 0            ),
+(4 , 3           , 30.00     , 1            ),
+(5 , 3           , 50.00     , 2            ),
+(6 , 4           , 100.00    , 1            ),
+(7 , 5           , 100.00    , 0            );
 
 insert into decision 
 (id, escenario_id, descripcion                                          ) values

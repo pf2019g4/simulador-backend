@@ -81,7 +81,7 @@ public class PuntajeService {
     public void calcularPuntajesTotales(Long cursoId, Long escenarioId) {
 
         PonderacionPuntaje ponderacionPuntaje = ponderacionPuntajeRepository.findByEscenarioId(escenarioId);
-        List<Proyecto> proyectosEntregados = proyectoService.obtenerEntregadosPorCursoYEscenario(cursoId, escenarioId);
+        List<Proyecto> proyectosEntregados = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
 
         List<PuntajeProyecto> puntajesProyecto = proyectosEntregados.stream().map(p -> puntajeProyectoRepository.findByProyectoId(p.getId())).collect(Collectors.toList());
 
@@ -92,15 +92,15 @@ public class PuntajeService {
         for (PuntajeProyecto puntajeProyecto : puntajesProyecto) {
             BigDecimal porcentajeTotal = BigDecimal.ZERO;
             
-            if (!cajaMax.equals(0)) {
+            if (cajaMax.compareTo(BigDecimal.ZERO) > 0) {
                 porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getCajaFinal().multiply(ponderacionPuntaje.getPorcentajeCaja()).divide(cajaMax,2, RoundingMode.HALF_UP));
             }
             
-            if (!ventasMax.equals(0)) {
+            if (ventasMax.compareTo(BigDecimal.ZERO) > 0) {
                 porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getVentasTotales().multiply(ponderacionPuntaje.getPorcentajeVentas()).divide(ventasMax,2, RoundingMode.HALF_UP));
             }
 
-            if (!rentaMax.equals(0)) {
+            if (rentaMax.compareTo(BigDecimal.ZERO) > 0) {
                 porcentajeTotal = porcentajeTotal.add(puntajeProyecto.getRenta().multiply(ponderacionPuntaje.getPorcentajeRenta()).divide(rentaMax,2, RoundingMode.HALF_UP));
             }
             

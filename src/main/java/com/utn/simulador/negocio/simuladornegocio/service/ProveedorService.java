@@ -77,5 +77,11 @@ public class ProveedorService {
         
         return proveedoresVo;
     }
+    
+    public Proveedor obtenerProveedorPorDefecto(){
+        
+        return proveedorRepository.findByEscenarioId(null).get(0);
+        
+    }
 
 }

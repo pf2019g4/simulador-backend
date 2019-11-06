@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS balance (
 CREATE TABLE IF NOT EXISTS proveedor (
   id bigint UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(45) NOT NULL,
-  escenario_id bigint UNSIGNED NOT NULL,
+  escenario_id bigint UNSIGNED,
   variacion_costo_variable decimal(19,2) NOT NULL,
   variacion_calidad integer NOT NULL,
   PRIMARY KEY (id),
