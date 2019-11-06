@@ -19,7 +19,19 @@ public class SimuladorVentasService {
     Estado simular(Estado estado, Boolean quiebreDeCaja) {
 
         Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
-        long unidadesPosiblesParaVender = forecast != null ? forecast.getCantidadUnidades() : 0;
+        
+        
+        long unidadesPosiblesParaVender;
+        
+        if(estado.getEsForecast()){
+             unidadesPosiblesParaVender = forecast != null ? forecast.getCantidadUnidades() : 0;
+        } else {
+            
+             unidadesPosiblesParaVender = 100;
+        }
+       
+        
+        
         long unidadesVendidas = quiebreDeCaja ? 0 : Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
        
         BigDecimal precio = forecast != null ? forecast.getPrecio() : BigDecimal.ZERO;
