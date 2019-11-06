@@ -143,11 +143,9 @@ public class MercadoService {
         int ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoBajo();
 
         for (EmpresaCompetidora empresaCopetidora : empresasCopetidoras) {
-
             ponderacionTotalmercadoAlto += empresaCopetidora.getAlto();
             ponderacionTotalmercadoMedio += empresaCopetidora.getMedio();
             ponderacionTotalmercadoBajo += empresaCopetidora.getBajo();
-
         }
 
         cuotaMercado += mercadoPeriodo.getAlto() * (proyecto.getPonderacionMercadoAlto() / ponderacionTotalmercadoAlto);
