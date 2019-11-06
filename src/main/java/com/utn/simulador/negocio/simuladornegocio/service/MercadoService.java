@@ -1,11 +1,15 @@
 package com.utn.simulador.negocio.simuladornegocio.service;
 
+import com.utn.simulador.negocio.simuladornegocio.domain.EmpresaCompetidora;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Forecast;
+import com.utn.simulador.negocio.simuladornegocio.domain.MercadoPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
 import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionMercado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoPonderacionMercado;
+import com.utn.simulador.negocio.simuladornegocio.repository.EmpresasCompetidorasRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.MercadoPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import java.math.BigDecimal;
@@ -21,6 +25,8 @@ public class MercadoService {
     private final PonderacionMercadoRepository ponderacionMercadoRepository;
     private final ForecastService forecastService;
     private final ProyectoRepository proyectoRepository;
+    private final MercadoPeriodoRepository mercadoPeriodoRepository;
+    private final EmpresasCompetidorasRepository empresasCompetidorasRepository;
 
     public void establecerPonderaciones(Proyecto proyecto) {
 
@@ -124,8 +130,32 @@ public class MercadoService {
         }
     }
 
-    long obtenerCuotaMercado(Estado estado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public long obtenerCuotaMercado(Estado estado) {
+
+        Proyecto proyecto = estado.getProyecto();
+        long cuotaMercado = 0;
+        MercadoPeriodo mercadoPeriodo = mercadoPeriodoRepository.findByEscenarioIdAndPeriodo(proyecto.getEscenario().getId(), estado.getPeriodo());
+
+        List<EmpresaCompetidora> empresasCopetidoras = empresasCompetidorasRepository.findByEscenarioId(estado.getProyecto().getEscenario().getId());
+
+        int ponderacionTotalmercadoBajo = proyecto.getPonderacionMercadoAlto();
+        int ponderacionTotalmercadoMedio = proyecto.getPonderacionMercadoMedio();
+        int ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoBajo();
+
+        for (EmpresaCompetidora empresaCopetidora : empresasCopetidoras) {
+
+            ponderacionTotalmercadoAlto += empresaCopetidora.getAlto();
+            ponderacionTotalmercadoMedio += empresaCopetidora.getMedio();
+            ponderacionTotalmercadoBajo += empresaCopetidora.getBajo();
+
+        }
+
+        cuotaMercado += mercadoPeriodo.getAlto() * (proyecto.getPonderacionMercadoAlto() / ponderacionTotalmercadoAlto);
+        cuotaMercado += mercadoPeriodo.getMedio() * (proyecto.getPonderacionMercadoMedio() / ponderacionTotalmercadoMedio);
+        cuotaMercado += mercadoPeriodo.getBajo() * (proyecto.getPonderacionMercadoBajo() / ponderacionTotalmercadoBajo);
+
+        return cuotaMercado;
+
     }
 
 }

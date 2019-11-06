@@ -8,4 +8,6 @@ import java.util.List;
 public interface MercadoPeriodoRepository extends JpaRepository<MercadoPeriodo, Long> {
 
     public List<MercadoPeriodo> findByEscenarioId(Long escenarioId);
+
+    public MercadoPeriodo findByEscenarioIdAndPeriodo(Long id, Integer periodo);
 }
