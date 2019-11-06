@@ -16,9 +16,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MercadoService {
 
     private final EstadoService estadoService;
@@ -138,9 +140,9 @@ public class MercadoService {
 
         List<EmpresaCompetidora> empresasCopetidoras = empresasCompetidorasRepository.findByEscenarioId(estado.getProyecto().getEscenario().getId());
 
-        int ponderacionTotalmercadoBajo = proyecto.getPonderacionMercadoAlto();
-        int ponderacionTotalmercadoMedio = proyecto.getPonderacionMercadoMedio();
-        int ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoBajo();
+        Integer ponderacionTotalmercadoBajo = proyecto.getPonderacionMercadoAlto();
+        Integer ponderacionTotalmercadoMedio = proyecto.getPonderacionMercadoMedio();
+        Integer ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoBajo();
 
         for (EmpresaCompetidora empresaCopetidora : empresasCopetidoras) {
             ponderacionTotalmercadoAlto += empresaCopetidora.getAlto();
