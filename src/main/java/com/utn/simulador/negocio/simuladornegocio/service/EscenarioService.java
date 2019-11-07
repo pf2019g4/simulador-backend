@@ -9,6 +9,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Decision;
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.Consecuencia;
 import com.utn.simulador.negocio.simuladornegocio.domain.Financiacion;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
@@ -16,6 +17,12 @@ import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.FinanciacionRepository;
 import com.utn.simulador.negocio.simuladornegocio.bo.CursoEscenarioBo;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
+import com.utn.simulador.negocio.simuladornegocio.repository.EmpresasCompetidorasRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.MercadoPeriodoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionPuntajeRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.RestriccionPrecioRepository;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -35,6 +42,13 @@ public class EscenarioService {
     private final UsuarioRepository usuarioRepository;
     private final DecisionRepository decisionRepository;
     private final FinanciacionRepository financiacionRepository;
+    private final ProyectoRepository proyectoRepository;
+    private final PonderacionMercadoRepository ponderacionMercadoRepository;
+    private final PonderacionPuntajeRepository ponderacionPuntajeRepository;
+    private final MercadoPeriodoRepository mercadoPeriodoRepository;
+    private final EmpresasCompetidorasRepository empresasCompetidorasRepository;
+    private final RestriccionPrecioRepository restriccionPrecioRepository;
+    private final ProyectoService proyectoService;
     
     @Autowired
     protected EntityManager em;
@@ -93,6 +107,18 @@ public class EscenarioService {
     }
     
     public void deleteEscenarioById(Long id) {
+        for(Proyecto proy : proyectoRepository.findByEscenarioId(id)) {
+            proyectoService.deleteDatosProyecto(proy.getId());
+        }
+        decisionRepository.deleteByEscenarioId(id);
+        financiacionRepository.deleteByEscenarioId(id);
+        cursoEscenarioRepository.deleteByEscenarioId(id);
+        proyectoRepository.deleteByEscenarioId(id);
+        ponderacionMercadoRepository.deleteByEscenarioId(id);
+        ponderacionPuntajeRepository.deleteByEscenarioId(id);
+        mercadoPeriodoRepository.deleteByEscenarioId(id);
+        empresasCompetidorasRepository.deleteByEscenarioId(id);
+        restriccionPrecioRepository.deleteByEscenarioId(id);
     	escenarioRepository.deleteById(id);
     }
     
