@@ -26,6 +26,10 @@ delete from empresa_competidora;
 delete from ponderacion_puntaje;
 delete from puntaje_proyecto;
 
+insert into usuario
+(id, mail   , foto_url, nombre_completo, rol) values
+(1,'admin@admin.com',NULL,'admin@admin.com','ADMIN');
+
 insert into balance
 (id, caja   , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
 (1 , 50000.0, 2000              , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1500           , 0                      ),
