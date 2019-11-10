@@ -7,11 +7,13 @@ import com.utn.simulador.negocio.simuladornegocio.domain.MercadoPeriodo;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadCobro;
 import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionMercado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.domain.RestriccionPrecio;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoPonderacionMercado;
 import com.utn.simulador.negocio.simuladornegocio.repository.EmpresasCompetidorasRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.MercadoPeriodoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.RestriccionPrecioRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class MercadoService {
     private final ProyectoRepository proyectoRepository;
     private final MercadoPeriodoRepository mercadoPeriodoRepository;
     private final EmpresasCompetidorasRepository empresasCompetidorasRepository;
+    private final RestriccionPrecioRepository restriccionPrecioRepository;
 
     public void establecerPonderaciones(Proyecto proyecto) {
 
@@ -137,6 +140,15 @@ public class MercadoService {
         Proyecto proyecto = estado.getProyecto();
         long cuotaMercado = 0;
         MercadoPeriodo mercadoPeriodo = mercadoPeriodoRepository.findByEscenarioIdAndPeriodo(proyecto.getEscenario().getId(), estado.getPeriodo());
+        RestriccionPrecio restriccionPrecio = restriccionPrecioRepository.findByEscenarioId(proyecto.getEscenario().getId()).get(0);
+
+        BigDecimal precioPeriodoActual = forecastService.obtenerPorProyectoYPeriodo(proyecto.getId(), estado.getPeriodo()).getPrecio();
+
+        if (precioPeriodoActual.compareTo(restriccionPrecio.getPrecioMin()) < 0) {
+            return 0;
+        } else if (precioPeriodoActual.compareTo(restriccionPrecio.getPrecioMax()) > 0) {
+            return 0;
+        }
 
         List<EmpresaCompetidora> empresasCopetidoras = empresasCompetidorasRepository.findByEscenarioId(estado.getProyecto().getEscenario().getId());
 
