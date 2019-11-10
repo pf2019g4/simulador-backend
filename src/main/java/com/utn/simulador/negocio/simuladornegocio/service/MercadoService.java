@@ -55,21 +55,7 @@ public class MercadoService {
     private void definirPonderacionMercadoPorModalidadCobro(Proyecto proyecto) {
         PonderacionMercado ponderacionMercadoAUtilizar = null;
 
-        List<PonderacionMercado> ponderacionesMercadoPorModalidadCobro
-                = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.MODALIDAD_DE_COBRO);
-
-        for (PonderacionMercado ponderacionMercado : ponderacionesMercadoPorModalidadCobro) {
-            for (ModalidadCobro modalidadCobro : proyecto.getModalidadCobro()) {
-                if (ponderacionMercado.getValor().intValue() == modalidadCobro.getOffsetPeriodo()) {
-                    ponderacionMercadoAUtilizar = ponderacionMercado;
-                    break;
-                }
-            }
-
-            if (ponderacionMercadoAUtilizar != null) {
-                break;
-            }
-        }
+        ponderacionMercadoAUtilizar = tomarModalidadCobroMasDistanteMayorAl25(proyecto, ponderacionMercadoAUtilizar);
 
         if (ponderacionMercadoAUtilizar == null) {
             ponderacionMercadoAUtilizar = new PonderacionMercado();
@@ -80,6 +66,27 @@ public class MercadoService {
 
         proyecto.aumentarPonderacionMercado(ponderacionMercadoAUtilizar);
 
+    }
+
+    private PonderacionMercado tomarModalidadCobroMasDistanteMayorAl25(Proyecto proyecto, PonderacionMercado ponderacionMercadoAUtilizar) {
+        List<PonderacionMercado> ponderacionesMercadoPorModalidadCobro
+                = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.MODALIDAD_DE_COBRO);
+
+        for (PonderacionMercado ponderacionMercado : ponderacionesMercadoPorModalidadCobro) {
+            for (ModalidadCobro modalidadCobro : proyecto.getModalidadCobro()) {
+                if (ponderacionMercado.getValor().intValue() == modalidadCobro.getOffsetPeriodo()) {
+                    if (modalidadCobro.getPorcentaje().compareTo(new BigDecimal(25)) > 0) {
+                        ponderacionMercadoAUtilizar = ponderacionMercado;
+                        break;
+                    }
+                }
+            }
+
+            if (ponderacionMercadoAUtilizar != null) {
+                break;
+            }
+        }
+        return ponderacionMercadoAUtilizar;
     }
 
     private void definirPonderacionMercadoPorPublicidad(Proyecto proyecto, Estado estado) {

@@ -137,7 +137,7 @@ INSERT INTO ponderacion_mercado (id, escenario_id, concepto, valor, bajo, medio,
 (1, 1, 'PRECIO_DESDE', '100.00', 100, 0, 0),
 (2, 1, 'PRECIO_DESDE', '700.00', 0, 30, 70),
 (3, 1, 'PRECIO_DESDE', '1200.00', 0, 0, 100),
-(4, 1, 'MODALIDAD_DE_COBRO', '0.00', 0, 0, 0),
+(4, 1, 'MODALIDAD_DE_COBRO', '0.00', 0, 0, 100),
 (5, 1, 'MODALIDAD_DE_COBRO', '1.00', 0, 0, 0),
 (6, 1, 'MODALIDAD_DE_COBRO', '2.00', 0, 0, 0),
 (7, 1, 'MODALIDAD_DE_COBRO', '3.00', 0, 0, 0),
@@ -148,8 +148,8 @@ INSERT INTO ponderacion_mercado (id, escenario_id, concepto, valor, bajo, medio,
 (12, 1, 'CALIDAD_DESDE', '0.00', 0, 0, 0),
 (13, 1, 'CALIDAD_DESDE', '0.00', 0, 0, 0),
 (14, 1, 'VENDEDORES_DESDE', '0.00', 0, 0, 0),
-(15, 1, 'VENDEDORES_DESDE', '0.00', 0, 0, 0),
-(16, 1, 'VENDEDORES_DESDE', '0.00', 0, 0, 0);
+(15, 1, 'VENDEDORES_DESDE', '1.00', 8, 0, 0),
+(16, 1, 'VENDEDORES_DESDE', '5.00', 0, 22, 0);
 
 
 INSERT INTO ponderacion_puntaje (id, escenario_id, porcentaje_caja, porcentaje_ventas, porcentaje_renta, porcentaje_escenario) VALUES
