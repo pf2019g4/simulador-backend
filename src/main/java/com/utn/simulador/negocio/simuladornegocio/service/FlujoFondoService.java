@@ -247,7 +247,7 @@ public class FlujoFondoService {
         cajaInicial.setCuentasPeriodo(new ArrayList<>());
         CuentaPeriodo cp = new CuentaPeriodo();
         cp.setMonto(estado.getProyecto().getEscenario().getBalanceInicial().getActivo().getCaja());
-        cp.setPeriodo(0);
+        cp.setPeriodo(1);
         cajaInicial.getCuentasPeriodo().add(cp);
         return cajaInicial;
     }

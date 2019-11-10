@@ -9,6 +9,8 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Curso;
 import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
 import com.utn.simulador.negocio.simuladornegocio.bo.CursoEscenarioBo;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
+import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EscenariosController {
 
     private final EscenarioService escenarioService;
+    private final ProyectoService proyectoService;
 
     @GetMapping("/escenarios")
     public List<Escenario> getEscenarios() {
@@ -79,5 +82,9 @@ public class EscenariosController {
     public CursoEscenarioBo getEscenarioJugadoresPorCurso (@PathVariable("id") Long id, @PathVariable("cursoId") Long cursoId){
         return escenarioService.getDetalleEscenarioJugadoresPorCurso(id, cursoId);
     }
-
+    
+    @GetMapping("/proyectosPorEscenario/{escenarioId}")
+    public List<Proyecto> getProyectosPorEscenario (@PathVariable("escenarioId") Long escenarioId){
+        return proyectoService.obtenerPorEscenario(escenarioId);
+    }
 }
