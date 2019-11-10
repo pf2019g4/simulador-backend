@@ -100,11 +100,11 @@ INSERT INTO financiacion (id, descripcion, escenario_id, tea, cantidad_cuotas) V
 
 
 INSERT INTO mercado_periodo (id, escenario_id, periodo, bajo, medio, alto) VALUES
-(1, 1, 1, 0, 0, 0),
-(2, 1, 2, 0, 0, 0),
-(3, 1, 3, 0, 0, 0),
-(4, 1, 4, 0, 0, 0),
-(5, 1, 5, 0, 0, 0);
+(1, 1, 1, 1000, 1000, 80),
+(2, 1, 2, 1000, 50, 80),
+(3, 1, 3, 1000, 50, 60),
+(4, 1, 4, 1000, 1000, 80),
+(5, 1, 5, 1000, 1000, 30);
 
 
 INSERT INTO proveedor (id, nombre, escenario_id, variacion_costo_variable, variacion_calidad) VALUES
