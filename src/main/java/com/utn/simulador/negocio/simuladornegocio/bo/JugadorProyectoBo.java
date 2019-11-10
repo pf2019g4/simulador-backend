@@ -9,6 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class JugadorProyectoBo implements Serializable{
     
+    private Long usuarioId;
     private String usuarioMail;
     private String usuarioNombre;
     private String usuarioFotoUrl;
