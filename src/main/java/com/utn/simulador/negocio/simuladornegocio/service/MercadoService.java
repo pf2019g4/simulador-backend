@@ -173,7 +173,7 @@ public class MercadoService {
 
     private long calcularCuotaMercado(Integer ponderacionMercadoParaProyecto, Integer ponderacionTotalmercadoAlto, Integer tamanioMercado) {
         BigDecimal porcentajePonderacionMercadoProyecto = (new BigDecimal(ponderacionMercadoParaProyecto.toString())
-                .divide(new BigDecimal(ponderacionTotalmercadoAlto.toString()),6, RoundingMode.HALF_UP));
+                .divide(new BigDecimal(ponderacionTotalmercadoAlto.toString()), 6, RoundingMode.HALF_UP));
         long cuotaMercado = porcentajePonderacionMercadoProyecto.multiply(new BigDecimal(tamanioMercado.toString())).longValue();
         return cuotaMercado;
     }
