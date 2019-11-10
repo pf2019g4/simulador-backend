@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface EstadoRepository extends JpaRepository<Estado, Long> {
 
@@ -14,6 +15,9 @@ public interface EstadoRepository extends JpaRepository<Estado, Long> {
 
     Optional<List<Estado>> findByProyectoIdAndEsForecast(Long idProyecto, boolean esForecast);
 
+    @Transactional
     void deleteByProyectoIdAndEsForecast(Long idProyecto, boolean esForecast);
 
+    @Transactional
+    void deleteByProyectoId(Long proyectoId);
 }

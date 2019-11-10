@@ -4,6 +4,7 @@ import com.utn.simulador.negocio.simuladornegocio.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
@@ -17,5 +18,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Long> {
 
     List<Cuenta> findByProyectoIdAndTipoCuentaAndTipoTransaccionAndEsForecast(Long proyectoId, TipoCuenta tipo, TipoTransaccion tipoTransaccion, boolean esForecast);
 
+    @Transactional
     void deleteByProyectoId(Long proyectoId);
 }

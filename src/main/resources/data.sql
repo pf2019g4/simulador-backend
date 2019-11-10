@@ -26,11 +26,6 @@ delete from empresa_competidora;
 delete from ponderacion_puntaje;
 delete from puntaje_proyecto;
 
-insert into estado
-(id, proyecto_id, activo, caja, ventas, capital_social, costo_fijo, costo_variable, periodo, produccion_mensual, calidad, publicidad, cantidad_vendedores, demanda_potencial, stock, es_forecast) values
-(1 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0       , 1                  , 0.0              , 0    , false      ),
-(2 , NULL       , false , 0.0 , 0     , 0             , 0         , 0             , 0      , 0                 , 0      , 0.0       , 1                  , 0.0              , 0    , false      );
-
 insert into balance
 (id, caja   , cuentas_por_cobrar, cuentas_por_cobrar_periodos, inventario, maquinaria, amortizacion_acumulada, proveedores, proveedores_periodos, deudas_bancarias, deudas_bancarias_periodos, capital_social, resultado_del_ejercicio) values
 (1 , 50000.0, 2000              , 2                          , 1500.0    , 0         , 0                     , 0          , 0                   , 0               , 0                        , 1500           , 0                      ),
@@ -39,7 +34,7 @@ insert into balance
 insert into escenario
 (id, titulo       , maximos_periodos, nombre_periodos, descripcion                                                                                                                                                                                                , impuesto_porcentaje, costo_fijo, costo_variable, produccion_mensual, stock,  calidad,  cantidad_vendedores,  publicidad, balance_id) values
 (1 , 'escenario 1', 5               , 'Mes'          , 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra mas del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', 0.35               , 200.0     , 3.5           , 150               , 200  ,  5      ,                    1,           1,          1),
-(2 , 'escenario 2', 2               , 'Periodo'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,                    1,           1,          2);
+(2 , 'escenario 2', 2               , 'Período'      , 'En este escenario vamos ...'                                                                                                                                                                              , 0.0                , 100.0     , 1.0           , 100               , 400  ,  2      ,                    1,           1,          2);
 
 insert into curso
 (id, nombre , clave     ) values
@@ -56,7 +51,7 @@ insert into proveedor
 (2 , 1           , 'Prov 1' , 2                       , 5                ),
 (3 , 1           , 'Prov 1' , 3.5                     , 5                ),
 (4 , 1           , 'Prov 2' , 1.5                     , 2                ),
-(5 , 2           , 'Unico'  , 0                       , 0                );
+(5 , 2           , 'Único'  , 0                       , 0                );
 
 insert into financiacion
 (id, escenario_id, descripcion, tea , cantidad_cuotas) values
@@ -77,9 +72,9 @@ insert into modalidad_pago
 
 insert into decision 
 (id, escenario_id, descripcion                                          ) values
-(1 , 1           , 'Cuanto quiere invertir en publicidad?'              ),
-(2 , 1           , 'Cuanto quiere invertir en actualizar la maquinaria?'),
-(3 , 1           , 'Cuanto quiere invertir en otras cosas?'             );
+(1 , 1           , '¿Cuánto quiere invertir en publicidad?'              ),
+(2 , 1           , '¿Cuánto quiere invertir en actualizar la maquinaria?'),
+(3 , 1           , '¿Cuánto quiere invertir en otras cosas?'             );
 
 insert into opcion
 (id, decision_id, descripcion                                                , variacion_costo_fijo, variacion_costo_variable, variacion_produccion, variacion_calidad, variacion_publicidad, variacion_cantidad_vendedores) values
@@ -100,10 +95,10 @@ insert into consecuencia
 (3 , 3        , 10000 , 'publicidad'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', null                      ),
 (4 , 3        , -10000, 'publicidad'             , 'ECONOMICO' , 1               , 1                , null                            , null                      ),
 (5 , 5        , 20000 , 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'             ),
-(6 , 5        , 2000  , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
+(6 , 5        , 2000  , 'depreciación maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
 (7 , 5        , -20000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'             ),
 (8 , 6        , 50000 , 'maquinaria'             , 'FINANCIERO', 0               , 1                , 'EGRESOS_NO_AFECTOS_A_IMPUESTOS', 'MAQUINARIAS'             ),
-(9 , 6        , 5000  , 'depreciacion maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
+(9 , 6        , 5000  , 'depreciación maquinaria', 'FINANCIERO', 1               , 5                , 'GASTOS_NO_DESEMBOLSABLES'      , 'AMORTIZACION_MAQUINARIAS'),
 (10, 6        , -50000, 'maquinaria'             , 'ECONOMICO' , 1               , 1                , null                            , 'MAQUINARIAS'             ),
 (11, 7        , 10000 , 'cosas'                  , 'FINANCIERO', 0               , 1                , 'EGRESOS_AFECTOS_A_IMPUESTOS'   , null                      ),
 (12, 7        , -10000, 'cosas'                  , 'ECONOMICO' , 1               , 1                , null                            , null                      ),

@@ -60,6 +60,11 @@ public class EscenariosController {
         return escenarioService.createEscenario(escenario);
     }
     
+    @PostMapping("/escenarios/{id}")
+    public Escenario duplicateEscenario(@PathVariable("id") Long id,@RequestBody Escenario escenario) {
+        return escenarioService.duplicateEscenario(escenario);
+    }
+    
     @PutMapping("/escenarios/{id}")
     public Escenario modifyEscenario(@PathVariable("id") Long id,@RequestBody Escenario escenario) {
         return escenarioService.modifyEscenario(escenario);

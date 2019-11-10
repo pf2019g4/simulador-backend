@@ -4,8 +4,15 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.Usuario;
+import com.utn.simulador.negocio.simuladornegocio.repository.CreditoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.CuentaRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ForecastRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ModalidadCobroRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.OpcionProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.PuntajeProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +27,13 @@ public class ProyectoService {
     private final ProyectoRepository proyectoRepository;
     private final EscenarioRepository escenarioRepository;
     private final UsuarioRepository usuarioRepository;
+    private final EstadoRepository estadoRepository;
+    private final CuentaRepository cuentaRepository;
+    private final OpcionProyectoRepository opcionProyectoRepository;
+    private final ForecastRepository forecastRepository;
+    private final ModalidadCobroRepository modalidadCobroRepository;
+    private final PuntajeProyectoRepository puntajeProyectoRepository;
+    private final CreditoRepository creditoRepository;
     private final EstadoService estadoService;
 
     public Estado obtener(long escenarionId, long usuarioId) {
@@ -68,6 +82,17 @@ public class ProyectoService {
 
     public void cerrarProyectos(Long cursoId, Long escenarioId) {
         proyectoRepository.marcarProyectosComoEntregado(cursoId, escenarioId);
+    }
+    
+    public void deleteDatosProyecto (Long proyectoId) {
+        estadoRepository.deleteByProyectoId(proyectoId);
+        //cuentaPeriodoRepository.deleteByProyectoId(proyectoId);
+        cuentaRepository.deleteByProyectoId(proyectoId);
+        opcionProyectoRepository.deleteByProyectoId(proyectoId);
+        forecastRepository.deleteByProyectoId(proyectoId);
+        modalidadCobroRepository.deleteByProyectoId(proyectoId);
+        puntajeProyectoRepository.deleteByProyectoId(proyectoId);
+        creditoRepository.deleteByProyectoId(proyectoId);
     }
 
 }

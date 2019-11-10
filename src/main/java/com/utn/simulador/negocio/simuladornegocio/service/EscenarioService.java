@@ -4,16 +4,33 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Usuario;
 import com.utn.simulador.negocio.simuladornegocio.domain.Curso;
 import com.utn.simulador.negocio.simuladornegocio.domain.CursoEscenario;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
+import com.utn.simulador.negocio.simuladornegocio.domain.Decision;
+import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
+import com.utn.simulador.negocio.simuladornegocio.domain.Consecuencia;
+import com.utn.simulador.negocio.simuladornegocio.domain.Financiacion;
+import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.repository.CursoEscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.EscenarioRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.UsuarioRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.DecisionRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.FinanciacionRepository;
 import com.utn.simulador.negocio.simuladornegocio.bo.CursoEscenarioBo;
+import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
+import com.utn.simulador.negocio.simuladornegocio.repository.EmpresasCompetidorasRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.MercadoPeriodoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionPuntajeRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.RestriccionPrecioRepository;
 import java.util.ArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +40,18 @@ public class EscenarioService {
     private final EscenarioRepository escenarioRepository;
     private final CursoEscenarioRepository cursoEscenarioRepository;
     private final UsuarioRepository usuarioRepository;
+    private final DecisionRepository decisionRepository;
+    private final FinanciacionRepository financiacionRepository;
+    private final ProyectoRepository proyectoRepository;
+    private final PonderacionMercadoRepository ponderacionMercadoRepository;
+    private final PonderacionPuntajeRepository ponderacionPuntajeRepository;
+    private final MercadoPeriodoRepository mercadoPeriodoRepository;
+    private final EmpresasCompetidorasRepository empresasCompetidorasRepository;
+    private final RestriccionPrecioRepository restriccionPrecioRepository;
+    private final ProyectoService proyectoService;
+    
+    @Autowired
+    protected EntityManager em;
 
     public List<Escenario> getEscenarios() {
         return escenarioRepository.findAll();
@@ -78,6 +107,18 @@ public class EscenarioService {
     }
     
     public void deleteEscenarioById(Long id) {
+        for(Proyecto proy : proyectoRepository.findByEscenarioId(id)) {
+            proyectoService.deleteDatosProyecto(proy.getId());
+        }
+        decisionRepository.deleteByEscenarioId(id);
+        financiacionRepository.deleteByEscenarioId(id);
+        cursoEscenarioRepository.deleteByEscenarioId(id);
+        proyectoRepository.deleteByEscenarioId(id);
+        ponderacionMercadoRepository.deleteByEscenarioId(id);
+        ponderacionPuntajeRepository.deleteByEscenarioId(id);
+        mercadoPeriodoRepository.deleteByEscenarioId(id);
+        empresasCompetidorasRepository.deleteByEscenarioId(id);
+        restriccionPrecioRepository.deleteByEscenarioId(id);
     	escenarioRepository.deleteById(id);
     }
     
@@ -91,6 +132,50 @@ public class EscenarioService {
         CursoEscenario cursoEscenario = cursoEscenarioRepository.findByCursoIdAndEscenarioId(cursoId, id);
         cursoEscenario.setAbierto(Boolean.FALSE);
         cursoEscenarioRepository.save(cursoEscenario);
+    }
+    
+    public Escenario duplicateEscenario(Escenario escenario) {
+        Long idOriginal = escenario.getId();
+        Escenario escenarioCopia = new Escenario();
+        escenarioCopia.setTitulo("");
+        escenarioCopia.setDescripcion("");
+        escenarioCopia.setImpuestoPorcentaje(0d);
+        escenarioCopia.setMaximosPeriodos(0);
+        escenarioCopia = escenarioRepository.save(escenarioCopia);
+        escenario.setId(escenarioCopia.getId());
+        escenario.setTitulo(escenario.getTitulo().concat(" - Copia"));
+        for(Proveedor proveedor : escenario.getProveedores()) {
+            proveedor.setId(null);
+            proveedor.setEscenarioId(escenario.getId());
+            for(ModalidadPago modalidadPago : proveedor.getModalidadPago()) {
+                modalidadPago.setId(null);
+                modalidadPago.setProveedor(proveedor);
+            }
+        }
+        escenario.getBalanceInicial().setId(null);
+        List<Decision> decisiones = decisionRepository.findByEscenarioId(idOriginal);
+        for(Decision decision : decisiones) {
+            decision.setId(null);
+            decision.setEscenarioId(escenario.getId());
+            for(Opcion opcion : decision.getOpciones()) {
+                opcion.setId(null);
+                opcion.setDecision(decision);
+                for(Consecuencia consecuencia : opcion.getConsecuencias()){
+                    consecuencia.setId(null);
+                    consecuencia.setOpcion(opcion);
+                }
+            }
+            em.detach(decision);
+        }
+        decisionRepository.saveAll(decisiones);
+        List<Financiacion> financiaciones = financiacionRepository.findByEscenarioId(idOriginal);
+        for(Financiacion financiacion : financiaciones) {
+            financiacion.setId(null);
+            financiacion.setEscenarioId(escenario.getId());
+            em.detach(financiacion);
+        }
+        financiacionRepository.saveAll(financiaciones);
+    	return escenarioRepository.save(escenario);
     }
 
 }

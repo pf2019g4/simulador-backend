@@ -16,7 +16,7 @@ public interface EscenarioRepository extends JpaRepository<Escenario, Long> {
     
     public Escenario save(Escenario escenario);
     
-    @Query("SELECT new com.utn.simulador.negocio.simuladornegocio.bo.JugadorProyectoBo(U.mail, U.nombreCompleto, U.fotoUrl, P.entregado, PP.cajaFinal, PP.ventasTotales, PP.renta, PP.puntaje) " +
+    @Query("SELECT new com.utn.simulador.negocio.simuladornegocio.bo.JugadorProyectoBo(U.id, U.mail, U.nombreCompleto, U.fotoUrl, P.entregado, PP.cajaFinal, PP.ventasTotales, PP.renta, PP.puntaje) " +
             "FROM Proyecto P " +
             "LEFT JOIN PuntajeProyecto PP ON PP.proyectoId = P.id " +
             "INNER JOIN Usuario U ON U.id = P.usuarioId " +
