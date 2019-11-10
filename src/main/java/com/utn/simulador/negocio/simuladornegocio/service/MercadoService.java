@@ -15,6 +15,7 @@ import com.utn.simulador.negocio.simuladornegocio.repository.PonderacionMercadoR
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.RestriccionPrecioRepository;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -162,12 +163,19 @@ public class MercadoService {
             ponderacionTotalmercadoBajo += empresaCopetidora.getBajo();
         }
 
-        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoAlto()).divide(new BigDecimal(ponderacionTotalmercadoAlto))).multiply(new BigDecimal(mercadoPeriodo.getAlto())).intValue();
-        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoMedio()).divide(new BigDecimal(ponderacionTotalmercadoMedio))).multiply(new BigDecimal(mercadoPeriodo.getMedio())).intValue();
-        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoBajo()).divide(new BigDecimal(ponderacionTotalmercadoBajo))).multiply(new BigDecimal(mercadoPeriodo.getBajo())).intValue();
+        cuotaMercado += calcularCuotaMercado(proyecto.getPonderacionMercadoAlto(), ponderacionTotalmercadoAlto, mercadoPeriodo.getAlto());
+        cuotaMercado += calcularCuotaMercado(proyecto.getPonderacionMercadoMedio(), ponderacionTotalmercadoMedio, mercadoPeriodo.getMedio());
+        cuotaMercado += calcularCuotaMercado(proyecto.getPonderacionMercadoBajo(), ponderacionTotalmercadoBajo, mercadoPeriodo.getBajo());
 
         return cuotaMercado;
 
+    }
+
+    private long calcularCuotaMercado(Integer ponderacionMercadoParaProyecto, Integer ponderacionTotalmercadoAlto, Integer tamanioMercado) {
+        BigDecimal porcentajePonderacionMercadoProyecto = (new BigDecimal(ponderacionMercadoParaProyecto.toString())
+                .divide(new BigDecimal(ponderacionTotalmercadoAlto.toString()),6, RoundingMode.HALF_UP));
+        long cuotaMercado = porcentajePonderacionMercadoProyecto.multiply(new BigDecimal(tamanioMercado.toString())).longValue();
+        return cuotaMercado;
     }
 
 }
