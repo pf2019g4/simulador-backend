@@ -52,7 +52,7 @@ public class MercadoService {
         PonderacionMercado ponderacionMercadoAUtilizar = null;
 
         List<PonderacionMercado> ponderacionesMercadoPorModalidadCobro
-                = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrdeByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.MODALIDAD_DE_COBRO);
+                = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.MODALIDAD_DE_COBRO);
 
         for (PonderacionMercado ponderacionMercado : ponderacionesMercadoPorModalidadCobro) {
             for (ModalidadCobro modalidadCobro : proyecto.getModalidadCobro()) {
@@ -79,7 +79,7 @@ public class MercadoService {
     }
 
     private void definirPonderacionMercadoPorPublicidad(Proyecto proyecto, Estado estado) {
-        List<PonderacionMercado> ponderacionesMercadoPorPublicidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrdeByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.PUBLICIDAD_DESDE);
+        List<PonderacionMercado> ponderacionesMercadoPorPublicidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.PUBLICIDAD_DESDE);
 
         for (PonderacionMercado ponderacionMercadoPublicidad : ponderacionesMercadoPorPublicidad) {
             if (ponderacionMercadoPublicidad.getValor().compareTo(estado.getPublicidad()) <= 0) {
@@ -90,7 +90,7 @@ public class MercadoService {
     }
 
     private void definirPonderacionMercadoPorCalidad(Proyecto proyecto, Estado estado) {
-        List<PonderacionMercado> ponderacionesMercadoPorCalidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrdeByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.CALIDAD_DESDE);
+        List<PonderacionMercado> ponderacionesMercadoPorCalidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.CALIDAD_DESDE);
 
         for (PonderacionMercado ponderacionMercadoCalidad : ponderacionesMercadoPorCalidad) {
             if (ponderacionMercadoCalidad.getValor().intValue() < estado.getCalidad()) {
@@ -101,7 +101,7 @@ public class MercadoService {
     }
 
     private void definirPonderacionMercadoPorVendedores(Proyecto proyecto, Estado estado) {
-        List<PonderacionMercado> ponderacionesMercadoPorVendedores = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrdeByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.VENDEDORES_DESDE);
+        List<PonderacionMercado> ponderacionesMercadoPorVendedores = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.VENDEDORES_DESDE);
 
         for (PonderacionMercado ponderacionMercadoVendedores : ponderacionesMercadoPorVendedores) {
             if (ponderacionMercadoVendedores.getValor().intValue() < estado.getCantidadVendedores()) {
@@ -112,7 +112,7 @@ public class MercadoService {
     }
 
     private void definirPonderacionMercadoPorPrecio(Proyecto proyecto) {
-        List<PonderacionMercado> ponderacionesMercadoPorPrecio = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrdeByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.PRECIO_DESDE);
+        List<PonderacionMercado> ponderacionesMercadoPorPrecio = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.PRECIO_DESDE);
 
         List<Forecast> forecasts = forecastService.obtenerPorProyecto(proyecto.getId());
 

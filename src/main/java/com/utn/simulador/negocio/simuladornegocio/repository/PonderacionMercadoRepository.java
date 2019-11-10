@@ -10,5 +10,5 @@ public interface PonderacionMercadoRepository extends JpaRepository<PonderacionM
 
     public List<PonderacionMercado> findByEscenarioId(Long escenarioId);
 
-    public List<PonderacionMercado> findByEscenarioIdAndConceptoOrdeByValorDesc(Long id, TipoPonderacionMercado tipoPonderacionMercado);
+    public List<PonderacionMercado> findByEscenarioIdAndConceptoOrderByValorDesc(Long id, TipoPonderacionMercado tipoPonderacionMercado);
 }

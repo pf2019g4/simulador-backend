@@ -3,7 +3,6 @@ package com.utn.simulador.negocio.simuladornegocio.builder;
 import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Balance;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
-import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.domain.EstadoInicial;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
@@ -23,23 +22,14 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     }
 
     public static EscenarioBuilder baseConEstadoInicial(EstadoInicial estado) {
-        EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
-        escenarioBuilder.instance.setTitulo("escenario de test 1");
-        escenarioBuilder.instance.setDescripcion("descripcion de test 1");
-        escenarioBuilder.instance.setImpuestoPorcentaje(0.0);
-        escenarioBuilder.instance.setMaximosPeriodos(12);
-        escenarioBuilder.instance.setNombrePeriodos("Mes");
+        EscenarioBuilder escenarioBuilder = base();
         escenarioBuilder.instance.setEstadoInicial(estado);
         return escenarioBuilder;
     }
 
     public static EscenarioBuilder escenarioConImpuesto(Double impuesto) {
-        EscenarioBuilder escenarioBuilder = new EscenarioBuilder();
-        escenarioBuilder.instance.setTitulo("escenario con impuesto");
-        escenarioBuilder.instance.setDescripcion("descripcion de escenario con impuesto");
+        EscenarioBuilder escenarioBuilder = base();
         escenarioBuilder.instance.setImpuestoPorcentaje(impuesto);
-        escenarioBuilder.instance.setMaximosPeriodos(5);
-        escenarioBuilder.instance.setNombrePeriodos("Mes");
         return escenarioBuilder;
     }
 
