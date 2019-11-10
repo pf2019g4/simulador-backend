@@ -68,4 +68,12 @@ public class ProyectoBuilder extends AbstractPersistenceBuilder<Proyecto> {
         return proyecto;
     }
 
+    public ProyectoBuilder conPonderacionesMercado(int mercadoAlto, int mercadoMedio, int mercadoBajo) {
+        this.instance.setPonderacionMercadoAlto(mercadoAlto);
+        this.instance.setPonderacionMercadoMedio(mercadoMedio);
+        this.instance.setPonderacionMercadoBajo(mercadoBajo);
+
+        return this;
+    }
+
 }

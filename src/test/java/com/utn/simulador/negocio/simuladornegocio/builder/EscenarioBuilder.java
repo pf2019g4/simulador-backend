@@ -4,6 +4,8 @@ import com.somospnt.test.builder.AbstractPersistenceBuilder;
 import com.utn.simulador.negocio.simuladornegocio.domain.Balance;
 import com.utn.simulador.negocio.simuladornegocio.domain.Escenario;
 import com.utn.simulador.negocio.simuladornegocio.domain.EstadoInicial;
+import com.utn.simulador.negocio.simuladornegocio.domain.MercadoPeriodo;
+import javax.persistence.EntityManager;
 
 public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
 
@@ -45,5 +47,20 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     public EscenarioBuilder conBalanceInicial(Balance balance) {
         this.instance.setBalanceInicial(balance);
         return this;
+    }
+
+    @Override
+    public Escenario build(EntityManager em) {
+
+        em.persist(instance);
+
+        for (int i = 1; i <= instance.getMaximosPeriodos(); i++) {
+            MercadoPeriodo mercadoPeriodo = MercadoPeriodo.builder().escenarioId(instance.getId()).periodo(i).alto(100).medio(100).bajo(100).build();
+            em.persist(mercadoPeriodo);
+        }
+
+        em.flush();
+        em.detach(instance);
+        return instance;
     }
 }

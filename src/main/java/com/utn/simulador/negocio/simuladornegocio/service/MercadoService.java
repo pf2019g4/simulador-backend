@@ -140,9 +140,9 @@ public class MercadoService {
 
         List<EmpresaCompetidora> empresasCopetidoras = empresasCompetidorasRepository.findByEscenarioId(estado.getProyecto().getEscenario().getId());
 
-        Integer ponderacionTotalmercadoBajo = proyecto.getPonderacionMercadoAlto();
+        Integer ponderacionTotalmercadoBajo = proyecto.getPonderacionMercadoBajo();
         Integer ponderacionTotalmercadoMedio = proyecto.getPonderacionMercadoMedio();
-        Integer ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoBajo();
+        Integer ponderacionTotalmercadoAlto = proyecto.getPonderacionMercadoAlto();
 
         for (EmpresaCompetidora empresaCopetidora : empresasCopetidoras) {
             ponderacionTotalmercadoAlto += empresaCopetidora.getAlto();
@@ -150,9 +150,9 @@ public class MercadoService {
             ponderacionTotalmercadoBajo += empresaCopetidora.getBajo();
         }
 
-        cuotaMercado += mercadoPeriodo.getAlto() * (proyecto.getPonderacionMercadoAlto() / ponderacionTotalmercadoAlto);
-        cuotaMercado += mercadoPeriodo.getMedio() * (proyecto.getPonderacionMercadoMedio() / ponderacionTotalmercadoMedio);
-        cuotaMercado += mercadoPeriodo.getBajo() * (proyecto.getPonderacionMercadoBajo() / ponderacionTotalmercadoBajo);
+        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoAlto()).divide(new BigDecimal(ponderacionTotalmercadoAlto))).multiply(new BigDecimal(mercadoPeriodo.getAlto())).intValue();
+        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoMedio()).divide(new BigDecimal(ponderacionTotalmercadoMedio))).multiply(new BigDecimal(mercadoPeriodo.getMedio())).intValue();
+        cuotaMercado += (new BigDecimal(proyecto.getPonderacionMercadoBajo()).divide(new BigDecimal(ponderacionTotalmercadoBajo))).multiply(new BigDecimal(mercadoPeriodo.getBajo())).intValue();
 
         return cuotaMercado;
 
