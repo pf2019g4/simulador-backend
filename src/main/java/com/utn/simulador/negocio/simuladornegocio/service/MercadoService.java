@@ -104,7 +104,7 @@ public class MercadoService {
         List<PonderacionMercado> ponderacionesMercadoPorCalidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.CALIDAD_DESDE);
 
         for (PonderacionMercado ponderacionMercadoCalidad : ponderacionesMercadoPorCalidad) {
-            if (ponderacionMercadoCalidad.getValor().intValue() < estado.getCalidad()) {
+            if (ponderacionMercadoCalidad.getValor().intValue() <= estado.getCalidad()) {
                 proyecto.aumentarPonderacionMercado(ponderacionMercadoCalidad);
                 break;
             }
@@ -115,7 +115,7 @@ public class MercadoService {
         List<PonderacionMercado> ponderacionesMercadoPorVendedores = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.VENDEDORES_DESDE);
 
         for (PonderacionMercado ponderacionMercadoVendedores : ponderacionesMercadoPorVendedores) {
-            if (ponderacionMercadoVendedores.getValor().intValue() < estado.getCantidadVendedores()) {
+            if (ponderacionMercadoVendedores.getValor().intValue() <= estado.getCantidadVendedores()) {
                 proyecto.aumentarPonderacionMercado(ponderacionMercadoVendedores);
                 break;
             }
