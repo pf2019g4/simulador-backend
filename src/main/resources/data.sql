@@ -164,3 +164,7 @@ INSERT INTO usuario (id, mail, foto_url, nombre_completo, rol, curso_id) VALUES
 (3, 'pepe@gmail.com', NULL, 'pepe@gmail.com', 'JUGADOR', 1),
 (4, 'laureano.clausi@gmail.com', 'https://lh3.googleusercontent.com/a-/AAuE7mBKqgkjOPjWbTk6KYllZ7lHYJzAfo3boZ5CsU5T_g', 'Laureano Gabriel Clausi', 'JUGADOR', 1),
 (5, 'santiago.hgarcia94@gmail.com', 'https://lh3.googleusercontent.com/a-/AAuE7mCgvBK688UVhuKjHhCa0PNYodLAeEgRfb8VrSy3cA', 'Santiago Garcia', 'JUGADOR', 1);
+
+insert into usuario
+(id, mail   , foto_url, nombre_completo, rol) values
+(6,'admin@admin.com',NULL,'admin@admin.com','ADMIN');
