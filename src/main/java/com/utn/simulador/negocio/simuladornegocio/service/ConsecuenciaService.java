@@ -5,9 +5,11 @@ import com.utn.simulador.negocio.simuladornegocio.domain.Consecuencia;
 import com.utn.simulador.negocio.simuladornegocio.repository.ConsecuenciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ConsecuenciaService {
 
     private final ConsecuenciaRepository consecuenciaRepository;

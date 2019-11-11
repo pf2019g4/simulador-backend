@@ -19,10 +19,11 @@ public class PonderacionMercado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long escenarioId;
-    private String concepto;
+    @Enumerated(EnumType.STRING)
+    private TipoPonderacionMercado concepto;
     private BigDecimal valor;
     private Integer bajo;
     private Integer medio;
     private Integer alto;
-    
+
 }

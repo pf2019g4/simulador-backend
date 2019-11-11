@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MercadoPeriodoRepository extends JpaRepository<MercadoPeriodo, Long> {
 
-    List<MercadoPeriodo> findByEscenarioId(Long escenarioId);
-    
+    //TODO este transactional no deberia estar
     @Transactional
     void deleteByEscenarioId(Long escenarioId);
+
+    public List<MercadoPeriodo> findByEscenarioId(Long escenarioId);
+
+    public MercadoPeriodo findByEscenarioIdAndPeriodo(Long id, Integer periodo);
 }
