@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 
@@ -24,5 +25,7 @@ public class Activo {
     private BigDecimal inventario;
     private BigDecimal maquinaria;
     private BigDecimal amortizacionAcumulada;
+    @Transient
+    private BigDecimal otros;
 
 }
