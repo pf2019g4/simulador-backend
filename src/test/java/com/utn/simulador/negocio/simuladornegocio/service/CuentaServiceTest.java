@@ -71,10 +71,10 @@ public class CuentaServiceTest extends SimuladorNegocioApplicationTests {
         int cantidadCuentasBancariasDespues = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "cuenta", "descripcion like '%Deudas Bancarias%' and proyecto_id = " + proyecto.getId());
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        assertThat(cantidadCuentasProveedoresDespues).isEqualTo(cantidadCuentasProveedoresAntes + 1);
-        assertThat(cantidadCuentasPorCobrarDespues).isEqualTo(cantidadCuentasPorCobrarAntes + 1);
-        assertThat(cantidadCuentasBancariasDespues).isEqualTo(cantidadCuentasBancariasAntes + 1);
-        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 3);
+        assertThat(cantidadCuentasProveedoresDespues).isEqualTo(cantidadCuentasProveedoresAntes + 2);
+        assertThat(cantidadCuentasPorCobrarDespues).isEqualTo(cantidadCuentasPorCobrarAntes + 2);
+        assertThat(cantidadCuentasBancariasDespues).isEqualTo(cantidadCuentasBancariasAntes + 2);
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 6);
 
     }
 }
