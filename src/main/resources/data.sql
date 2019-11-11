@@ -168,4 +168,3 @@ INSERT INTO usuario (id, mail, foto_url, nombre_completo, rol, curso_id) VALUES
 insert into usuario
 (id, mail   , foto_url, nombre_completo, rol) values
 (6,'admin@admin.com',NULL,'admin@admin.com','ADMIN');
->>>>>>> f8ee6a5f6fadbc34ddd1fa0b9a5d0c296e0d0858
