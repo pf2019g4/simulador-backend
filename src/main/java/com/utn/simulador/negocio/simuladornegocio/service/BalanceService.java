@@ -13,10 +13,11 @@ public class BalanceService {
 
     private final EstadoService estadoService;
     private final CuentaService cuentaService;
-    private final ForecastService forecastService;
 
     public Balance obtenerPorProyecto(Long proyectoId, Boolean esForecast) {
         Estado estado = estadoService.obtenerActual(proyectoId, esForecast);
+        PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), null);
+        patrimonioNeto.setResultadoDelEjercicio(calcularResultadoDelEjercicio(patrimonioNeto, proyectoId, esForecast));
         Activo activo = new Activo(
                 estado.getCaja(),
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.CREDITO_CLIENTES, esForecast), estado.getPeriodo()),
@@ -26,15 +27,25 @@ public class BalanceService {
                         proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS, esForecast)),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
                         proyectoId, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES, TipoBalance.AMORTIZACION_MAQUINARIAS, esForecast)).negate()
+                ,BigDecimal.ZERO
         );
         Pasivo pasivo = new Pasivo(
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES, esForecast), estado.getPeriodo()),
                 null,
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_BANCARIA, esForecast), estado.getPeriodo()),
-                null
+                null,
+                BigDecimal.ZERO
         );
-        PatrimonioNeto patrimonioNeto = new PatrimonioNeto(estado.getCapitalSocial(), null);
-        patrimonioNeto.setResultadoDelEjercicio(calcularResultadoDelEjercicio(activo, pasivo, patrimonioNeto));
+
+        BigDecimal sumaActivo = sumaActivo(activo);
+        BigDecimal sumaPasivoYPatrimonio = sumaPasivo(pasivo).add(sumaPatrimonioNeto(patrimonioNeto));
+        Integer comparacion = sumaActivo.compareTo(sumaPasivoYPatrimonio);
+        if( comparacion > 0){
+            pasivo.setOtros(sumaActivo.subtract(sumaPasivoYPatrimonio));
+        } else if( comparacion < 0) {
+            activo.setOtros(sumaPasivoYPatrimonio.subtract(sumaActivo));
+        }
+
         return new Balance(null, activo, pasivo, patrimonioNeto);
     }
 
@@ -65,22 +76,19 @@ public class BalanceService {
     }
 
     private BigDecimal calcularInventario(Estado estado) {
-        Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(estado.getProyecto().getId(), estado.getPeriodo());
-        return forecast != null ? forecast.getPrecio().multiply(new BigDecimal(estado.getStock())) : BigDecimal.ZERO;
+        return estado.getCostoVariable().multiply(new BigDecimal(estado.getStock()));
     }
 
-    private BigDecimal calcularResultadoDelEjercicio(Activo activo, Pasivo pasivo, PatrimonioNeto pn) {
+    private BigDecimal calcularResultadoDelEjercicio(PatrimonioNeto pn, Long idProyecto, Boolean esForecast) {
         if (pn.getResultadoDelEjercicio() != null) {
             return pn.getResultadoDelEjercicio();
         }
-        int cmp = sumaActivo(activo).compareTo(sumaPasivo(pasivo).add(sumaPatrimonioNeto(pn)));
-        if (cmp == 0) {
-            return new BigDecimal(0);
-        } else if (cmp == -1) {
-            return sumaPasivo(pasivo).add(sumaPatrimonioNeto(pn)).subtract(sumaActivo(activo));
-        } else {
-            return sumaActivo(activo).subtract(sumaPatrimonioNeto(pn)).subtract(sumaPasivo(pasivo));
-        }
+        List<Cuenta> cuentas = cuentaService.obtenerPorProyectoYTipoCuenta(idProyecto, TipoCuenta.ECONOMICO, esForecast);
+        return cuentas.stream()
+                .map(cuenta -> cuenta.getCuentasPeriodo().stream()
+                        .map(cuentaPeriodo -> cuentaPeriodo.getMonto() != null ? cuentaPeriodo.getMonto() : BigDecimal.ZERO)
+                        .reduce(BigDecimal::add).get())
+                .reduce(BigDecimal::add).get();
     }
 
     private BigDecimal sumaActivo(Activo activo) {

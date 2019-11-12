@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 
@@ -22,5 +23,7 @@ public class Pasivo {
     private Integer proveedoresPeriodos;
     private BigDecimal deudasBancarias;
     private Integer deudasBancariasPeriodos;
+    @Transient
+    private BigDecimal otros;
 
 }

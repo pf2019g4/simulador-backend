@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SimuladorProduccionService {
 
     private final CuentaService cuentaService;
@@ -37,12 +39,14 @@ public class SimuladorProduccionService {
             if (costoPeriodo.compareTo(BigDecimal.ZERO) != 0) {
                 cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
             }
+            if(modalidadPago.getOffsetPeriodo() == 0){
+                estado.setCaja(estado.getCaja().subtract(costoPeriodo));
+            }
         }
 
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
 
-        estado.setCaja(estado.getCaja().subtract(costoProduccionPeriodo));
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
     }
 

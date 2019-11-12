@@ -20,4 +20,12 @@ public class EstadoInicialBuilder extends AbstractPersistenceBuilder<EstadoInici
         estadoBuilder.instance.setCalidad(5);
         return estadoBuilder;
     }
+
+    public EstadoInicialBuilder conEstado(Integer calidad, Integer cantidadVendedores, BigDecimal publicidad) {
+        this.instance.setCalidad(calidad);
+        this.instance.setCantidadVendedores(cantidadVendedores);
+        this.instance.setPublicidad(publicidad);
+
+        return this;
+    }
 }

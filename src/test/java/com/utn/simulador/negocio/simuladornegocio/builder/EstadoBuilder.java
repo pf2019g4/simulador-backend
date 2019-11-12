@@ -30,33 +30,13 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
     }
 
     public static EstadoBuilder inicialConPeriodoActual(Proyecto proyecto, Integer periodoActual) {
-        EstadoBuilder estadoBuilder = new EstadoBuilder();
-        estadoBuilder.instance.setProyecto(proyecto);
-        estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
-        estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
-        estadoBuilder.instance.setCaja(new BigDecimal(11000));
-        estadoBuilder.instance.setStock(200L);
-        estadoBuilder.instance.setProduccionMensual(200L);
-        estadoBuilder.instance.setCalidad(0);
-        estadoBuilder.instance.setPublicidad(new BigDecimal(500));
-        estadoBuilder.instance.setCantidadVendedores(0);
-        estadoBuilder.instance.setActivo(true);
+        EstadoBuilder estadoBuilder = inicial(proyecto);
         estadoBuilder.instance.setPeriodo(periodoActual);
-        estadoBuilder.instance.setEsForecast(true);
         return estadoBuilder;
     }
 
     public static EstadoBuilder inicialConPeriodoYEstado(Proyecto proyecto, Integer periodoActual, Boolean activo) {
-        EstadoBuilder estadoBuilder = new EstadoBuilder();
-        estadoBuilder.instance.setProyecto(proyecto);
-        estadoBuilder.instance.setCostoFijo(new BigDecimal("1555.5"));
-        estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
-        estadoBuilder.instance.setCaja(new BigDecimal(11000));
-        estadoBuilder.instance.setStock(200L);
-        estadoBuilder.instance.setProduccionMensual(200L);
-        estadoBuilder.instance.setCalidad(0);
-        estadoBuilder.instance.setPublicidad(new BigDecimal(500));
-        estadoBuilder.instance.setCantidadVendedores(0);
+        EstadoBuilder estadoBuilder = inicial(proyecto);
         estadoBuilder.instance.setActivo(activo);
         estadoBuilder.instance.setPeriodo(periodoActual);
         estadoBuilder.instance.setEsForecast(true);

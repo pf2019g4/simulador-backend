@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.utn.simulador.negocio.simuladornegocio.controller;
 
 import com.utn.simulador.negocio.simuladornegocio.domain.Opcion;
 import com.utn.simulador.negocio.simuladornegocio.domain.OpcionProyecto;
-import com.utn.simulador.negocio.simuladornegocio.domain.PonderacionPuntaje;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoCuenta;
 import com.utn.simulador.negocio.simuladornegocio.domain.TipoFlujoFondo;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
@@ -19,6 +13,7 @@ import com.utn.simulador.negocio.simuladornegocio.service.ProyectoService;
 import com.utn.simulador.negocio.simuladornegocio.service.PuntajeService;
 import com.utn.simulador.negocio.simuladornegocio.service.SimuladorService;
 import com.utn.simulador.negocio.simuladornegocio.service.EscenarioService;
+import com.utn.simulador.negocio.simuladornegocio.service.MercadoService;
 import com.utn.simulador.negocio.simuladornegocio.service.ProveedorService;
 import java.util.List;
 import java.util.Arrays;
@@ -48,6 +43,7 @@ public class SimuladorController {
     private final PuntajeService puntajeService;
     private final EscenarioService escenarioService;
     private final ProveedorService proveedorService;
+    private final MercadoService mercadoService;
 
     @GetMapping("/tipoFlujoFondos")
     public List<TipoFlujoFondo> getTipoFlujoFondos() {
@@ -93,24 +89,37 @@ public class SimuladorController {
         List<Proyecto> proyectosASimular = proyectoService.obtenerPorCursoYEscenario(cursoId, escenarioId);
 
         boolean esForecast = false;
+        prepararEscenarioParaSimularMercado(proyectosASimular, esForecast);
+        
+        simularMercadoYCalcularPuntaje(proyectosASimular, esForecast);
+
+    }
+
+    private void simularMercadoYCalcularPuntaje(List<Proyecto> proyectosASimular, boolean esForecast) {
+        for (Proyecto proyecto : proyectosASimular) {
+            simuladorService.simularPeriodos(proyecto.getId(), esForecast);
+            puntajeService.calcularPuntajesProyecto(proyecto.getId());
+        }
+    }
+
+    private void prepararEscenarioParaSimularMercado(List<Proyecto> proyectosASimular, boolean esForecast) {
         for (Proyecto proyecto : proyectosASimular) {
             
-            if(proyecto.getProveedorSeleccionado() == null) {
+            if (proyecto.getProveedorSeleccionado() == null) {
                 proyecto.setProveedorSeleccionado(proveedorService.obtenerProveedorPorDefecto());
             }
 
-            List<OpcionProyecto> findByProyectoId = opcionProyectoRepository.findByProyectoId(proyecto.getId());
+            List<OpcionProyecto> opcionesProyecto = opcionProyectoRepository.findByProyectoId(proyecto.getId());
 
-            for (OpcionProyecto opcionProyecto : findByProyectoId) {
+            for (OpcionProyecto opcionProyecto : opcionesProyecto) {
                 decisionService.tomaDecision(proyecto.getId(), opcionProyecto.getOpcion().getId(), esForecast);
             }
             cuentaService.crearPorBalanceInicial(proyecto.getId(), esForecast);
             financiacionService.acreditar(proyecto.getId(), esForecast);
-            simuladorService.simularPeriodos(proyecto.getId(), esForecast);
             
-            puntajeService.calcularPuntajesProyecto(proyecto.getId());
-        }
+            mercadoService.establecerPonderaciones(proyecto);
 
+        }
     }
 
 }
