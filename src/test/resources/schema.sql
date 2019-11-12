@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS usuario (
   nombre_completo VARCHAR(60) NOT NULL,
   rol VARCHAR(20) NOT NULL,
   curso_id bigint,
-  FOREIGN KEY (curso_id) REFERENCES curso(id)
-
+  FOREIGN KEY (curso_id) REFERENCES curso(id),
+  UNIQUE(`mail`)
 );
 
 CREATE TABLE IF NOT EXISTS curso_escenario (
