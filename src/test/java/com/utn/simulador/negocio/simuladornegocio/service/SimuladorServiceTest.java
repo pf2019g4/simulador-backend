@@ -32,7 +32,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo() + 1).build(em);
 
-        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), true);
+        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto, true);
 
         assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
         assertThat(nuevoEstado.getCaja()).isGreaterThan(new BigDecimal("1000"));
@@ -47,7 +47,7 @@ public class SimuladorServiceTest extends SimuladorNegocioApplicationTests {
 
         Forecast forecast = ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo() + 1).build(em);
 
-        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto.getId(), true);
+        Estado nuevoEstado = simuladorService.simularPeriodo(proyecto, true);
 
         assertThat(nuevoEstado.getPeriodo()).isEqualTo(estadoInicial.getPeriodo() + 1);
         assertThat(nuevoEstado.getCaja()).isGreaterThan(new BigDecimal("1000"));
