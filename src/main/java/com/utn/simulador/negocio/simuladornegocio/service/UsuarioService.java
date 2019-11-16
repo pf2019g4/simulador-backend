@@ -42,6 +42,10 @@ public class UsuarioService {
             usuario.setFotoUrl(nuevoUsuario.getFotoUrl());
             usuario.setRol(Rol.JUGADOR);
             usuario = usuarioRepository.save(usuario);
+        }else{
+            usuario.setNombreCompleto(nuevoUsuario.getNombreCompleto());
+            usuario.setFotoUrl(nuevoUsuario.getFotoUrl());
+            usuario = usuarioRepository.save(usuario);
         }
 
         return usuario;
