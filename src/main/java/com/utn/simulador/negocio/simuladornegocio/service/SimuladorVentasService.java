@@ -78,7 +78,7 @@ public class SimuladorVentasService {
     }
 
     private BigDecimal descontarInventarioYCalcularCostoMercaderiaVendida(Estado estado, long unidadesVendidas) {
-        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()), RoundingMode.HALF_UP);
+        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()), 10, RoundingMode.HALF_UP);
         BigDecimal costoMercaderiaVendida = costoProduccionPorUnidad.multiply(BigDecimal.valueOf(unidadesVendidas));
 
         BigDecimal subtract = estado.getInventario().subtract(costoMercaderiaVendida);
