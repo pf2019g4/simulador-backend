@@ -27,6 +27,7 @@ public class EstadoService {
                 .costoVariable(proyecto.getEscenario().getEstadoInicial().getCostoVariable())
                 .produccionMensual(proyecto.getEscenario().getEstadoInicial().getProduccionMensual())
                 .stock(proyecto.getEscenario().getEstadoInicial().getStock())
+                .inventario(proyecto.getEscenario().getBalanceInicial().getActivo().getInventario())
                 .calidad(proyecto.getEscenario().getEstadoInicial().getCalidad())
                 .publicidad(proyecto.getEscenario().getEstadoInicial().getPublicidad())
                 .cantidadVendedores(proyecto.getEscenario().getEstadoInicial().getCantidadVendedores())

@@ -17,19 +17,23 @@ public class SimuladorProduccionService {
     private final CuentaService cuentaService;
 
     Estado simular(Estado estado, Boolean quiebreDeCaja) {
-        if(!quiebreDeCaja) {
-            aumentarStock(estado);
-        }
+
         imputarGastosProduccion(estado, quiebreDeCaja);
         //TODO aca habria que amortizar la maquinaria para el periodo
+
         return estado;
     }
 
     private void imputarGastosProduccion(Estado estado, Boolean quiebreDeCaja) {
         BigDecimal costoProduccionPeriodo = quiebreDeCaja ? BigDecimal.ZERO : calcularCostoProduccionPeriodo(estado);
+
+        if (!quiebreDeCaja) {
+            aumentarStockEInventario(estado, costoProduccionPeriodo);
+        }
+
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
-        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(), 
-                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), 
+        Cuenta cuentaFinanciera = cuentaService.crearCuentaFinanciera(estado.getProyecto().getId(),
+                TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(),
                 TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, null, TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
         cuentaFinanciera.setTipoBalance(TipoBalance.DEUDA_PROVEEDORES);
 
@@ -39,7 +43,7 @@ public class SimuladorProduccionService {
             if (costoPeriodo.compareTo(BigDecimal.ZERO) != 0) {
                 cuentasPeriodos.add(cuentaService.crearCuentaFinancieraPeriodo(estado.getPeriodo() + modalidadPago.getOffsetPeriodo(), costoPeriodo, cuentaFinanciera));
             }
-            if(modalidadPago.getOffsetPeriodo() == 0){
+            if (modalidadPago.getOffsetPeriodo() == 0) {
                 estado.setCaja(estado.getCaja().subtract(costoPeriodo));
             }
         }
@@ -50,8 +54,9 @@ public class SimuladorProduccionService {
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
     }
 
-    private void aumentarStock(Estado estado) {
+    private void aumentarStockEInventario(Estado estado, BigDecimal costoProduccionPeriodo) {
         estado.setStock(estado.getStock() + estado.getProduccionMensual());
+        estado.setInventario(estado.getInventario().add(costoProduccionPeriodo));
     }
 
     private BigDecimal calcularCostoProduccionPeriodo(Estado estado) {

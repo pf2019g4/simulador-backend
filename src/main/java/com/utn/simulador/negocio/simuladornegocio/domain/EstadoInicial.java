@@ -18,6 +18,7 @@ public class EstadoInicial {
     private BigDecimal costoFijo;
     private BigDecimal costoVariable;
     private Long stock;
+    private BigDecimal inventario;
     private Long produccionMensual;
     private Integer calidad;
     private BigDecimal publicidad;

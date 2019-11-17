@@ -16,6 +16,7 @@ public class EscenarioBuilder extends AbstractPersistenceBuilder<Escenario> {
     private EscenarioBuilder() {
         instance = new Escenario();
         restriccionPrecio = RestriccionPrecio.builder().precioMax(new BigDecimal(999999)).precioMin(BigDecimal.ZERO).build();
+        instance.setEstadoInicial(EstadoInicialBuilder.baseParaEscenario().build());
 
     }
 
