@@ -143,6 +143,7 @@ public class EscenarioService {
         escenarioCopia.setDescripcion("");
         escenarioCopia.setImpuestoPorcentaje(0d);
         escenarioCopia.setMaximosPeriodos(0);
+        escenarioCopia.setEstadoInicial(escenario.getEstadoInicial());
         escenarioCopia = escenarioRepository.save(escenarioCopia);
         escenario.setId(escenarioCopia.getId());
         escenario.setTitulo(escenario.getTitulo().concat(" - Copia"));
