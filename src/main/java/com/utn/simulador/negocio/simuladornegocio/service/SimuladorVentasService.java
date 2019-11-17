@@ -52,7 +52,7 @@ public class SimuladorVentasService {
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
 
-        BigDecimal ingresosCaja = calcularIngresosCaja(estado);
+        BigDecimal ingresosCaja = montoPeriodo(cuentaFinanciera.getCuentasPeriodo(), estado.getPeriodo());
         estado.setCaja(estado.getCaja().add(ingresosCaja));
 
         BigDecimal costoMercaderiaVendida = BigDecimal.ZERO;
@@ -90,19 +90,6 @@ public class SimuladorVentasService {
         estado.setInventario(subtract);
 
             return costoMercaderiaVendida;
-    }
-
-    private BigDecimal calcularIngresosCaja(Estado estado) {
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(estado.getProyecto().getId(), TipoCuenta.FINANCIERO, TipoTransaccion.VENTA, estado.getEsForecast());
-
-        return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
-    }
-
-    private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
-        return cuentas
-                .stream()
-                .map(cuenta -> montoPeriodo(cuenta.getCuentasPeriodo(), periodo))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {

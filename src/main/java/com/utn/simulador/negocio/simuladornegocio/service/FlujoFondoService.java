@@ -27,9 +27,6 @@ public class FlujoFondoService {
     private final ProyectoRepository proyectoRepository;
     private final EstadoRepository estadoRepository;
 
-    @Autowired
-    protected EntityManager em;
-
     public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, boolean esForecast) {
 
         //TODO: tener en cuenta si es forecast o no
@@ -149,22 +146,25 @@ public class FlujoFondoService {
         return cuentasIngresosAfectosAImpuestos;
     }
 
-    //TODO: hay que mejorar este agrupador
     private List<Cuenta> agruparCuentas(List<Cuenta> cuentas, TipoTransaccion tipoTransaccion) {
-        List<Cuenta> cuentasAgrupadas = new ArrayList<>(cuentas);
-        cuentasAgrupadas.removeIf(c -> c.getTipoTransaccion() != null && c.getTipoTransaccion().equals(tipoTransaccion));
+        List<Cuenta> cuentasAgrupadas = new ArrayList<>();
         cuentas.removeIf(c -> c.getTipoTransaccion() == null || !c.getTipoTransaccion().equals(tipoTransaccion));
 
         if (cuentas.size() > 0) {
-            Cuenta cuentaAgrupada = cuentas.get(0);
+            Cuenta cuentaAgrupada = new Cuenta();
             cuentaAgrupada.setDescripcion(tipoTransaccion.getDescripcion());
-            for (Cuenta cuenta : cuentas.subList(1, cuentas.size())) {
+            cuentaAgrupada.setCuentasPeriodo(new ArrayList<>());
+            for (Cuenta cuenta : cuentas) {
                 for (CuentaPeriodo cuentaPeriodo : cuenta.getCuentasPeriodo()) {
-                    CuentaPeriodo cuentaP = cuentaAgrupada.getCuentasPeriodo().stream().filter(cp -> cp.getPeriodo().equals(cuentaPeriodo.getPeriodo())).findFirst().orElse(null);
-                    if (cuentaP != null) {
-                        cuentaP.setMonto(cuentaP.getMonto().add(cuentaPeriodo.getMonto()));
+                    CuentaPeriodo cuentaPAgrupado = cuentaAgrupada.getCuentasPeriodo().stream().filter(cp -> cp.getPeriodo().equals(cuentaPeriodo.getPeriodo())).findFirst().orElse(null);
+                    if (cuentaPAgrupado != null) {
+                        cuentaPAgrupado.setMonto(cuentaPAgrupado.getMonto().add(cuentaPeriodo.getMonto()));
                     } else {
-                        cuentaAgrupada.agregarCuenta(cuentaPeriodo);
+                        CuentaPeriodo cuentaPeriodoAgrupado = new CuentaPeriodo();
+                        cuentaPeriodoAgrupado.setCuenta(cuentaAgrupada);
+                        cuentaPeriodoAgrupado.setMonto(cuentaPeriodo.getMonto());
+                        cuentaPeriodoAgrupado.setPeriodo(cuentaPeriodo.getPeriodo());
+                        cuentaAgrupada.agregarCuenta(cuentaPeriodoAgrupado);
                     }
                 }
             }
