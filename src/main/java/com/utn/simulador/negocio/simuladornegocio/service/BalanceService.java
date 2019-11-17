@@ -27,7 +27,7 @@ public class BalanceService {
                         proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS, esForecast)),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
                         proyectoId, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES, TipoBalance.AMORTIZACION_MAQUINARIAS, esForecast)).negate(),
-                 BigDecimal.ZERO
+                BigDecimal.ZERO
         );
         Pasivo pasivo = new Pasivo(
                 sumaProximosPeriodos(cuentaService.obtenerPorProyectoYTipoBalance(proyectoId, TipoBalance.DEUDA_PROVEEDORES, esForecast), estado.getPeriodo()),
@@ -36,11 +36,6 @@ public class BalanceService {
                 null,
                 BigDecimal.ZERO
         );
-
-        //al resultado del ejercicio le sumo el inventario ya que 
-        // en el presupuesto economico se esta restando el total del costo de produccion
-        //y no solo el costo de produccion de lo vendido
-        patrimonioNeto.setResultadoDelEjercicio(patrimonioNeto.getResultadoDelEjercicio().add(activo.getInventario()));
 
         BigDecimal sumaActivo = sumaActivo(activo);
         BigDecimal sumaPasivoYPatrimonio = sumaPasivo(pasivo).add(sumaPatrimonioNeto(patrimonioNeto));
@@ -81,7 +76,7 @@ public class BalanceService {
     }
 
     private BigDecimal calcularInventario(Estado estado) {
-        return estado.getCostoVariable().multiply(new BigDecimal(estado.getStock()));
+        return estado.getInventario();
     }
 
     private BigDecimal calcularResultadoDelEjercicio(PatrimonioNeto pn, Long idProyecto, Boolean esForecast) {

@@ -3,7 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +35,6 @@ public class SimuladorVentasService {
 
         long unidadesVendidas = quiebreDeCaja ? 0 : Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
 
-        BigDecimal costoMercaderiaVendida = descontarInventarioYCalcularCostoMercaderiaVendida(estado, unidadesVendidas);
-
-        //TODO crear cuenta economica de CMV costo mercaderia vendida.
         BigDecimal precio = forecast != null ? forecast.getPrecio() : BigDecimal.ZERO;
 
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
@@ -58,7 +55,15 @@ public class SimuladorVentasService {
         BigDecimal ingresosCaja = calcularIngresosCaja(estado);
         estado.setCaja(estado.getCaja().add(ingresosCaja));
 
+        BigDecimal costoMercaderiaVendida = BigDecimal.ZERO;
+
+        if (unidadesVendidas > 0 && estado.getStock() > 0) {
+            costoMercaderiaVendida = descontarInventarioYCalcularCostoMercaderiaVendida(estado, unidadesVendidas);
+        }
+        crearCuentaCostoMercaderiaVendida(estado, costoMercaderiaVendida);
+
         estado.setStock(estado.getStock() - unidadesVendidas);
+
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas(), TipoTransaccion.VENTA, estado.getEsForecast());
@@ -68,13 +73,23 @@ public class SimuladorVentasService {
         return estado;
     }
 
+    private void crearCuentaCostoMercaderiaVendida(Estado estado, BigDecimal costoMercaderiaVendida) {
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoMercaderiaVendida.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
+    }
+
     private BigDecimal descontarInventarioYCalcularCostoMercaderiaVendida(Estado estado, long unidadesVendidas) {
-        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()));
+        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()), RoundingMode.HALF_UP);
         BigDecimal costoMercaderiaVendida = costoProduccionPorUnidad.multiply(BigDecimal.valueOf(unidadesVendidas));
 
-        estado.setInventario(estado.getInventario().subtract(costoMercaderiaVendida));
+        BigDecimal subtract = estado.getInventario().subtract(costoMercaderiaVendida);
 
-        return costoMercaderiaVendida;
+        if (subtract.compareTo(BigDecimal.ZERO) < 1) {
+            subtract = BigDecimal.ZERO;
+            costoMercaderiaVendida = estado.getInventario();
+        }
+        estado.setInventario(subtract);
+
+            return costoMercaderiaVendida;
     }
 
     private BigDecimal calcularIngresosCaja(Estado estado) {

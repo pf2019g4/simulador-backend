@@ -51,7 +51,6 @@ public class SimuladorProduccionService {
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
 
-        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoProduccionPeriodo.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
     }
 
     private void aumentarStockEInventario(Estado estado, BigDecimal costoProduccionPeriodo) {

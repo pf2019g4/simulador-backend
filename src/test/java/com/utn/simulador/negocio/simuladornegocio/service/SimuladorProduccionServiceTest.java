@@ -39,8 +39,8 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        assertThat(cantidadCuentasDespues).isEqualTo(cantidadCuentasAntes + 2);
-        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 2);
+        assertThat(cantidadCuentasDespues).isEqualTo(cantidadCuentasAntes + 1);
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 1);
         assertThat(estado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(estado.getStock()).isGreaterThan(stockInicial);
         assertThat(estado.getCaja()).isLessThan(cajaInicial);

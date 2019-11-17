@@ -30,6 +30,16 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         return estadoBuilder;
     }
 
+    public EstadoBuilder conStock(Long stock) {
+        this.instance.setStock(stock);
+        return this;
+    }
+
+    public EstadoBuilder conInventario(BigDecimal inventario) {
+        this.instance.setInventario(inventario);
+        return this;
+    }
+
     public static EstadoBuilder inicialConPeriodoActual(Proyecto proyecto, Integer periodoActual) {
         EstadoBuilder estadoBuilder = inicial(proyecto);
         estadoBuilder.instance.setPeriodo(periodoActual);
