@@ -153,7 +153,6 @@ public class CuentaService {
 
             for (int i = 1; i <= balanceInicial.getActivo().getCuentasPorCobrarPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, cuentasPorCobrarPorPeriodo, cuentaFinancieraCobroClientes);
-                crearCuentaEconomica(proyectoId,i, "Cuentas a Cobrar " + i,cuentasPorCobrarPorPeriodo,TipoTransaccion.OTROS,esForecast );
             }
         }
     }
@@ -167,7 +166,6 @@ public class CuentaService {
 
             for (int i = 1; i <= balanceInicial.getPasivo().getProveedoresPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, proveedoresPorPorPeriodo, cuentaFinancieraPagoProveedores);
-                crearCuentaEconomica(proyectoId,i, "Proveedores " + i ,proveedoresPorPorPeriodo.negate(),TipoTransaccion.OTROS,esForecast );
             }
         }
 
@@ -182,7 +180,6 @@ public class CuentaService {
 
             for (int i = 1; i <= balanceInicial.getPasivo().getDeudasBancariasPeriodos(); i++) {
                 crearCuentaFinancieraPeriodo(i, deudaBancariaPorPeriodo, cuentaFinancieraPagoDeudasBancarias);
-                crearCuentaEconomica(proyectoId,i, "Deudas Bancarias "+ i,deudaBancariaPorPeriodo.negate(),TipoTransaccion.OTROS,esForecast );
 
             }
         }
