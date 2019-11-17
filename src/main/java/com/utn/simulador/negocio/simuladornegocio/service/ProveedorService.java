@@ -3,9 +3,11 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proveedor;
 import com.utn.simulador.negocio.simuladornegocio.domain.Proyecto;
 import com.utn.simulador.negocio.simuladornegocio.domain.ModalidadPago;
+import com.utn.simulador.negocio.simuladornegocio.domain.Estado;
 import com.utn.simulador.negocio.simuladornegocio.repository.ModalidadPagoRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProveedorRepository;
 import com.utn.simulador.negocio.simuladornegocio.repository.ProyectoRepository;
+import com.utn.simulador.negocio.simuladornegocio.repository.EstadoRepository;
 import com.utn.simulador.negocio.simuladornegocio.vo.ProveedorVo;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ProveedorService {
     private final ProveedorRepository proveedorRepository;
     private final ProyectoRepository proyectoRepository;
     private final ModalidadPagoRepository modalidadPagoRepository;
+    private final EstadoRepository estadoRepository;
 
     public List<Proveedor> obtenerPorEscenario(Long idEscenario){
         return proveedorRepository.findByEscenarioId(idEscenario);
@@ -84,6 +87,18 @@ public class ProveedorService {
         
         return proveedorRepository.findByEscenarioId(null).get(0);
         
+    }
+    
+    public void aplicarCambiosAtributos(Long proyectoId, Boolean esForecast){
+        
+        Estado estadoActual = estadoRepository.findByProyectoIdAndActivoTrueAndEsForecast(proyectoId, esForecast);
+
+        if(estadoActual.getProyecto().getProveedorSeleccionado() != null ){
+            estadoActual.setCostoVariable(estadoActual.getCostoVariable().add(estadoActual.getProyecto().getProveedorSeleccionado().getVariacionCostoVariable()));
+            estadoActual.setCalidad(estadoActual.getCalidad() + estadoActual.getProyecto().getProveedorSeleccionado().getVariacionCalidad());
+        
+            this.estadoRepository.save(estadoActual);
+        }
     }
 
 }
