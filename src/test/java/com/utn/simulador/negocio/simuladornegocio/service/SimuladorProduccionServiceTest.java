@@ -45,7 +45,7 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         assertThat(estado.getStock()).isGreaterThan(stockInicial);
         assertThat(estado.getCaja()).isLessThan(cajaInicial);
         assertThat(estado.getInventario()).isGreaterThan(inventarioInicial);
-        assertThat(estado.getInventario()).isEqualTo(new BigDecimal("13411.0"));
+        assertThat(estado.getInventario()).isEqualTo(new BigDecimal("12711.0"));
         System.out.println("####################### " + estado.getInventario() + " ### inventariInicial:" + inventarioInicial);
 
     }

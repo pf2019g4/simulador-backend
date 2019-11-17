@@ -88,10 +88,10 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         assertThat(stock30D).isLessThan(stockContado);
         assertThat(caja30D).isGreaterThan(cajaContado);
         assertThat(caja30D.subtract(cajaContado)).isGreaterThan(BigDecimal.ZERO);
-//        assertThat(caja30D.subtract(cajaContado)).isEqualTo(variacionCajaContado);
+        assertThat(caja30D.subtract(cajaContado)).isLessThan(variacionCajaContado);
         assertThat(estado60D.getStock()).isLessThan(stock30D);
         assertThat(estado60D.getCaja()).isGreaterThan(caja30D);
         assertThat(estado60D.getCaja().subtract(caja30D)).isGreaterThan(BigDecimal.ZERO);
-        assertThat(estado60D.getCaja().subtract(caja30D)).isGreaterThan(variacionCaja30D);
+        assertThat(estado60D.getCaja().subtract(caja30D)).isEqualTo(variacionCaja30D);
     }
 }

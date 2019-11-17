@@ -41,26 +41,25 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
      *  AGND2            100     100
      * FLUJO FONDOS      900     900
      */
-
     @Test
     public void calcularCuentas_conCuentasValidasYSinCalcularImpuestos_devuelveVoConFlujoDeFondosSinImpuestos() {
 
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         EstadoBuilder.inicialConPeriodoActual(proyecto, 2).build(em);
 
-        Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 2).build(em);
 
-        Cuenta cuentaIAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI2", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaIAI2 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "IAI2", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI2, new BigDecimal(200), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI2, new BigDecimal(100), 2).build(em);
 
-        Cuenta cuentaEAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "EAI1", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaEAI1 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "EAI1", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.COSTO_PRODUCCION).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI1, new BigDecimal(100), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI1, new BigDecimal(100), 2).build(em);
 
-        Cuenta cuentaEAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "EAI2", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaEAI2 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "EAI2", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.COSTO_PRODUCCION).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI2, new BigDecimal(200), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI2, new BigDecimal(100), 2).build(em);
 
@@ -80,12 +79,11 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaAGND2, new BigDecimal(50), 2).build(em);
 
-
         Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), true);
 
-        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(1);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
-        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(1);
         assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
@@ -132,7 +130,6 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
      *  INV2            400     400
      * FLUJO FONDOS      -60     -60
      */
-
     @Test
     public void calcularCuentas_conCuentasValidasYConCalcularImpuestos_devuelveVoConFlujoDeFondosConImpuestos() {
 
@@ -140,19 +137,19 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         Proyecto proyecto = ProyectoBuilder.proyectoConEscenario(escenario).build(em);
         EstadoBuilder.inicialConPeriodoActual(proyecto, 2).build(em);
 
-        Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaIAI1 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "IAI1", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI1, new BigDecimal(1000), 2).build(em);
 
-        Cuenta cuentaIAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "IAI2", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaIAI2 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "IAI2", TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.VENTA).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI2, new BigDecimal(200), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaIAI2, new BigDecimal(100), 2).build(em);
 
-        Cuenta cuentaEAI1 = CuentaBuilder.deProyectoConDescripcion(proyecto, "EAI1", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaEAI1 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "EAI1", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.COSTO_PRODUCCION).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI1, new BigDecimal(100), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI1, new BigDecimal(100), 2).build(em);
 
-        Cuenta cuentaEAI2 = CuentaBuilder.deProyectoConDescripcion(proyecto, "EAI2", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS).build(em);
+        Cuenta cuentaEAI2 = CuentaBuilder.deProyectoConDescripcionYTipoTransaccion(proyecto, "EAI2", TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS, TipoTransaccion.COSTO_PRODUCCION).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI2, new BigDecimal(200), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaEAI2, new BigDecimal(100), 2).build(em);
 
@@ -198,13 +195,12 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV2, new BigDecimal(400), 1).build(em);
         CuentaPeriodoBuilder.deCuentaConMonto(cuentaINV2, new BigDecimal(400), 2).build(em);
 
-
         Map<String, AgrupadorVo> resultadoVo = flujoFondoService.calcularCuentas(proyecto.getId(), true);
 
-        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(1);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
 
-        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
+        assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(1);
         assertThat(resultadoVo.get(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
 
         assertThat(resultadoVo.get(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES.name()).getCuentas()).hasSize(2);
@@ -223,7 +219,6 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
         assertThat(resultadoVo.get(TipoFlujoFondo.AJUSTE_DE_GASTOS_NO_DESEMBOLSABLES.name()).getCuentas().get(1).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("100"), withinPercentage(0.001));
-
 
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas()).hasSize(2);
         assertThat(resultadoVo.get(TipoFlujoFondo.INGRESOS_NO_AFECTOS_A_IMPUESTOS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
@@ -246,10 +241,6 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
 
     //TODO testar impuestos negativos
     //TODO Testear Ingresos No Afectos A Impuestos, Egresos No Afectos A Impuestos, Inversiones
-
-
-
-
     /*
      *                   P1      P2
      * VENTAS            1000    1000
@@ -259,7 +250,6 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
      *  INTERES          100     100
      * TOTAL             800     800
      */
-
     @Test
     public void obteneEstadoEconomico_conCuentasValidas_devuelveVoConEstadoEconomico() {
 
@@ -298,7 +288,6 @@ public class FlujoFondoServiceTest extends SimuladorNegocioApplicationTests {
         assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas()).hasSize(1);
         assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas().get(0).getCuentasPeriodo()).hasSize(2);
         assertThat(resultadoVo.get(TipoTransaccion.OTROS.name()).getCuentas().get(0).getCuentasPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("-100"), withinPercentage(0.001));
-
 
         assertThat(resultadoVo.get("TOTAL").getMontosPeriodo()).hasSize(2);
         assertThat(resultadoVo.get("TOTAL").getMontosPeriodo().stream().filter(c -> c.getPeriodo().equals(1)).findFirst().get().getMonto()).isCloseTo(new BigDecimal("800"), withinPercentage(0.001));
