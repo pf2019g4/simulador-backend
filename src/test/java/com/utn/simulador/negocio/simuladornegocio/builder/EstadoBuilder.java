@@ -19,6 +19,7 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setCostoVariable(new BigDecimal(50));
         estadoBuilder.instance.setCaja(new BigDecimal(11000));
         estadoBuilder.instance.setStock(200L);
+        estadoBuilder.instance.setInventario(new BigDecimal("1155.5"));
         estadoBuilder.instance.setProduccionMensual(200L);
         estadoBuilder.instance.setCalidad(0);
         estadoBuilder.instance.setPublicidad(new BigDecimal(500));
@@ -27,6 +28,16 @@ public class EstadoBuilder extends AbstractPersistenceBuilder<Estado> {
         estadoBuilder.instance.setPeriodo(0);
         estadoBuilder.instance.setEsForecast(true);
         return estadoBuilder;
+    }
+
+    public EstadoBuilder conStock(Long stock) {
+        this.instance.setStock(stock);
+        return this;
+    }
+
+    public EstadoBuilder conInventario(BigDecimal inventario) {
+        this.instance.setInventario(inventario);
+        return this;
     }
 
     public static EstadoBuilder inicialConPeriodoActual(Proyecto proyecto, Integer periodoActual) {

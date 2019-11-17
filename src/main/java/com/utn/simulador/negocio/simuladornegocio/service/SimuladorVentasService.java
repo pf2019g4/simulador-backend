@@ -3,6 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +52,18 @@ public class SimuladorVentasService {
         cuentaFinanciera.setCuentasPeriodo(cuentasPeriodos);
         cuentaService.guardar(cuentaFinanciera);
 
-        BigDecimal ingresosCaja = calcularIngresosCaja(estado);
+        BigDecimal ingresosCaja = montoPeriodo(cuentaFinanciera.getCuentasPeriodo(), estado.getPeriodo());
         estado.setCaja(estado.getCaja().add(ingresosCaja));
 
+        BigDecimal costoMercaderiaVendida = BigDecimal.ZERO;
+
+        if (unidadesVendidas > 0 && estado.getStock() > 0) {
+            costoMercaderiaVendida = descontarInventarioYCalcularCostoMercaderiaVendida(estado, unidadesVendidas);
+        }
+        crearCuentaCostoMercaderiaVendida(estado, costoMercaderiaVendida);
+
         estado.setStock(estado.getStock() - unidadesVendidas);
+
         BigDecimal montoEconomicoVendido = precio.multiply(new BigDecimal(unidadesVendidas));
         estado.setVentas(montoEconomicoVendido);
         cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.VENTA.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), estado.getVentas(), TipoTransaccion.VENTA, estado.getEsForecast());
@@ -64,17 +73,23 @@ public class SimuladorVentasService {
         return estado;
     }
 
-    private BigDecimal calcularIngresosCaja(Estado estado) {
-        List<Cuenta> cuentasIngresosAfectosAImpuestos = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(estado.getProyecto().getId(), TipoCuenta.FINANCIERO, TipoTransaccion.VENTA, estado.getEsForecast());
-
-        return sumaMontoPeriodo(cuentasIngresosAfectosAImpuestos, estado.getPeriodo());
+    private void crearCuentaCostoMercaderiaVendida(Estado estado, BigDecimal costoMercaderiaVendida) {
+        cuentaService.crearCuentaEconomica(estado.getProyecto().getId(), estado.getPeriodo(), TipoTransaccion.COSTO_PRODUCCION.getDescripcion() + " " + estado.getProyecto().getEscenario().getNombrePeriodos() + " " + estado.getPeriodo(), costoMercaderiaVendida.negate(), TipoTransaccion.COSTO_PRODUCCION, estado.getEsForecast());
     }
 
-    private BigDecimal sumaMontoPeriodo(List<Cuenta> cuentas, Integer periodo) {
-        return cuentas
-                .stream()
-                .map(cuenta -> montoPeriodo(cuenta.getCuentasPeriodo(), periodo))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    private BigDecimal descontarInventarioYCalcularCostoMercaderiaVendida(Estado estado, long unidadesVendidas) {
+        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()), RoundingMode.HALF_UP);
+        BigDecimal costoMercaderiaVendida = costoProduccionPorUnidad.multiply(BigDecimal.valueOf(unidadesVendidas));
+
+        BigDecimal subtract = estado.getInventario().subtract(costoMercaderiaVendida);
+
+        if (subtract.compareTo(BigDecimal.ZERO) < 1) {
+            subtract = BigDecimal.ZERO;
+            costoMercaderiaVendida = estado.getInventario();
+        }
+        estado.setInventario(subtract);
+
+            return costoMercaderiaVendida;
     }
 
     private BigDecimal montoPeriodo(List<CuentaPeriodo> cuentaPeriodos, Integer periodo) {

@@ -26,6 +26,8 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
     public void simular_produccionValida_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
+
+        BigDecimal inventarioInicial = estadoInicial.getInventario();
         Long stockInicial = estadoInicial.getStock();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 
@@ -37,26 +39,29 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         int cantidadCuentasDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
         int cantidadCuentasPeriodosDespues = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta_periodo");
 
-        assertThat(cantidadCuentasDespues).isEqualTo(cantidadCuentasAntes + 2);
-        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 2);
+        assertThat(cantidadCuentasDespues).isEqualTo(cantidadCuentasAntes + 1);
+        assertThat(cantidadCuentasPeriodosDespues).isEqualTo(cantidadCuentasPeriodosAntes + 1);
         assertThat(estado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(estado.getStock()).isGreaterThan(stockInicial);
         assertThat(estado.getCaja()).isLessThan(cajaInicial);
+        assertThat(estado.getInventario()).isGreaterThan(inventarioInicial);
+        assertThat(estado.getInventario()).isEqualTo(new BigDecimal("13411.0"));
+        System.out.println("####################### " + estado.getInventario() + " ### inventariInicial:" + inventarioInicial);
 
     }
 
     @Test
     public void simular_produccionValida_Diferido_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        
+
         List<ModalidadPago> modalidadesPago = new ArrayList<>();
         modalidadesPago.add(ModalidadPagoBuilder.base(60L, 0).build(em)); //60% contado
         modalidadesPago.add(ModalidadPagoBuilder.base(0L, 1).build(em)); //0% a 30 dias
         modalidadesPago.add(ModalidadPagoBuilder.base(40L, 2).build(em)); //40% a 60 dias
-        
+
         Proveedor proveedor = ProveedorBuilder.base(3.5D, 5, proyecto.getEscenario().getId()).build(em);
         proveedor.setModalidadPago(modalidadesPago);
-        
+
         proyecto.setProveedorSeleccionado(proveedor);
         Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
@@ -70,9 +75,9 @@ public class SimuladorProduccionServiceTest extends SimuladorNegocioApplicationT
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial).abs();
-        
+
         estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
-        
+
         Estado estado30D = produccionService.simular(estadoInicial, false);
         Long stock30D = estado30D.getStock();
         BigDecimal caja30D = estado30D.getCaja();

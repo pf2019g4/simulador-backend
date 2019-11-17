@@ -61,6 +61,8 @@ public class SimuladorService {
 
     public void simularPeriodos(Long proyectoId, boolean esForecast) {
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
+        proyecto.setPeriodoQuiebreCaja(0);
+        proyectoRepository.save(proyecto);
         imputarCuentasPeriodo0(proyectoId, esForecast);
 
         Integer maximosPeriodos = proyecto.getEscenario().getMaximosPeriodos();
