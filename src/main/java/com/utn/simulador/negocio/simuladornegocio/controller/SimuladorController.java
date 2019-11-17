@@ -68,7 +68,7 @@ public class SimuladorController {
             for (Opcion opcion : opciones) {
                 decisionService.tomaDecision(proyectoId, opcion.getId(), esForecast);
             }
-
+            proveedorService.aplicarCambiosAtributos(proyectoId, esForecast);
             cuentaService.crearPorBalanceInicial(proyectoId, esForecast);
             financiacionService.acreditar(proyectoId, esForecast);
             simuladorService.simularPeriodos(proyectoId, esForecast);

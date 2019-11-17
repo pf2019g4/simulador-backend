@@ -15,6 +15,8 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,9 @@ public class FlujoFondoService {
     private final CuentaService cuentaService;
     private final ProyectoRepository proyectoRepository;
     private final EstadoRepository estadoRepository;
+
+    @Autowired
+    protected EntityManager em;
 
     public Map<String, AgrupadorVo> calcularCuentas(Long idProyecto, boolean esForecast) {
 
@@ -208,7 +213,6 @@ public class FlujoFondoService {
             this.descripcion = descripcion;
         }
     }
-
 
     public Map<String, AgrupadorVo> obtenerFlujoFinanciero(Long idProyecto, boolean esForecast) {
         Map<String, AgrupadorVo> cuentas = new HashMap<>();
