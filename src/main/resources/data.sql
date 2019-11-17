@@ -57,7 +57,7 @@ DELETE FROM escenario;
 -- -----------------------------------------------------------------------------
 INSERT INTO escenario
 (id  , titulo           , descripcion                                                                                                                                                                                                , impuesto_porcentaje, maximos_periodos, nombre_periodos, costo_fijo , costo_variable, produccion_mensual, stock, calidad, cantidad_vendedores, publicidad, balance_id) VALUES
-(1   , 'Anteojos de Sol', 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra mas del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', '0.35'             , 5               , 'Mes'          , '1000.00'  , '10.00'       , 1500              , 200  , 5      , 1                  , 1         , 1         ),
+(1   , 'Anteojos de Sol', 'El mercado de gafas para sol es un mercado de mucho potencial. \nCABA concentra más del 20% de la venta total del país, y dónde será el territorio de competencia de las distintas marcas que competirán.', '0.35'             , 5               , 'Mes'          , '1000.00'  , '10.00'       , 1500              , 200  , 5      , 1                  , 1         , 1         ),
 (2   , 'escenario 2'    , 'En este escenario vamos ...'                                                                                                                                                                              , '0.00'             , 2               , 'Período'      , '100.00'   , '1.00'        , 100               , 400  , 2      , 1                  , 1         , 2         );
 
 -- -----------------------------------------------------------------------------
@@ -141,7 +141,7 @@ INSERT INTO empresa_competidora
 (id  , escenario_id, nombre     , bajo, medio, alto) VALUES
 (1   , 1           , 'RayBan'   , 0   , 30   , 70  ),
 (2   , 1           , 'Adidas'   , 20  , 60   , 20  ),
-(3   , 1           , 'La sureña', 100 , 0    , 0   );
+(3   , 1           , 'La Sureña', 100 , 0    , 0   );
 
 -- -----------------------------------------------------------------------------
 -- financiacion
