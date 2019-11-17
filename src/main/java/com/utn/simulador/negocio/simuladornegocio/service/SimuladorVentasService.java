@@ -3,6 +3,7 @@ package com.utn.simulador.negocio.simuladornegocio.service;
 import com.utn.simulador.negocio.simuladornegocio.domain.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,9 @@ public class SimuladorVentasService {
 
         long unidadesVendidas = quiebreDeCaja ? 0 : Math.min(Math.max(estado.getStock(), estado.getProduccionMensual()), unidadesPosiblesParaVender);
 
+        BigDecimal costoMercaderiaVendida = descontarInventarioYCalcularCostoMercaderiaVendida(estado, unidadesVendidas);
+
+        //TODO crear cuenta economica de CMV costo mercaderia vendida.
         BigDecimal precio = forecast != null ? forecast.getPrecio() : BigDecimal.ZERO;
 
         List<CuentaPeriodo> cuentasPeriodos = new ArrayList<>();
@@ -62,6 +66,15 @@ public class SimuladorVentasService {
         estado.setDemandaPotencial(precio.multiply(new BigDecimal(unidadesPosiblesParaVender)));
 
         return estado;
+    }
+
+    private BigDecimal descontarInventarioYCalcularCostoMercaderiaVendida(Estado estado, long unidadesVendidas) {
+        BigDecimal costoProduccionPorUnidad = estado.getInventario().divide(BigDecimal.valueOf(estado.getStock()));
+        BigDecimal costoMercaderiaVendida = costoProduccionPorUnidad.multiply(BigDecimal.valueOf(unidadesVendidas));
+
+        estado.setInventario(estado.getInventario().subtract(costoMercaderiaVendida));
+
+        return costoMercaderiaVendida;
     }
 
     private BigDecimal calcularIngresosCaja(Estado estado) {

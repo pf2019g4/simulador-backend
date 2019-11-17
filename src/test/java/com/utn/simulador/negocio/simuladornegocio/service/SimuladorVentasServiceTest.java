@@ -26,6 +26,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
         Estado estadoInicial = EstadoBuilder.inicial(proyecto).build(em);
         Long stockInicial = estadoInicial.getStock();
+        BigDecimal inventarioInicial = estadoInicial.getInventario();
         BigDecimal cajaInicial = estadoInicial.getCaja();
 
         int cantidadCuentasAntes = JdbcTestUtils.countRowsInTable(jdbcTemplate, "cuenta");
@@ -43,12 +44,13 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         assertThat(nuevoEstado.getId()).isEqualTo(estadoInicial.getId());
         assertThat(nuevoEstado.getStock()).isLessThan(stockInicial);
         assertThat(nuevoEstado.getCaja()).isGreaterThan(cajaInicial);
+        assertThat(nuevoEstado.getInventario()).isLessThan(inventarioInicial);
     }
 
     @Test
     public void simular_ventasConStock_Diferido_estado() {
         Proyecto proyecto = ProyectoBuilder.proyectoAbierto().build(em);
-        
+
         List<ModalidadCobro> modalidadesCobro = new ArrayList<>();
         modalidadesCobro.add(ModalidadCobroBuilder.base(proyecto, 60L, 0).build(em)); //60% contado
         modalidadesCobro.add(ModalidadCobroBuilder.base(proyecto, 0L, 1).build(em)); //0% a 30 dias
@@ -67,7 +69,7 @@ public class SimuladorVentasServiceTest extends SimuladorNegocioApplicationTests
         Long stockContado = estadoContado.getStock();
         BigDecimal cajaContado = estadoContado.getCaja();
         BigDecimal variacionCajaContado = cajaContado.subtract(cajaInicial);
-        
+
         estadoContado.setPeriodo(estadoContado.getPeriodo() + 1);
         ForecastBuilder.baseDeProyectoYPeriodo(proyecto, estadoInicial.getPeriodo()).build(em);
         Estado estado30D = simuladorVentasService.simular(estadoContado, false);
