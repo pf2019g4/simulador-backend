@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS escenario (
   costo_variable decimal(19,2),
   produccion_mensual bigint,
   stock bigint,
-  inventario decimal (19,2) NOT NULL,
+  inventario decimal (19,2) default 0,
   calidad integer,
   cantidad_vendedores integer,
   publicidad integer,

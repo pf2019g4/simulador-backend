@@ -31,7 +31,7 @@ public class SimuladorService {
         Estado estadoInicial = estadoService.obtenerActual(proyecto.getId(), esForecast);
         Estado nuevoEstado = estadoService.avanzarTiempo(estadoInicial);
         
-        Boolean quiebreDeCaja = estadoInicial.getCaja().compareTo(BigDecimal.ZERO) <= 0;
+        Boolean quiebreDeCaja = estadoInicial.getCaja().compareTo(BigDecimal.ZERO) < 0;
         if(quiebreDeCaja && proyecto.getPeriodoQuiebreCaja() <= 0) {
             proyecto.setPeriodoQuiebreCaja(estadoInicial.getPeriodo());
             proyectoRepository.save(proyecto);
