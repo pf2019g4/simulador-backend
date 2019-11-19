@@ -92,7 +92,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   ponderacion_mercado_medio int,
   ponderacion_mercado_alto int,
   entregado boolean default false,
-  periodo_quiebre_caja integer,
   PRIMARY KEY (id),
   FOREIGN KEY (escenario_id) REFERENCES escenario(id),
   FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)

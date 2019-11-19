@@ -39,8 +39,6 @@ public class Proyecto {
     private int ponderacionMercadoBajo;
     private int ponderacionMercadoMedio;
     private int ponderacionMercadoAlto;
-    
-    private int periodoQuiebreCaja;
 
     public void aumentarPonderacionMercado(PonderacionMercado ponderacionMercado) {
         ponderacionMercadoAlto += ponderacionMercado.getAlto();
