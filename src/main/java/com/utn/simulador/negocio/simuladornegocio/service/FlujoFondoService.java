@@ -148,6 +148,10 @@ public class FlujoFondoService {
 
     private List<Cuenta> agruparCuentas(List<Cuenta> cuentas, TipoTransaccion tipoTransaccion) {
         List<Cuenta> cuentasAgrupadas = new ArrayList<>();
+        List<Cuenta> cuentasNoAgrupadas = new ArrayList<>(cuentas);
+        
+        cuentasNoAgrupadas.removeIf(c -> c.getTipoTransaccion().equals(tipoTransaccion));
+        
         cuentas.removeIf(c -> c.getTipoTransaccion() == null || !c.getTipoTransaccion().equals(tipoTransaccion));
 
         if (cuentas.size() > 0) {
@@ -170,6 +174,8 @@ public class FlujoFondoService {
             }
             cuentasAgrupadas.add(cuentaAgrupada);
         }
+        
+        cuentasAgrupadas.addAll(cuentasNoAgrupadas);
 
         return cuentasAgrupadas;
     }
