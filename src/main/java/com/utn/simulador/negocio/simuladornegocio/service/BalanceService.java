@@ -24,7 +24,7 @@ public class BalanceService {
                 null,
                 calcularInventario(estado),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
-                        proyectoId, TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS, TipoBalance.MAQUINARIAS, esForecast)),
+                        proyectoId, TipoFlujoFondo.INVERSIONES, TipoBalance.MAQUINARIAS, esForecast)),
                 sumaPeriodos(cuentaService.obtenerPorProyectoYTipoFlujoFondoYTipoBalance(
                         proyectoId, TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES, TipoBalance.AMORTIZACION_MAQUINARIAS, esForecast)).negate(),
                 BigDecimal.ZERO
