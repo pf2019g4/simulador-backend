@@ -31,11 +31,7 @@ public class SimuladorService {
         Estado estadoInicial = estadoService.obtenerActual(proyecto.getId(), esForecast);
         Estado nuevoEstado = estadoService.avanzarTiempo(estadoInicial);
         
-        Boolean quiebreDeCaja = estadoInicial.getCaja().compareTo(BigDecimal.ZERO) <= 0;
-        if(quiebreDeCaja && proyecto.getPeriodoQuiebreCaja() <= 0) {
-            proyecto.setPeriodoQuiebreCaja(estadoInicial.getPeriodo());
-            proyectoRepository.save(proyecto);
-        }
+        Boolean quiebreDeCaja = estadoInicial.getCaja().compareTo(BigDecimal.ZERO) < 0;
         
         nuevoEstado = imputarCuentas(nuevoEstado, quiebreDeCaja);
         simuladorProduccionService.simular(nuevoEstado, quiebreDeCaja);
@@ -61,7 +57,6 @@ public class SimuladorService {
 
     public void simularPeriodos(Long proyectoId, boolean esForecast) {
         Proyecto proyecto = proyectoRepository.findById(proyectoId).get();
-        proyecto.setPeriodoQuiebreCaja(0);
         proyectoRepository.save(proyecto);
         imputarCuentasPeriodo0(proyectoId, esForecast);
 

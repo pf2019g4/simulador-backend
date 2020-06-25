@@ -87,7 +87,6 @@ CREATE TABLE IF NOT EXISTS proyecto (
   escenario_id bigint UNSIGNED NOT NULL,
   usuario_id bigint,
   curso_id bigint not null,
-  periodo_quiebre_caja int,
   proveedor_id bigint NULL,
   ponderacion_mercado_bajo int,
   ponderacion_mercado_medio int,
