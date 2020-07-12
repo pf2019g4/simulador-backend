@@ -285,6 +285,17 @@ public class FlujoFondoService {
         cuentas.put("CM", new AgrupadorVo("CM", null, cuentaCostoMarginal));
 
         List<Cuenta> cuentasOtras = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(idProyecto, TipoCuenta.ECONOMICO, TipoTransaccion.OTROS, esForecast);
+        
+        for (Cuenta c : cuentasOtras) {
+            if(c.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS) || 
+               c.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS)|| 
+               c.getTipoFlujoFondo().equals(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES)){
+               for(CuentaPeriodo cp : c.getCuentasPeriodo()){
+                   cp.setMonto(cp.getMonto().negate());
+               }
+            }
+        }
+        
         cuentas.put(TipoTransaccion.OTROS.name(), new AgrupadorVo(TipoCuenta.ECONOMICO.name(), cuentasOtras, null));
 
         List<CuentaPeriodo> cuentaMovimientosEconomicos = IntStream.
