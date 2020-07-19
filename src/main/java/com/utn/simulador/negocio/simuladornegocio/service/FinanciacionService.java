@@ -76,11 +76,11 @@ public class FinanciacionService {
     }
 
     private BigDecimal calcularInteresesAmortizacionFrances(BigDecimal saldoCapital, Financiacion financionTomada) {
-        return saldoCapital.multiply(financionTomada.getTea().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+        return saldoCapital.multiply(financionTomada.getTea().divide(BigDecimal.valueOf(100), 3, RoundingMode.HALF_UP));
     }
 
     private BigDecimal calcularCuotaAmortizacionFrances(Credito credito, Financiacion financiacion) {
-        BigDecimal dividendo = BigDecimal.ONE.subtract(BigDecimal.ONE.add(financiacion.getTea().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).pow(-1 * financiacion.getCantidadCuotas(), MathContext.DECIMAL32));
-        return credito.getMonto().multiply(financiacion.getTea().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).divide(dividendo, 2, RoundingMode.HALF_UP);
+        BigDecimal dividendo = BigDecimal.ONE.subtract(BigDecimal.ONE.add(financiacion.getTea().divide(BigDecimal.valueOf(100), 3, RoundingMode.HALF_UP)).pow(-1 * financiacion.getCantidadCuotas(), MathContext.DECIMAL32));
+        return credito.getMonto().multiply(financiacion.getTea().divide(BigDecimal.valueOf(100), 3, RoundingMode.HALF_UP)).divide(dividendo, 3, RoundingMode.HALF_UP);
     }
 }

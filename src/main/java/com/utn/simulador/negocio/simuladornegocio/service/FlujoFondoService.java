@@ -287,12 +287,14 @@ public class FlujoFondoService {
         List<Cuenta> cuentasOtras = cuentaService.obtenerPorProyectoYTipoCuentaYTipoTransaccion(idProyecto, TipoCuenta.ECONOMICO, TipoTransaccion.OTROS, esForecast);
         
         for (Cuenta c : cuentasOtras) {
+            if(c.getTipoFlujoFondo() != null){
             if(c.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_AFECTOS_A_IMPUESTOS) || 
                c.getTipoFlujoFondo().equals(TipoFlujoFondo.EGRESOS_NO_AFECTOS_A_IMPUESTOS)|| 
                c.getTipoFlujoFondo().equals(TipoFlujoFondo.GASTOS_NO_DESEMBOLSABLES)){
                for(CuentaPeriodo cp : c.getCuentasPeriodo()){
                    cp.setMonto(cp.getMonto().negate());
                }
+            }
             }
         }
         
