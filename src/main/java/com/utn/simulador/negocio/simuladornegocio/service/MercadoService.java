@@ -104,10 +104,12 @@ public class MercadoService {
         List<PonderacionMercado> ponderacionesMercadoPorCalidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.CALIDAD_DESDE);
 
         for (PonderacionMercado ponderacionMercadoCalidad : ponderacionesMercadoPorCalidad) {
+            if(estado != null && ponderacionMercadoCalidad.getValor() != null && estado.getCalidad() != null){
             if (ponderacionMercadoCalidad.getValor().intValue() <= estado.getCalidad()) {
                 proyecto.aumentarPonderacionMercado(ponderacionMercadoCalidad);
                 break;
             }
+             }
         }
     }
 
