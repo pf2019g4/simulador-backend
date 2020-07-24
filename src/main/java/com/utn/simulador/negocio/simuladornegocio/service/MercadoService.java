@@ -93,10 +93,12 @@ public class MercadoService {
         List<PonderacionMercado> ponderacionesMercadoPorPublicidad = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.PUBLICIDAD_DESDE);
 
         for (PonderacionMercado ponderacionMercadoPublicidad : ponderacionesMercadoPorPublicidad) {
-            if (ponderacionMercadoPublicidad.getValor().compareTo(estado.getPublicidad()) <= 0) {
-                proyecto.aumentarPonderacionMercado(ponderacionMercadoPublicidad);
-                break;
-            }
+             if(estado != null && ponderacionMercadoPublicidad.getValor() != null && estado.getPublicidad() != null){
+                if (ponderacionMercadoPublicidad.getValor().compareTo(estado.getPublicidad()) <= 0) {
+                    proyecto.aumentarPonderacionMercado(ponderacionMercadoPublicidad);
+                    break;
+                }
+             }
         }
     }
 
@@ -105,10 +107,10 @@ public class MercadoService {
 
         for (PonderacionMercado ponderacionMercadoCalidad : ponderacionesMercadoPorCalidad) {
             if(estado != null && ponderacionMercadoCalidad.getValor() != null && estado.getCalidad() != null){
-            if (ponderacionMercadoCalidad.getValor().intValue() <= estado.getCalidad()) {
-                proyecto.aumentarPonderacionMercado(ponderacionMercadoCalidad);
-                break;
-            }
+                if (ponderacionMercadoCalidad.getValor().intValue() <= estado.getCalidad()) {
+                    proyecto.aumentarPonderacionMercado(ponderacionMercadoCalidad);
+                    break;
+                }
              }
         }
     }
@@ -117,10 +119,12 @@ public class MercadoService {
         List<PonderacionMercado> ponderacionesMercadoPorVendedores = ponderacionMercadoRepository.findByEscenarioIdAndConceptoOrderByValorDesc(proyecto.getEscenario().getId(), TipoPonderacionMercado.VENDEDORES_DESDE);
 
         for (PonderacionMercado ponderacionMercadoVendedores : ponderacionesMercadoPorVendedores) {
-            if (ponderacionMercadoVendedores.getValor().intValue() <= estado.getCantidadVendedores()) {
-                proyecto.aumentarPonderacionMercado(ponderacionMercadoVendedores);
-                break;
-            }
+             if(estado != null && ponderacionMercadoVendedores.getValor() != null && estado.getCantidadVendedores() != null){
+                if (ponderacionMercadoVendedores.getValor().intValue() <= estado.getCantidadVendedores()) {
+                    proyecto.aumentarPonderacionMercado(ponderacionMercadoVendedores);
+                    break;
+                }
+             }
         }
     }
 
@@ -138,7 +142,6 @@ public class MercadoService {
 
         for (PonderacionMercado ponderacionMercadoPrecio : ponderacionesMercadoPorPrecio) {
             if (ponderacionMercadoPrecio.getValor().compareTo(precioPromedio) <= 0) {
-
                 proyecto.aumentarPonderacionMercado(ponderacionMercadoPrecio);
                 break;
             }
