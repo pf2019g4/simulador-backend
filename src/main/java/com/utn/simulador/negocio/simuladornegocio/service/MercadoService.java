@@ -132,7 +132,7 @@ public class MercadoService {
             sumatoriaDePrecios = sumatoriaDePrecios.add(forecast.getPrecio());
         }
 
-        BigDecimal precioPromedio = sumatoriaDePrecios.divide(new BigDecimal(proyecto.getEscenario().getMaximosPeriodos()));
+        BigDecimal precioPromedio = sumatoriaDePrecios.divide(new BigDecimal(proyecto.getEscenario().getMaximosPeriodos()), 6, RoundingMode.HALF_UP);
 
         for (PonderacionMercado ponderacionMercadoPrecio : ponderacionesMercadoPorPrecio) {
             if (ponderacionMercadoPrecio.getValor().compareTo(precioPromedio) <= 0) {
