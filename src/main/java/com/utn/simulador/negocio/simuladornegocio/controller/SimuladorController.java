@@ -78,6 +78,7 @@ public class SimuladorController {
     @PostMapping("/escenario/{escenarioId}/curso/{cursoId}/simular-mercado")
     public void simularMercado(@PathVariable("escenarioId") Long escenarioId,
             @PathVariable("cursoId") Long cursoId) {
+
         proyectoService.cerrarProyectos(cursoId, escenarioId);
         correrSimulacionProyectos(cursoId, escenarioId);
         escenarioService.cerrarCursoEscenario(cursoId, escenarioId);
@@ -90,7 +91,6 @@ public class SimuladorController {
 
         boolean esForecast = false;
         prepararEscenarioParaSimularMercado(proyectosASimular, esForecast);
-        
         simularMercadoYCalcularPuntaje(proyectosASimular, esForecast);
 
     }
@@ -108,17 +108,17 @@ public class SimuladorController {
             if (proyecto.getProveedorSeleccionado() == null) {
                 proyecto.setProveedorSeleccionado(proveedorService.obtenerProveedorPorDefecto());
             }
-
+            
             List<OpcionProyecto> opcionesProyecto = opcionProyectoRepository.findByProyectoId(proyecto.getId());
-
+          
             for (OpcionProyecto opcionProyecto : opcionesProyecto) {
                 decisionService.tomaDecision(proyecto.getId(), opcionProyecto.getOpcion().getId(), esForecast);
             }
+            proveedorService.aplicarCambiosAtributos(proyecto.getId(), esForecast);
             cuentaService.crearPorBalanceInicial(proyecto.getId(), esForecast);
             financiacionService.acreditar(proyecto.getId(), esForecast);
-            
             mercadoService.establecerPonderaciones(proyecto);
-
+            
         }
     }
 

@@ -154,9 +154,15 @@ public class MercadoService {
         long cuotaMercado = 0;
         MercadoPeriodo mercadoPeriodo = mercadoPeriodoRepository.findByEscenarioIdAndPeriodo(proyecto.getEscenario().getId(), estado.getPeriodo());
         RestriccionPrecio restriccionPrecio = restriccionPrecioRepository.findByEscenarioId(proyecto.getEscenario().getId()).get(0);
-
-        BigDecimal precioPeriodoActual = forecastService.obtenerPorProyectoYPeriodo(proyecto.getId(), estado.getPeriodo()).getPrecio();
-
+        BigDecimal precioPeriodoActual;
+        Forecast forecast = forecastService.obtenerPorProyectoYPeriodo(proyecto.getId(), estado.getPeriodo());
+        
+        if(forecast != null){
+            precioPeriodoActual = forecast.getPrecio();
+        }else{
+            return 0;
+        }
+        
         if (precioPeriodoActual.compareTo(restriccionPrecio.getPrecioMin()) < 0) {
             return 0;
         } else if (precioPeriodoActual.compareTo(restriccionPrecio.getPrecioMax()) > 0) {
