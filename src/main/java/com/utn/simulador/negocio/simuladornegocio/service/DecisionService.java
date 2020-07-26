@@ -137,7 +137,7 @@ public class DecisionService {
                 if (decision.getOpcionTomada() == null) {
                     break;
                 } else {
-                    opcionProyectoRepository.deleteByOpcionId(decision.getOpcionTomada());
+                    opcionProyectoRepository.deleteByProyectoIdAndOpcionId(proyecto.getId(),decision.getOpcionTomada());
                     break;
                 }
             }

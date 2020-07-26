@@ -11,7 +11,7 @@ public interface OpcionProyectoRepository extends JpaRepository<OpcionProyecto, 
     List<OpcionProyecto> findByProyectoId(Long proyectoId);
 
     @Transactional
-    List<OpcionProyecto> deleteByOpcionId(Long opcionId);
+    List<OpcionProyecto> deleteByProyectoIdAndOpcionId(Long proyectoId,Long opcionId);
 
     @Transactional
     void deleteByProyectoId(Long proyectoId);
