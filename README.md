@@ -11,12 +11,9 @@ Por ahora utiliza una BD en memoria.
 
 - Proyecto "utn-simulador-ui" a la misma altura
 
-carpeta-padre
-|
-|->utn-simulador-ui
-|->simulador-backend
+/carpeta-padre/utn-simulador-ui
 
-
+/carpeta-padre/simulador-backend
 
 ## Links útiles
 
@@ -25,6 +22,12 @@ mvn clean install
 
 ## Para compilar el front
 mvn clean compile -Dbuild=frontend
+
+## Para compilar completo para producción
+
+mvn clean compile -Dbuild=frontend
+
+mvn clean package -DskipTests
 
 ## Para levantar
 mvn spring-boot:run
